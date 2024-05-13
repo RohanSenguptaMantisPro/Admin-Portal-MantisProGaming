@@ -1,0 +1,35 @@
+import 'dart:ui';
+
+// const colours for fonts , background particular widgets all are defined
+// but only use const colours when multiple places these colours are getting
+// used. else for just 1-2 place we should always use custom colors on the
+// screen itself.
+
+class Colours {
+  const Colours._(); // private constructor , so we can not mistakenly
+  // instantiate this class from outside any other class. cause private
+  // constructor can not be instantiaed cause its private.
+
+  /// #EDF8FF #FDC1E8, #FDFAE1, #FFFFFF
+  static const gradient = [
+    Color(0xFFEDF8FF),
+    Color(0xFFFDC1E8),
+    Color(0xFFFFFFFF),
+    Color(0xFFFDFAE1),
+  ];
+
+  /// #458CFF
+  static const primaryColour = Color(0xFF0cba48);
+
+  /// #757C8E
+  static const neutralTextColour = Color(0xFFfefefe);
+
+  static const lightTextColour = Color(0xFF929296);
+
+  /// #FF5C5C
+  static const redColour = Color(0xFFFF5C5C);
+
+  static const backgroundColourLightDark = Color(0xFF171719);
+
+  static const backgroundColorDark = Color(0xFF05050f);
+}
