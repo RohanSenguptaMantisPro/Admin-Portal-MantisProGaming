@@ -27,21 +27,87 @@ class Dashboard extends StatelessWidget {
                   child: LayoutBuilder(
                     builder: (layoutContext, boxConstraints) {
                       return Padding(
-                        padding: EdgeInsets.all(
-                          boxConstraints.maxWidth * 0.1,
+                        padding: EdgeInsets.only(
+                          left: boxConstraints.maxWidth * 0.03,
+                          right: boxConstraints.maxWidth * 0.03,
+                          top: 10,
                         ),
+                        //ListView:  So that the column is scrollable if not
+                        // enough space.
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 2,
-                                  color: Colors.green,
+                            Expanded(
+                              child: Container(
+                                width: boxConstraints.maxWidth * 0.7,
+                                // height: 60,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 2,
+                                    color: Colors.red,
+                                  ),
+                                  image: const DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: AssetImage(
+                                      'assets/images/mantis_pro_gaming_logo.png',
+                                    ),
+                                  ),
                                 ),
-                                image: const DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                    'assets/images/mantis_pro_gaming_logo.png',
+                              ),
+                            ),
+                            Expanded(
+                              flex: 10,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colours.backgroundColorDark,
+                                  border: Border.all(
+                                    width: 2,
+                                    color: Colors.yellow,
+                                  ),
+                                ),
+                                child: ListView(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                        left: boxConstraints.maxWidth * 0.05,
+                                        top: 10,
+                                        bottom: 10,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colours.backgroundColorDark,
+                                        border: Border.all(
+                                          width: 1,
+                                          color: Colors.orange,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Icon(
+                                            Icons.dashboard,
+                                            color: Colours.dashBoardIconColour,
+                                          ),
+                                          Text(
+                                            'Global Dashboard',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colours.backgroundColorDark,
+                                  border: Border.all(
+                                    width: 2,
+                                    color: Colors.purple,
                                   ),
                                 ),
                               ),
@@ -62,7 +128,7 @@ class Dashboard extends StatelessWidget {
                 flex: 6,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colours.backgroundColorDark,
+                    color: Colours.backgroundColourLightDark,
                     border: Border.all(
                       width: 2,
                       color: Colors.white,

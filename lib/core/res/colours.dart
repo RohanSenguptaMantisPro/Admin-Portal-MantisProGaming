@@ -24,7 +24,7 @@ class Colours {
   /// #757C8E
   static const neutralTextColour = Color(0xFFfefefe);
 
-  static const lightTextColour = Color(0xFF929296);
+  static const lightTextColour = Color(0xFF8f8f94);
 
   /// #FF5C5C
   static const redColour = Color(0xFFFF5C5C);
@@ -32,4 +32,6 @@ class Colours {
   static const backgroundColourLightDark = Color(0xFF171719);
 
   static const backgroundColorDark = Color(0xFF05050f);
+
+  static const dashBoardIconColour = Color(0xFF8f8f94);
 }
