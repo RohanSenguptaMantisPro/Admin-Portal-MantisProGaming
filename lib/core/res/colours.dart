@@ -20,6 +20,7 @@ class Colours {
 
   /// #458CFF
   static const primaryColour = Color(0xFF0cba48);
+  static const primaryColourLight = Color(0xFF253f36);
 
   /// #757C8E
   static const neutralTextColour = Color(0xFFfefefe);

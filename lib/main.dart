@@ -33,19 +33,20 @@ class MyApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(
             color: Colors.transparent,
           ),
+          fontFamily: GoogleFonts.poppins().fontFamily,
           textTheme: GoogleFonts.poppinsTextTheme(textTheme).copyWith(
             bodyMedium: GoogleFonts.poppins(
               textStyle: const TextStyle(
                 fontSize: 14,
                 color: Colours.neutralTextColour,
-                fontWeight: FontWeight.w400 ,
+                fontWeight: FontWeight.w400,
               ),
             ),
             bodySmall: GoogleFonts.poppins(
               textStyle: const TextStyle(
                 fontSize: 14,
                 color: Colours.lightTextColour,
-                fontWeight: FontWeight.w500 ,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
