@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Education App',
         theme: ThemeData(
           useMaterial3: true,
@@ -35,6 +36,13 @@ class MyApp extends StatelessWidget {
           ),
           fontFamily: GoogleFonts.poppins().fontFamily,
           textTheme: GoogleFonts.poppinsTextTheme(textTheme).copyWith(
+            titleMedium: GoogleFonts.poppins(
+              textStyle: const TextStyle(
+                fontSize: 23,
+                color: Colours.neutralTextColour,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             bodyMedium: GoogleFonts.poppins(
               textStyle: const TextStyle(
                 fontSize: 14,

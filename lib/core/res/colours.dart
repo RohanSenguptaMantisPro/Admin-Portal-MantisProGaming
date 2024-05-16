@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 // const colours for fonts , background particular widgets all are defined
 // but only use const colours when multiple places these colours are getting
 // used. else for just 1-2 place we should always use custom colors on the
@@ -24,7 +26,6 @@ class Colours {
 
   /// #757C8E
   static const neutralTextColour = Color(0xFFfefefe);
-
   static const lightTextColour = Color(0xFF8f8f94);
 
   /// #FF5C5C
@@ -35,4 +36,9 @@ class Colours {
   static const backgroundColorDark = Color(0xFF05050f);
 
   static const dashBoardIconColour = Color(0xFF8f8f94);
+
+  static const grey = Colors.grey;
+  static const greyBackground = Color(0xFF2f343b);
+
+  static const whiteIconsColor = Color(0xFFfafafb);
 }

@@ -16,7 +16,7 @@ class DashboardController extends ChangeNotifier {
   ];
 
   List<Widget> get screens => _screens;
-  int _currentIndex = 0; // default page to land users on.
+  int _currentIndex = 1; // default page to land users on.
 
   int get currentIndex => _currentIndex; //
 
