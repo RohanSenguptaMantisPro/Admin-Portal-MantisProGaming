@@ -22,7 +22,7 @@ class _SearchUserFormState extends State<SearchUserForm> {
   Widget build(BuildContext context) {
     return Container(
       width: 300,
-      height: 37,
+      height: 33,
       child: Form(
         key: widget.formKey,
         child: IField(
@@ -30,11 +30,23 @@ class _SearchUserFormState extends State<SearchUserForm> {
           hintText: 'Search by account, name, userID...',
           keyboardType: TextInputType.text,
           hintStyle: context.theme.textTheme.bodySmall!.copyWith(
-            color: Colors.grey.shade700,
-            fontSize: 12,
+            color: Colours.greyTextColour,
           ),
           fillColour: Colours.backgroundColorDark,
           filled: true,
+          prefixIcon: const Icon(
+            Icons.search,
+            color: Colours.greyIconColor,
+          ),
+          cursorColor: Colours.white,
+          borderRadius: 8,
+          borderColor: Colours.grey,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 0,
+          ),
+          cursorHeight: 15,
+          inputTextStyle: context.theme.textTheme.bodySmall,
         ),
       ),
     );

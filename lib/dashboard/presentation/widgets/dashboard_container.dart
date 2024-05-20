@@ -69,7 +69,7 @@ class DashboardContainer extends StatelessWidget {
                 style: context.theme.textTheme.bodySmall!.copyWith(
                   color: isCurrentPageActive
                       ? Colours.primaryColour
-                      : Colours.lightTextColour,
+                      : Colours.lightWhiteTextColour,
                 ),
               ),
             ],

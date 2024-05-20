@@ -171,13 +171,14 @@ class Dashboard extends StatelessWidget {
                                   ),
                                   title: Text(
                                     'Admin Name',
-                                    style: context.theme.textTheme.bodyMedium,
+                                    style: context.theme.textTheme.bodySmall,
                                   ),
                                   subtitle: Text(
                                     'Admin',
                                     style: context.theme.textTheme.bodySmall!
                                         .copyWith(
                                       fontSize: 10,
+                                      color: Colours.greyTextColour,
                                     ),
                                   ),
                                 ),
@@ -202,7 +203,7 @@ class Dashboard extends StatelessWidget {
                     color: Colours.backgroundColourLightDark,
                     border: Border(
                       left: BorderSide(
-                        color: Colours.lightTextColour,
+                        color: Colours.grey,
                       ),
                     ),
                   ),

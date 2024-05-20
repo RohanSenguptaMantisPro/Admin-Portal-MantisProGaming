@@ -36,31 +36,26 @@ class MyApp extends StatelessWidget {
           ),
           fontFamily: GoogleFonts.poppins().fontFamily,
           textTheme: GoogleFonts.poppinsTextTheme(textTheme).copyWith(
+            // for different sized texts.
             titleMedium: GoogleFonts.poppins(
               textStyle: const TextStyle(
                 fontSize: 23,
-                color: Colours.neutralTextColour,
+                color: Colours.whiteTextColour,
                 fontWeight: FontWeight.bold,
-              ),
-            ),
-            bodyMedium: GoogleFonts.poppins(
-              textStyle: const TextStyle(
-                fontSize: 14,
-                color: Colours.neutralTextColour,
-                fontWeight: FontWeight.w400,
               ),
             ),
             bodySmall: GoogleFonts.poppins(
               textStyle: const TextStyle(
-                fontSize: 14,
-                color: Colours.lightTextColour,
+                fontSize: 12,
+                color: Colours.whiteTextColour,
                 fontWeight: FontWeight.w500,
               ),
             ),
           ),
 
-          colorScheme:
-              ColorScheme.fromSwatch(accentColor: Colours.primaryColour),
+          colorScheme: ColorScheme.fromSwatch(
+            accentColor: Colours.primaryColour,
+          ),
         ),
         onGenerateRoute: generateRoute,
       ),

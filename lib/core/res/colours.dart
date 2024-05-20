@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 class Colours {
   const Colours._(); // private constructor , so we can not mistakenly
   // instantiate this class from outside any other class. cause private
-  // constructor can not be instantiaed cause its private.
+  // constructor can not be instantiated cause its private.
 
   /// #EDF8FF #FDC1E8, #FDFAE1, #FFFFFF
   static const gradient = [
@@ -25,8 +25,9 @@ class Colours {
   static const primaryColourLight = Color(0xFF253f36);
 
   /// #757C8E
-  static const neutralTextColour = Color(0xFFfefefe);
-  static const lightTextColour = Color(0xFF8f8f94);
+  static const whiteTextColour = Color(0xFFfefefe);
+  static const lightWhiteTextColour = Color(0xFF929296);
+  static const greyTextColour = Colors.grey;
 
   /// #FF5C5C
   static const redColour = Color(0xFFFF5C5C);
@@ -40,5 +41,8 @@ class Colours {
   static const grey = Colors.grey;
   static const greyBackground = Color(0xFF2f343b);
 
+  static const white = Colors.white;
+
   static const whiteIconsColor = Color(0xFFfafafb);
+  static const greyIconColor = Colors.grey;
 }

@@ -17,6 +17,13 @@ class IField extends StatelessWidget {
     this.hintStyle,
     this.overrideValidator = false,
     this.maxLines,
+    this.prefixIcon,
+    this.cursorColor,
+    this.borderColor,
+    this.borderRadius,
+    this.contentPadding,
+    this.cursorHeight,
+    this.inputTextStyle,
   });
 
   final String? Function(String?)? validator;
@@ -32,11 +39,21 @@ class IField extends StatelessWidget {
   final bool overrideValidator;
   final TextStyle? hintStyle;
   final int? maxLines;
+  final Icon? prefixIcon;
+  final Color? cursorColor;
+  final Color? borderColor;
+  final double? borderRadius;
+  final EdgeInsetsGeometry? contentPadding;
+  final double? cursorHeight;
+  final TextStyle? inputTextStyle;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      maxLines: maxLines ?? 1,
+      cursorColor: cursorColor,
+      cursorHeight: cursorHeight,
+      style: inputTextStyle,
+      maxLines: maxLines,
       controller: controller,
       validator: overrideValidator
           ? validator
@@ -53,35 +70,36 @@ class IField extends StatelessWidget {
       obscureText: obscureText,
       readOnly: readOnly,
       decoration: InputDecoration(
+        prefixIcon: prefixIcon,
+        // prefixIconConstraints: BoxConstraints(
+        //   maxWidth: 10,
+        // ),
+
         border: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colours.grey.shade700,
+            color: borderColor ?? Colours.grey,
           ),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(borderRadius ?? 8),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colours.grey.shade700),
+          borderRadius: BorderRadius.circular(borderRadius ?? 8),
+          borderSide: BorderSide(
+            color: borderColor ?? Colours.grey,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(borderRadius ?? 8),
           borderSide: BorderSide(
-            color: Colours.grey.shade700,
+            color: borderColor ?? Colours.grey,
           ),
         ),
         // overwriting the default padding helps with that puffy look
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 0,
-        ),
+        contentPadding: contentPadding,
         filled: filled,
         fillColor: fillColour,
         suffixIcon: suffixIcon,
         hintText: hintText,
-        hintStyle: hintStyle ??
-            context.theme.textTheme.bodySmall!.copyWith(
-              color: Colors.grey.shade700,
-            ),
+        hintStyle: hintStyle,
       ),
     );
   }

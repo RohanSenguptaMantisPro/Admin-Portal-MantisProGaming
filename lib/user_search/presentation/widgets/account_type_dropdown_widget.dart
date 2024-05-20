@@ -5,6 +5,8 @@ import 'package:getwidget/getwidget.dart';
 
 // TODO(RohanSengupta): dropdown box design; dropdown selection to change view.
 
+// Dropdown using getwidget/GFMultiselect.
+/*
 class AccountTypeDropdown extends StatelessWidget {
   List<int> temp = [];
 
@@ -19,7 +21,7 @@ class AccountTypeDropdown extends StatelessWidget {
       width: 200,
       child: GFMultiSelect(
         initialSelectedItemsIndex: null,
-        items: [],
+        items: const ['user type 1', 'user type 2'],
         onSelect: (value) {
           // for (int i = 0; i < value.length; i++) {
           //   log("${value[i]} \n");
@@ -27,11 +29,13 @@ class AccountTypeDropdown extends StatelessWidget {
 
           // onSelect is getting called multiple times so same indices are adding again and again, so
           // emptying and readding new values
-          /*temp = [];
+          */
+/*temp = [];
 
-          for (var i = 0; i < value.length; i++) {
-            temp.add(value[i]);
-          }*/
+        for (var i = 0; i < value.length; i++) {
+          temp.add(value[i]);
+        }*/ /*
+
           // value is List<dynamic> but initial selectedIndex is list<int> so we'll be needing list int
           // thats why this extra for loop from value to temp
 
@@ -47,16 +51,13 @@ class AccountTypeDropdown extends StatelessWidget {
         dropdownTitleTileTextStyle: context.theme.textTheme.bodyMedium!,
 
         dropdownTitleTileColor: Colours.greyBackground,
-        // dropdownTitleTileMargin: const EdgeInsets.all(
-        //   8,
-        // ),
 
         // margins and paddings of the dropdown.
         dropdownTitleTilePadding: const EdgeInsets.only(
           left: 10,
           right: 10,
-          top: 7,
-          bottom: 7,
+          top: 4,
+          bottom: 4,
         ),
         dropdownTitleTileMargin: const EdgeInsets.all(0),
         // padding: const EdgeInsets.all(6),
@@ -65,7 +66,7 @@ class AccountTypeDropdown extends StatelessWidget {
         // All borders.
         hideDropdownUnderline: true,
         dropdownTitleTileBorder: Border.all(color: Colors.grey, width: 1),
-        dropdownTitleTileBorderRadius: BorderRadius.circular(12),
+        dropdownTitleTileBorderRadius: BorderRadius.circular(10),
 
         // icon.
         expandedIcon: const Icon(
@@ -85,3 +86,5 @@ class AccountTypeDropdown extends StatelessWidget {
     );
   }
 }
+*/
+
