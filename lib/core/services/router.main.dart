@@ -4,7 +4,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/':
       return _pageBuilder(
-        (_) => const Dashboard(),
+        (_) => const LoginScreen(),
         settings: settings,
       );
 

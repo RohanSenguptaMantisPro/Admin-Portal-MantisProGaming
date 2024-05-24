@@ -1,10 +1,10 @@
-import 'package:admin_portal_mantis_pro_gaming/feedback/presentation/views/feedback_screen.dart';
-import 'package:admin_portal_mantis_pro_gaming/global_dashboard/presentation/views/global_dashboard_screen.dart';
-import 'package:admin_portal_mantis_pro_gaming/incentives/presentation/views/incentives_screen.dart';
-import 'package:admin_portal_mantis_pro_gaming/time_tracking/presentation/views/time_tracking_screen.dart';
-import 'package:admin_portal_mantis_pro_gaming/user_search/presentation/views/user_search_screen.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/feedback/presentation/views/feedback_screen.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/global_dashboard/presentation/views/global_dashboard_screen.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/incentives/presentation/views/incentives_screen.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/time_tracking/presentation/views/time_tracking_screen.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user_search/presentation/views/user_search_screen.dart';
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class DashboardController extends ChangeNotifier {
   final List<Widget> _screens = [

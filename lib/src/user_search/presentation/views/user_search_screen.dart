@@ -1,10 +1,11 @@
+import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/custom_dropdown.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
-import 'package:admin_portal_mantis_pro_gaming/user_search/presentation/widgets/account_type_dropdown_menu.dart';
-import 'package:admin_portal_mantis_pro_gaming/user_search/presentation/widgets/filter_dropdown_tile.dart';
-import 'package:admin_portal_mantis_pro_gaming/user_search/presentation/widgets/search_user_form.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user_search/presentation/widgets/account_type_dropdown_menu.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user_search/presentation/widgets/filter_dropdown_tile.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user_search/presentation/widgets/search_user_form.dart';
+
 
 import 'package:flutter/material.dart';
 
@@ -45,14 +46,15 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(
-          height: 50,
-        ),
-        Expanded(
-          flex: 2,
-          child: Container(
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 40,
+          ),
+          Container(
+            height: 110,
+            width: double.infinity,
             decoration: BoxDecoration(
               border: Border.all(
                 color: Colours.primaryColour,
@@ -183,10 +185,8 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
               ),
             ),
           ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(
+          Container(
+            height: 45,
             decoration: BoxDecoration(
               border: Border.all(
                 color: Colors.yellow,
@@ -194,10 +194,8 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
             ),
             child: Row(),
           ),
-        ),
-        Expanded(
-          flex: 12,
-          child: Container(
+          Container(
+            height: 470,
             width: double.infinity,
             decoration: BoxDecoration(
               border: Border.all(
@@ -206,10 +204,9 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
             ),
             child: Column(),
           ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(
+          Container(
+            height: 50,
+            width: double.infinity,
             decoration: BoxDecoration(
               border: Border.all(
                 color: Colors.blue,
@@ -217,11 +214,11 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
             ),
             child: Row(),
           ),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-      ],
+          const SizedBox(
+            height: 16,
+          ),
+        ],
+      ),
     );
   }
 }

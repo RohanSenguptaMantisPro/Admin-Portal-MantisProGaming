@@ -20,6 +20,9 @@ class Colours {
     Color(0xFFFDFAE1),
   ];
 
+  static const loginScreenGreenGradient = Color(0xFF0E4D27);
+  static const loginSceenBlackGradient = Colors.black;
+
   /// #458CFF
   static const primaryColour = Color(0xFF0cba48);
   static const primaryColourLight = Color(0xFF253f36);

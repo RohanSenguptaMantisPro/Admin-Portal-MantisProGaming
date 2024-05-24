@@ -1,10 +1,10 @@
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/services/router.dart';
-import 'package:admin_portal_mantis_pro_gaming/dashboard/presentation/providers/dashboard_controller.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/dashboard/presentation/providers/dashboard_controller.dart';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,6 +37,15 @@ class MyApp extends StatelessWidget {
           fontFamily: GoogleFonts.poppins().fontFamily,
           textTheme: GoogleFonts.poppinsTextTheme(textTheme).copyWith(
             // for different sized texts.
+            headlineLarge: GoogleFonts.poppins(
+              textStyle: const TextStyle(
+                height: 1,
+                fontSize: 90,
+                color: Colours.whiteTextColour,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
             titleMedium: GoogleFonts.poppins(
               textStyle: const TextStyle(
                 fontSize: 23,
@@ -44,11 +53,34 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            titleSmall: GoogleFonts.poppins(
+              textStyle: const TextStyle(
+                fontSize: 18,
+                color: Colours.whiteTextColour,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+
+            bodyMedium: GoogleFonts.poppins(
+              textStyle: const TextStyle(
+                fontSize: 14,
+                color: Colours.whiteTextColour,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+
             bodySmall: GoogleFonts.poppins(
               textStyle: const TextStyle(
                 fontSize: 12,
                 color: Colours.whiteTextColour,
                 fontWeight: FontWeight.w500,
+              ),
+            ),
+
+            labelSmall: GoogleFonts.poppins(
+              textStyle: const TextStyle(
+                fontSize: 11,
+                color: Colours.greyTextColour,
               ),
             ),
           ),
