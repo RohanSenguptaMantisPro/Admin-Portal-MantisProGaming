@@ -51,14 +51,14 @@ class CenterTextBox extends StatelessWidget {
                       const WidgetStatePropertyAll(Colours.primaryColour),
                   shape: WidgetStatePropertyAll(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                 ),
-                icon: const Icon(
-                  Icons.login,
-                  color: Colours.whiteIconsColor,
-                  size: 20,
+                icon: Image.asset(
+                  MediaRes.googleIcon,
+                  width: 15,
+                  height: 15,
                 ),
                 label: Text(
                   'Continue with Google',

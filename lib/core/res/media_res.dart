@@ -6,7 +6,8 @@ class MediaRes {
   static const _baseIcon = 'assets/icons';
 
   // images
-  static const mantisProGamingLogo = '$_baseImage/mantis_pro_gaming_logo.png';
+  static const mantisProGamingLogo =
+      '$_baseImage/dark_mantis_pro_gaming_logo.png';
   static const dashboardIconImage = '$_baseImage/dashboard_icon.png';
   static const defaultUserImage = '$_baseImage/default_user.png';
   static const loginScreenBottomDesign =
@@ -15,4 +16,5 @@ class MediaRes {
   static const loginScreenTopGameCovers = '$_baseImage/cover.jpg';
 
 //   icons
+  static const googleIcon = '$_baseIcon/google_icon.png';
 }

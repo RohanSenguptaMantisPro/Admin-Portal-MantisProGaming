@@ -24,12 +24,12 @@ class Colours {
   static const loginSceenBlackGradient = Colors.black;
 
   /// #458CFF
-  static const primaryColour = Color(0xFF0cba48);
+  static const primaryColour = Color(0xFF06BD46);
   static const primaryColourLight = Color(0xFF253f36);
 
   /// #757C8E
   static const whiteTextColour = Color(0xFFfefefe);
-  static const lightWhiteTextColour = Color(0xFF929296);
+  static const lightWhiteTextColour = Color(0xFF9b9da0);
   static const greyTextColour = Colors.grey;
 
   /// #FF5C5C

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/services/router.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/dashboard/presentation/providers/dashboard_controller.dart';
@@ -42,7 +44,7 @@ class MyApp extends StatelessWidget {
                 height: 1,
                 fontSize: 90,
                 color: Colours.whiteTextColour,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
 
@@ -80,7 +82,8 @@ class MyApp extends StatelessWidget {
             labelSmall: GoogleFonts.poppins(
               textStyle: const TextStyle(
                 fontSize: 11,
-                color: Colours.greyTextColour,
+                color: Colours.lightWhiteTextColour,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
