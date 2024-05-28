@@ -27,10 +27,11 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     // Top image container.
                     Container(
-                      decoration: const BoxDecoration(
+                      decoration:  BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 2),
                         image: DecorationImage(
-                          image: AssetImage(MediaRes.loginScreenTopGameCovers),
-                          fit: BoxFit.cover,
+                          image: AssetImage(MediaRes.loginScreenTopCover),
+                          fit: BoxFit.cover ,
                         ),
                         // border: Border.all(color: Colors.purple, width: 2),
                       ),

@@ -13,7 +13,7 @@ class MediaRes {
   static const loginScreenBottomDesign =
       '$_baseSvgImage/login_screen_bottom_design.svg';
 
-  static const loginScreenTopGameCovers = '$_baseImage/cover.jpg';
+  static const loginScreenTopCover = '$_baseImage/bg_mantisdashboard-min.png';
 
 //   icons
   static const googleIcon = '$_baseIcon/google_icon.png';
