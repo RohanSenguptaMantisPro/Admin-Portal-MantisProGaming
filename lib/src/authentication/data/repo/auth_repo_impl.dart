@@ -11,9 +11,29 @@ class AuthRepoImpl implements AuthRepo {
   final AuthRemoteDataSource _remoteDataSource;
 
   @override
-  ResultFuture<void> logInWithGoogle() async {
+  ResultFuture<String> createUser() async {
     try {
-      await _remoteDataSource.logInWithGoogle();
+      final String result = await _remoteDataSource.createUser();
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure.fromException(e));
+    }
+  }
+
+  @override
+  ResultFuture<bool> isAdmin(String userToken) async {
+    try {
+      final bool result = await _remoteDataSource.isAdmin(userToken);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure.fromException(e));
+    }
+  }
+
+  @override
+  ResultFuture<void> cacheUserToken(String userToken) async {
+    try {
+      await _remoteDataSource.cacheUserToken(userToken);
       return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure.fromException(e));

@@ -5,7 +5,11 @@ import 'package:flutter/material.dart';
 abstract class AuthRepo {
   const AuthRepo();
 
-  ResultFuture<void> logInWithGoogle();
+  ResultFuture<String> createUser();
+
+  ResultFuture<bool> isAdmin(String userToken);
+
+  ResultFuture<void> cacheUserToken(String userToken);
 
   ResultFuture<bool> isUserLoggedIn();
 }
