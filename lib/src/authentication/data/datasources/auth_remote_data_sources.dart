@@ -39,7 +39,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
     try {
       final response = await _httpClient.post(
-        Uri.https(kCreateUserEndpoint),
+        Uri.https(baseUrl, kCreateUserEndpoint),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -69,31 +69,29 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       // later to be configured according to the
       // isAdmin endpoint.
-      final response = await _httpClient.post(
-        Uri.https(kIsAdminEndpoint),
+      final response = await _httpClient.get(
+        Uri.https(baseUrl, kIsAdminEndpoint),
         headers: {
-          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $userToken',
         },
-        body: jsonEncode({
-          'token': userToken,
-        }),
       );
 
-      final receivedJson = jsonDecode(response.body) as DataMap;
-
-      if (response.statusCode != 200 && receivedJson['status'] == 'failure') {
-        return false;
-      } else if (response.statusCode != 200 &&
-          receivedJson['status'] != 'failure') {
+      if (response.statusCode == 401) {
+        final receivedJson = jsonDecode(response.body) as DataMap;
+        if (receivedJson['status'] == 'failure') {
+          return false;
+        }
+      } else if (response.statusCode == 200) {
+        final receivedJson = jsonDecode(response.body) as DataMap;
+        if (receivedJson['status'] == 'success') {
+          return true;
+        }
+      } else {
         throw ServerException(
           message: response.body,
           statusCode: response.statusCode.toString(),
         );
-      } else if (response.statusCode == 200 &&
-          receivedJson['status'] == 'success') {
-        return true;
       }
-
       return false;
     } on ServerException {
       rethrow;
@@ -121,9 +119,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<bool> isUserLoggedIn() async {
     try {
-      //
-      // final isUserLoggedIn = _prefs.getString(kUserToken);
-      return false;
+      return (_prefs.getString(kUserToken) != null) ? true : false;
     } catch (e) {
       throw CacheException(message: e.toString());
     }

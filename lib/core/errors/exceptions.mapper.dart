@@ -137,9 +137,9 @@ class CacheExceptionMapper extends ClassMapperBase<CacheException> {
   static String _$message(CacheException v) => v.message;
   static const Field<CacheException, String> _f$message =
       Field('message', _$message);
-  static int _$statusCode(CacheException v) => v.statusCode;
-  static const Field<CacheException, int> _f$statusCode =
-      Field('statusCode', _$statusCode, opt: true, def: 500);
+  static String _$statusCode(CacheException v) => v.statusCode;
+  static const Field<CacheException, String> _f$statusCode =
+      Field('statusCode', _$statusCode, opt: true, def: '500');
 
   @override
   final MappableFields<CacheException> fields = const {
@@ -205,7 +205,7 @@ extension CacheExceptionValueCopy<$R, $Out>
 
 abstract class CacheExceptionCopyWith<$R, $In extends CacheException, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({String? message, int? statusCode});
+  $R call({String? message, String? statusCode});
   CacheExceptionCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -219,7 +219,7 @@ class _CacheExceptionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<CacheException> $mapper =
       CacheExceptionMapper.ensureInitialized();
   @override
-  $R call({String? message, int? statusCode}) => $apply(FieldCopyWithData({
+  $R call({String? message, String? statusCode}) => $apply(FieldCopyWithData({
         if (message != null) #message: message,
         if (statusCode != null) #statusCode: statusCode
       }));

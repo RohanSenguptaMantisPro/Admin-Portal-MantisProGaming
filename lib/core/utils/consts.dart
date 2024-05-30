@@ -1,7 +1,7 @@
 const kUserToken = 'cached_user_token';
 
-const _baseUrl = 'https://analytics.mantispro.app:5100/api/v1/users';
+const baseUrl = 'analytics.mantispro.app';
 
-const kCreateUserEndpoint = '$_baseUrl/auth/android/google';
-const kIsAdminEndpoint = '$_baseUrl/isAdmin';
-const kGetUserDataEndpoint = '$_baseUrl/currentuser';
+const kCreateUserEndpoint = ':5100/api/v1/users/auth/android/google';
+const kIsAdminEndpoint = ':5100/api/v1/users/isAdmin';
+const kGetUserDataEndpoint = ':5100/api/v1/users/currentuser';

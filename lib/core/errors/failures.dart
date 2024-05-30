@@ -20,7 +20,8 @@ abstract class Failure with FailureMappable {
       '$statusCode${statusCode is String ? '' : ' Error'}: $message';
 }
 
-class CacheFailure extends Failure {
+@MappableClass()
+class CacheFailure extends Failure with CacheFailureMappable {
   CacheFailure({required super.message, required super.statusCode});
 
   CacheFailure.fromException(CacheException exception)
@@ -28,49 +29,12 @@ class CacheFailure extends Failure {
           message: exception.message,
           statusCode: exception.statusCode,
         );
-
-  // due to dart_mappable i have to create the overrides. but these methods
-  // shouldn't be called.
-  @override
-  // TODO: implement copyWith
-  FailureCopyWith<Failure, Failure, Failure> get copyWith =>
-      throw UnimplementedError();
-
-  @override
-  String toJson() {
-    // TODO: implement toJson
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, dynamic> toMap() {
-    // TODO: implement toMap
-    throw UnimplementedError();
-  }
 }
 
-class ServerFailure extends Failure {
+@MappableClass()
+class ServerFailure extends Failure with ServerFailureMappable {
   ServerFailure({required super.message, required super.statusCode});
 
   ServerFailure.fromException(ServerException exception)
       : this(message: exception.message, statusCode: exception.statusCode);
-
-  // due to dart_mappable i have to create the overrides. but these methods
-  // shouldn't be called.
-  @override
-  // TODO: implement copyWith
-  FailureCopyWith<Failure, Failure, Failure> get copyWith =>
-      throw UnimplementedError();
-
-  @override
-  String toJson() {
-    // TODO: implement toJson
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, dynamic> toMap() {
-    // TODO: implement toMap
-    throw UnimplementedError();
-  }
 }
