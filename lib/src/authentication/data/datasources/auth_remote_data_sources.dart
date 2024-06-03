@@ -36,15 +36,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<String> createUser() async {
     // Call createUser endpoint.
-
+    debugPrint('------- Calling createUser Endpoint.');
     try {
-      final response = await _httpClient.post(
+      final response = await _httpClient.get(
         Uri.https(baseUrl, kCreateUserEndpoint),
         headers: {
           'Content-Type': 'application/json',
         },
       );
       if (response.statusCode != 200 && response.statusCode != 201) {
+        debugPrint('------- ServerException has occurred.');
         throw ServerException(
           message: response.body,
           statusCode: response.statusCode.toString(),
@@ -56,6 +57,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on ServerException {
       rethrow;
     } catch (e, s) {
+      debugPrint('------- Some error has occurred.');
       debugPrintStack(stackTrace: s);
       throw ServerException(
         message: e.toString(),

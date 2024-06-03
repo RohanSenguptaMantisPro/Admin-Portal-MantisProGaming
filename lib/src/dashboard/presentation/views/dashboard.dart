@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Dashboard extends StatelessWidget {
+  static const routeName = 'dashboard';
+
   const Dashboard({super.key});
 
   // TODO(RohanSengupta): Later add on the mediaQuery screen responsiveness.

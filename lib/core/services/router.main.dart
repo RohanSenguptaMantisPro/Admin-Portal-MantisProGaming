@@ -7,6 +7,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         (_) => const LoginScreen(),
         settings: settings,
       );
+    case Dashboard.routeName:
+      return _pageBuilder(
+        (_) => const Dashboard(),
+        settings: settings,
+      );
 
     default:
       return _pageBuilder(

@@ -4,7 +4,9 @@ import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
 import 'package:flutter/material.dart';
 
 class CenterTextBox extends StatelessWidget {
-  const CenterTextBox({super.key});
+  const CenterTextBox({required this.childButton, super.key});
+
+  final Widget childButton;
 
   @override
   Widget build(BuildContext context) {
@@ -41,31 +43,7 @@ class CenterTextBox extends StatelessWidget {
             const SizedBox(
               height: 50,
             ),
-            SizedBox(
-              width: 270,
-              height: 40,
-              child: ElevatedButton.icon(
-                onPressed: () => (),
-                style: ButtonStyle(
-                  backgroundColor:
-                      const WidgetStatePropertyAll(Colours.primaryColour),
-                  shape: WidgetStatePropertyAll(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-                icon: Image.asset(
-                  MediaRes.googleIcon,
-                  width: 15,
-                  height: 15,
-                ),
-                label: Text(
-                  'Continue with Google',
-                  style: context.theme.textTheme.bodyMedium,
-                ),
-              ),
-            ),
+            childButton,
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [

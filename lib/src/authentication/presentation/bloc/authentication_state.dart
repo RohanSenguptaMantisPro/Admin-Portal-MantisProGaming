@@ -6,7 +6,7 @@ abstract class AuthState with AuthStateMappable {
 }
 
 @MappableClass()
-class AuthInitial extends AuthState with AuthInitialMappable{
+class AuthInitial extends AuthState with AuthInitialMappable {
   const AuthInitial();
 }
 
@@ -15,32 +15,47 @@ class AuthLoading extends AuthState with AuthLoadingMappable {
   const AuthLoading();
 }
 
-class SignedIn extends AuthState {
-  const SignedIn(this.user);
-
-  final LocalUser user;
-
-  @override
-  List<Object> get props => [user];
-}
-
-class SignedUp extends AuthState {
-  const SignedUp();
-}
-
-class ForgotPasswordSent extends AuthState {
-  const ForgotPasswordSent();
-}
-
-class UserUpdated extends AuthState {
-  const UserUpdated();
-}
-
-class AuthError extends AuthState {
+@MappableClass()
+class AuthError extends AuthState with AuthErrorMappable {
   const AuthError(this.message);
 
   final String message;
+}
 
-  @override
-  List<String> get props => [message];
+@MappableClass()
+class CreatedUser extends AuthState with CreatedUserMappable {
+  const CreatedUser({required this.userToken});
+
+  final String userToken;
+}
+
+@MappableClass()
+class AdminCheckStatus extends AuthState with AdminCheckStatusMappable {
+  const AdminCheckStatus({required this.isAdmin});
+
+  final bool isAdmin;
+}
+
+@MappableClass()
+class CachedUserToken extends AuthState with CachedUserTokenMappable {
+  const CachedUserToken();
+}
+
+@MappableClass()
+class CheckingIsUserLoggedIn extends AuthState
+    with CheckingIsUserLoggedInMappable {
+  const CheckingIsUserLoggedIn();
+}
+
+@MappableClass()
+class IsLoggedInStatus extends AuthState with IsLoggedInStatusMappable {
+  const IsLoggedInStatus({required this.isLoggedIn});
+
+  final bool isLoggedIn;
+}
+
+@MappableClass()
+class LoggedInCheckFailed extends AuthState
+    with LoggedInCheckFailedMappable {
+  const LoggedInCheckFailed();
 }

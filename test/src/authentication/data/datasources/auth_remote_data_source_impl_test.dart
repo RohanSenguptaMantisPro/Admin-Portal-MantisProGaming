@@ -36,7 +36,7 @@ void main() {
       'should return [String] when the status code is 200 or 201',
       () async {
         when(
-          () => client.post(
+          () => client.get(
             any(),
             headers: any(named: 'headers'),
           ),
@@ -60,7 +60,7 @@ void main() {
         );
 
         verify(
-          () => client.post(
+          () => client.get(
             Uri.https(baseUrl, kCreateUserEndpoint),
             headers: {
               'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ void main() {
       '201',
       () async {
         when(
-          () => client.post(
+          () => client.get(
             any(),
             headers: any(
               named: 'headers',
@@ -103,7 +103,7 @@ void main() {
         );
 
         verify(
-          () => client.post(
+          () => client.get(
             Uri.https(baseUrl, kCreateUserEndpoint),
             headers: {'Content-Type': 'application/json'},
           ),

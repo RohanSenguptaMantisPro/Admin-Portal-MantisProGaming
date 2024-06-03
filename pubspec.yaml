@@ -10,11 +10,14 @@ environment:
   sdk: '>=3.3.4 <4.0.0'
 
 dependencies:
+  bloc: ^8.1.4
+  bloc_test: ^9.1.7
   cupertino_icons: ^1.0.6
   dart_mappable: ^4.2.2
   dartz: ^0.10.1
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.1.5
   flutter_svg: ^2.0.10+1
   font_awesome_flutter: ^10.7.0
   get_it: ^7.7.0
