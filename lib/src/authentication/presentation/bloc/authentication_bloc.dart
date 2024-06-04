@@ -43,6 +43,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     final result = await _createUser();
+    debugPrint('------- $result');
     debugPrint('------- emitting new state');
     result.fold(
       (failure) => emit(AuthError(failure.errorMessage)),

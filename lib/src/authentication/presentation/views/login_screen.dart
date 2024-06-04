@@ -1,6 +1,7 @@
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_toast.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/widgets/center_text_box.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/dashboard/presentation/views/dashboard.dart';
@@ -31,24 +32,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        // checking if user is loggedin
+        // checking if user is logged in
         if (state is IsLoggedInStatus && state.isLoggedIn == true) {
           Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
         } // if couldn't auto log user in.
         else if (state is LoggedInCheckFailed) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Could not auto log in user'),
-            ),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   const SnackBar(
+          //     content: Text('Could not auto log in user'),
+          //   ),
+          // );
+          showCustomToast(context, 'Auto login failed, please login');
         } // if any error.
         else if (state is AuthError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Something went wrong'),
-            ),
-          );
-        } //on button click userToken recieved and saved.
+          debugPrint('----- listener state : $state');
+          debugPrint('----- Something went wrong : ${state.message}');
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   const SnackBar(
+          //     content: Text('Something went wrong'),
+          //   ),
+          // );
+          showCustomToast(context, 'Something Went Wrong');
+        } //on button click userToken received and saved.
         else if (state is CreatedUser && state.userToken.isNotEmpty) {
           receivedUserToken = state.userToken;
           context.read<AuthBloc>().add(
@@ -60,11 +65,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 CacheUserTokenEvent(receivedUserToken),
               );
         } else if (state is AdminCheckStatus && state.isAdmin == false) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("You don't have Admin Permissions"),
-            ),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   const SnackBar(
+          //     content: Text("You don't have Admin Permissions"),
+          //   ),
+          showCustomToast(context, 'You do not have Admin Permission');
         } //if all ok and cachedUserToken go to dashboard page.
         else if (state is CachedUserToken) {
           Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
@@ -73,7 +78,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
       //
       builder: (context, state) {
-        // dont show login page if checking user token status.
+        // don't show login page if checking user token status.
+        debugPrint('---- new state : $state');
         if (state is CheckingIsUserLoggedIn) {
           return const CircularProgressIndicator();
         } else {
@@ -93,8 +99,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           // Top image container.
                           Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white, width: 2),
+                            decoration: const BoxDecoration(
+                              // border: Border.all(color: Colors.white, width: 2),
                               image: DecorationImage(
                                 image: AssetImage(MediaRes.loginScreenTopCover),
                                 fit: BoxFit.cover,

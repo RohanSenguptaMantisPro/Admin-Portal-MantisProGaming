@@ -102,7 +102,8 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'should emit [AuthLoading, CreatedUser]',
       build: () {
-        when(() => createUser()).thenAnswer((_) async => Right(tUserToken));
+        when(() => createUser())
+            .thenAnswer((_) async => const Right(tUserToken));
         return authBloc;
       },
       act: (bloc) => bloc.add(
@@ -110,7 +111,7 @@ void main() {
       ),
       expect: () => [
         const AuthLoading(),
-        CreatedUser(userToken: tUserToken),
+        const CreatedUser(userToken: tUserToken),
       ],
       verify: (_) {
         verify(() => createUser()).called(1);
