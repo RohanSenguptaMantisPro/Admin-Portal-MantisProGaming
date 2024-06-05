@@ -37,22 +37,16 @@ class _LoginScreenState extends State<LoginScreen> {
           Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
         } // if couldn't auto log user in.
         else if (state is LoggedInCheckFailed) {
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   const SnackBar(
-          //     content: Text('Could not auto log in user'),
-          //   ),
-          // );
           showCustomToast(context, 'Auto login failed, please login');
         } // if any error.
         else if (state is AuthError) {
           debugPrint('----- listener state : $state');
           debugPrint('----- Something went wrong : ${state.message}');
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   const SnackBar(
-          //     content: Text('Something went wrong'),
-          //   ),
-          // );
-          showCustomToast(context, 'Something Went Wrong');
+
+          showCustomToast(
+              context,
+              'Something Went Wrong!! Please try again '
+              'later!');
         } //on button click userToken received and saved.
         else if (state is CreatedUser && state.userToken.isNotEmpty) {
           receivedUserToken = state.userToken;
@@ -65,10 +59,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 CacheUserTokenEvent(receivedUserToken),
               );
         } else if (state is AdminCheckStatus && state.isAdmin == false) {
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   const SnackBar(
-          //     content: Text("You don't have Admin Permissions"),
-          //   ),
           showCustomToast(context, 'You do not have Admin Permission');
         } //if all ok and cachedUserToken go to dashboard page.
         else if (state is CachedUserToken) {

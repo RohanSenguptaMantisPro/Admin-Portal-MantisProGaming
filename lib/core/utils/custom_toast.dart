@@ -4,18 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 
 ToastFuture showCustomToast(BuildContext toastContext, String toastTitle) {
-  final Widget widget = Center(
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(30),
-      child: Container(
-        width: 500,
-        height: 60,
-        color: Colours.primaryColour,
-        child: Center(
-          child: Text(
-            toastTitle,
-            style: toastContext.theme.textTheme.bodySmall,
-          ),
+  final Widget widget = ClipRRect(
+    borderRadius: BorderRadius.circular(30),
+    child: Container(
+      width: 500,
+      height: 60,
+      color: Colours.primaryColour,
+      child: Center(
+        child: Text(
+          toastTitle,
+          style: toastContext.theme.textTheme.bodySmall,
         ),
       ),
     ),
@@ -26,7 +24,7 @@ ToastFuture showCustomToast(BuildContext toastContext, String toastTitle) {
     context: toastContext,
     dismissOtherToast: true,
     duration: const Duration(seconds: 3),
-    position: ToastPosition.bottom ,
+    position: ToastPosition.top ,
     textDirection: TextDirection.ltr,
   );
   return toastFuture;

@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:html' as html;
+import 'dart:ui';
 
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
@@ -39,12 +42,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     debugPrint('------- Calling createUser Endpoint.');
     try {
       final response = await _httpClient.get(
-        Uri.https(baseUrl, kCreateUserEndpoint),
+        Uri.https('$baseUrl:$port', kCreateUserEndpoint),
         headers: {
           'Content-Type': 'application/json',
         },
       );
-      if (response.statusCode != 200 && response.statusCode != 201) {
+      if (response.statusCode != 200 && response.statusCode != 302) {
         debugPrint('------- ServerException has occurred.');
         throw ServerException(
           message: response.body,
@@ -52,12 +55,35 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
-      final receivedJson = jsonDecode(response.body) as DataMap;
+      // // Step 2: Open the URL in a new browser tab
+      // debugPrint('https://$baseUrl:$port$kCreateUserEndpoint');
+      // final newWindow =
+      //     html.window.open('https://$baseUrl:$port$kCreateUserEndpoint', 'OAuth');
+      //
+      // // Step 3: Wait for JWT Token
+      // final completer = Completer<String>();
+      //
+      // // Listen for a message from the new window
+      // html.window.onMessage.listen((event) {
+      //   if (event.data != null && event.data is String) {
+      //     // Complete the Completer with the JWT token
+      //     completer.complete(event.data as String);
+      //     // Close the new window
+      //     newWindow.close();
+      //   }
+      // });
+      //
+      // // Wait until the Completer's Future completes
+      // final response = await completer.future;
+      // debugPrint(response);
+
+      final receivedJson = jsonDecode(response as String) as DataMap;
+      debugPrint(receivedJson.toString());
       return receivedJson['token'].toString();
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      debugPrint('------- Some error has occurred.');
+      debugPrint('------- [RemoteDataSource Error] : $e ');
       debugPrintStack(stackTrace: s);
       throw ServerException(
         message: e.toString(),
@@ -72,7 +98,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // later to be configured according to the
       // isAdmin endpoint.
       final response = await _httpClient.get(
-        Uri.https(baseUrl, kIsAdminEndpoint),
+        Uri.https('$baseUrl:$port', kIsAdminEndpoint),
         headers: {
           'Authorization': 'Bearer $userToken',
         },

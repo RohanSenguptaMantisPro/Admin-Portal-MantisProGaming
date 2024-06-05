@@ -150,7 +150,7 @@ void main() {
         return authBloc;
       },
       act: (bloc) => bloc.add(
-        IsAdminEvent(
+        const IsAdminEvent(
           userToken: tUserToken,
         ),
       ),
@@ -174,7 +174,7 @@ void main() {
         return authBloc;
       },
       act: (bloc) => bloc.add(
-        IsAdminEvent(
+        const IsAdminEvent(
           userToken: tUserToken,
         ),
       ),
@@ -199,7 +199,7 @@ void main() {
         );
         return authBloc;
       },
-      act: (bloc) => bloc.add(CacheUserTokenEvent(tUserToken)),
+      act: (bloc) => bloc.add(const CacheUserTokenEvent(tUserToken)),
       expect: () => [
         const AuthLoading(),
         const CachedUserToken(),
@@ -219,7 +219,7 @@ void main() {
         );
         return authBloc;
       },
-      act: (bloc) => bloc.add(CacheUserTokenEvent(tUserToken)),
+      act: (bloc) => bloc.add(const CacheUserTokenEvent(tUserToken)),
       expect: () => [
         const AuthLoading(),
         AuthError(tServerFailure.errorMessage),
