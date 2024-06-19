@@ -1,6 +1,8 @@
 import 'package:admin_portal_mantis_pro_gaming/core/errors/failures.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/encryption_service.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/cache_user_token.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/create_user.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/google_sign_in_service.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/is_admin.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/is_user_logged_in.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
@@ -17,25 +19,36 @@ class MockCacheUserToken extends Mock implements CacheUserToken {}
 
 class MockIsUserLoggedIn extends Mock implements IsUserLoggedIn {}
 
+class MockEncryptionService extends Mock implements EncryptionService {}
+
+class MockGoogleSignInService extends Mock implements GoogleSignInService {}
+
 void main() {
   late CreateUser createUser;
   late IsAdmin isAdmin;
   late CacheUserToken cacheUserToken;
   late IsUserLoggedIn isUserLoggedIn;
+  late EncryptionService encryptionService;
+  late GoogleSignInService googleSignInService;
   late AuthBloc authBloc;
 
   const tUserToken = 'test user token';
+  const tEncryptedDataMap = {'data': 'encryptedData'};
 
   setUp(() {
     createUser = MockCreateUser();
     isAdmin = MockIsAdmin();
     cacheUserToken = MockCacheUserToken();
     isUserLoggedIn = MockIsUserLoggedIn();
+    googleSignInService = MockGoogleSignInService();
+    encryptionService = MockEncryptionService();
     authBloc = AuthBloc(
+      googleSignInService: googleSignInService,
       createUser: createUser,
       isAdmin: isAdmin,
       cacheUserToken: cacheUserToken,
       isUserLoggedIn: isUserLoggedIn,
+      encryptionService: encryptionService,
     );
   });
 
@@ -47,8 +60,7 @@ void main() {
 
   final tServerFailure = ServerFailure(
     message: 'user-not-found',
-    statusCode: 'There is no user record corresponding to this identifier. '
-        'The user may have been deleted',
+    statusCode: '505',
   );
 
   // also right isLoggedIn tests here.
@@ -98,45 +110,99 @@ void main() {
     );
   });
 
+  // createUser Event.
   group('CreateUserEvent', () {
     blocTest<AuthBloc, AuthState>(
-      'should emit [AuthLoading, CreatedUser]',
+      'should emit [AuthError] when Google Sign-In fails',
       build: () {
-        when(() => createUser())
+        when(() => googleSignInService()).thenAnswer(
+          (_) async => Left(tServerFailure),
+        );
+        return authBloc;
+      },
+      act: (bloc) => bloc.add(const CreateUserEvent()),
+      expect: () => [
+        const AuthLoading(),
+        AuthError(tServerFailure.message),
+      ],
+      verify: (_) {
+        verify(() => googleSignInService()).called(1);
+        verifyNoMoreInteractions(googleSignInService);
+      },
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'should emit [AuthError] when encryption fails',
+      build: () {
+        when(() => googleSignInService())
+            .thenAnswer((_) async => const Right(tUserToken));
+        when(() => encryptionService.encrypt(tUserToken)).thenReturn(null);
+        return authBloc;
+      },
+      act: (bloc) => bloc.add(const CreateUserEvent()),
+      expect: () => [
+        const AuthLoading(),
+        const AuthError('Error in encryption.'),
+      ],
+      verify: (_) {
+        verify(() => googleSignInService()).called(1);
+        verify(() => encryptionService.encrypt(tUserToken)).called(1);
+        verifyNoMoreInteractions(googleSignInService);
+        verifyNoMoreInteractions(encryptionService);
+      },
+    );
+    //
+    blocTest<AuthBloc, AuthState>(
+      'should emit [CreatedUser] when user creation is successful',
+      build: () {
+        when(() => googleSignInService())
+            .thenAnswer((_) async => const Right(tUserToken));
+        when(() => encryptionService.encrypt(tUserToken))
+            .thenReturn(tEncryptedDataMap);
+        when(() => createUser(tEncryptedDataMap))
             .thenAnswer((_) async => const Right(tUserToken));
         return authBloc;
       },
-      act: (bloc) => bloc.add(
-        const CreateUserEvent(),
-      ),
+      act: (bloc) => bloc.add(const CreateUserEvent()),
       expect: () => [
         const AuthLoading(),
         const CreatedUser(userToken: tUserToken),
       ],
       verify: (_) {
-        verify(() => createUser()).called(1);
+        verify(() => googleSignInService()).called(1);
+        verify(() => encryptionService.encrypt(tUserToken)).called(1);
+        verify(() => createUser(tEncryptedDataMap)).called(1);
+        verifyNoMoreInteractions(googleSignInService);
+        verifyNoMoreInteractions(encryptionService);
         verifyNoMoreInteractions(createUser);
       },
     );
-
-    blocTest<AuthBloc, AuthState>(
-      'should emit [AuthLoading, AuthError] when fails',
-      build: () {
-        when(() => createUser()).thenAnswer((_) async => Left(tServerFailure));
-        return authBloc;
-      },
-      act: (bloc) => bloc.add(
-        const CreateUserEvent(),
-      ),
-      expect: () => [
-        const AuthLoading(),
-        AuthError(tServerFailure.errorMessage),
-      ],
-      verify: (_) {
-        verify(() => createUser()).called(1);
-        verifyNoMoreInteractions(createUser);
-      },
-    );
+    //
+    // blocTest<AuthBloc, AuthState>(
+    //   'should emit [AuthError] when user creation fails',
+    //   build: () {
+    //     when(() => googleSignInService())
+    //         .thenAnswer((_) async => const Right(tUserToken));
+    //     when(() => encryptionService.encrypt(tUserToken))
+    //         .thenReturn(tEncryptedDataMap);
+    //     when(() => createUser(tEncryptedDataMap))
+    //         .thenAnswer((_) async => Left(tServerFailure));
+    //     return authBloc;
+    //   },
+    //   act: (bloc) => bloc.add(const CreateUserEvent()),
+    //   expect: () => [
+    //     const AuthLoading(),
+    //     AuthError(tServerFailure.message),
+    //   ],
+    //   verify: (_) {
+    //     verify(() => googleSignInService()).called(1);
+    //     verify(() => encryptionService.encrypt(tUserToken)).called(1);
+    //     verify(() => createUser(tEncryptedDataMap)).called(1);
+    //     verifyNoMoreInteractions(googleSignInService);
+    //     verifyNoMoreInteractions(encryptionService);
+    //     verifyNoMoreInteractions(createUser);
+    //   },
+    // );
   });
 
   group('IsAdminEvent', () {

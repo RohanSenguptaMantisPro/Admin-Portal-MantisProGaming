@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
+import 'package:google_sign_in_web/web_only.dart' as web;
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -255,6 +257,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   style: context.theme.textTheme.bodyMedium,
                                 ),
                               ),
+                                  /*web.renderButton(
+                                configuration: web.GSIButtonConfiguration(
+                                    // buttonStyle
+                                    ),
+                              ),*/
                             ),
                 ),
               ],

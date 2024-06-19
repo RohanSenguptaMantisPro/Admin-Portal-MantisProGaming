@@ -11,9 +11,19 @@ class AuthRepoImpl implements AuthRepo {
   final AuthRemoteDataSource _remoteDataSource;
 
   @override
-  ResultFuture<String> createUser() async {
+  ResultFuture<String> googleSignInService() async {
     try {
-      final String result = await _remoteDataSource.createUser();
+      final String result = await _remoteDataSource.googleSignInService();
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure.fromException(e));
+    }
+  }
+
+  @override
+  ResultFuture<String> createUser(DataMap jsonPayload) async {
+    try {
+      final String result = await _remoteDataSource.createUser(jsonPayload);
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure.fromException(e));
@@ -50,4 +60,6 @@ class AuthRepoImpl implements AuthRepo {
       return Left(ServerFailure.fromException(e));
     }
   }
+
+
 }

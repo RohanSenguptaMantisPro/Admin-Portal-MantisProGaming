@@ -1,10 +1,12 @@
+import 'package:admin_portal_mantis_pro_gaming/core/utils/encryption_service.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/cache_user_token.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/create_user.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/google_sign_in_service.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/is_admin.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/is_user_logged_in.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:flutter/cupertino.dart';
 
 part 'authentication_event.dart';
 
@@ -15,14 +17,18 @@ part 'authentication_bloc.mapper.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
+    required GoogleSignInService googleSignInService,
     required CreateUser createUser,
     required IsAdmin isAdmin,
     required CacheUserToken cacheUserToken,
     required IsUserLoggedIn isUserLoggedIn,
-  })  : _createUser = createUser,
+    required EncryptionService encryptionService,
+  })  : _googleSignInService = googleSignInService,
+        _createUser = createUser,
         _isAdmin = isAdmin,
         _cacheUserToken = cacheUserToken,
         _isUserLoggedIn = isUserLoggedIn,
+        _encryptionService = encryptionService,
         super(const AuthInitial()) {
     on<AuthEvent>((event, emit) {
       emit(const AuthLoading());
@@ -33,22 +39,45 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<IsUserLoggedInEvent>(_isUserLoggedInHandler);
   }
 
+  final GoogleSignInService _googleSignInService;
   final CreateUser _createUser;
   final IsAdmin _isAdmin;
   final CacheUserToken _cacheUserToken;
   final IsUserLoggedIn _isUserLoggedIn;
+  final EncryptionService _encryptionService;
 
   Future<void> _createUserHandler(
     CreateUserEvent event,
     Emitter<AuthState> emit,
   ) async {
-    final result = await _createUser();
-    debugPrint('------- $result');
-    debugPrint('------- emitting new state');
-    result.fold(
-      (failure) => emit(AuthError(failure.errorMessage)),
-      (userToken) => emit(CreatedUser(userToken: userToken)),
-    );
+    // google signin call.
+    final userIdToken = await _googleSignInService();
+
+    // await before fold and then both results are asynced
+    // due to nested calls and handling asynchronous methods
+    // properly.
+
+    await userIdToken.fold((failure) async {
+      emit(AuthError(failure.message));
+    }, (idToken) async {
+      // encryption.
+      final DataMap? encryptedDataMap = _encryptionService.encrypt(idToken);
+
+      if (encryptedDataMap == null) {
+        emit(const AuthError('Error in encryption.'));
+      }
+      // create user http call.
+      final createdUserToken = await _createUser(encryptedDataMap!);
+
+      await createdUserToken.fold(
+        (failure) async {
+          emit(AuthError(failure.message));
+        },
+        (createdUserToken) async {
+          emit(CreatedUser(userToken: createdUserToken));
+        },
+      );
+    });
   }
 
   Future<void> _isAdminHandler(

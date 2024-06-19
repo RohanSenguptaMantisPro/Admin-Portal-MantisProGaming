@@ -9,27 +9,49 @@ Future<void> init() async {
 Future<void> _initAuth() async {
   final prefs = await SharedPreferences.getInstance();
   final httpClient = http.Client();
+  final GoogleSignIn googleSignIn = GoogleSignIn(
+    clientId: webClientId,
+    scopes: [
+      'email',
+      'profile',
+    ],
+  );
+  final rsaService = RSAService();
+  final aesService = AESService();
 
   sl
     ..registerFactory(
       () => AuthBloc(
+        googleSignInService: sl(),
         createUser: sl(),
         isAdmin: sl(),
         cacheUserToken: sl(),
         isUserLoggedIn: sl(),
+        encryptionService: sl(),
       ),
     )
+    ..registerLazySingleton(() => GoogleSignInService(sl()))
     ..registerLazySingleton(() => CreateUser(sl()))
     ..registerLazySingleton(() => IsAdmin(sl()))
     ..registerLazySingleton(() => CacheUserToken(sl()))
     ..registerLazySingleton(() => IsUserLoggedIn(sl()))
+    ..registerLazySingleton(
+      () => EncryptionService(
+        aesService: sl(),
+        rsaService: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => rsaService)
+    ..registerLazySingleton(() => aesService)
     ..registerLazySingleton<AuthRepo>(() => AuthRepoImpl(sl()))
     ..registerLazySingleton<AuthRemoteDataSource>(
       () => AuthRemoteDataSourceImpl(
+        googleSignIn: sl(),
         prefs: sl(),
         httpClient: sl(),
       ),
     )
+    ..registerLazySingleton(() => googleSignIn)
     ..registerLazySingleton(() => prefs)
     ..registerLazySingleton(() => httpClient);
 }

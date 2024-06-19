@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 abstract class AuthRepo {
   const AuthRepo();
 
-  ResultFuture<String> createUser();
+  ResultFuture<String> googleSignInService();
+
+  ResultFuture<String> createUser(DataMap jsonPayload);
 
   ResultFuture<bool> isAdmin(String userToken);
 

@@ -1,19 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html' as html;
-import 'dart:ui';
 
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthRemoteDataSource {
   const AuthRemoteDataSource();
 
-  Future<String> createUser();
+  Future<String> googleSignInService();
+
+  Future<String> createUser(DataMap jsonPayload);
 
   Future<bool> isAdmin(String userToken);
 
@@ -26,28 +27,69 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   const AuthRemoteDataSourceImpl({
     required SharedPreferences prefs,
     required http.Client httpClient,
+    required GoogleSignIn googleSignIn,
   })  : _prefs = prefs,
-        _httpClient = httpClient;
+        _httpClient = httpClient,
+        _googleSignIn = googleSignIn;
+
+  // _googleSignIn = googleSignIn
 
   final SharedPreferences _prefs;
   final http.Client _httpClient;
+  final GoogleSignIn _googleSignIn;
 
   // final FirebaseAuth _authClient;
   // final FirebaseFirestore _cloudStoreClient;
   // final FirebaseStorage _dbClient;
 
+  // google sign in
+  // encrypt.
+  // createUser as below with updates.
+
   @override
-  Future<String> createUser() async {
+  Future<String> googleSignInService() async {
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signInSilently();
+
+      final GoogleSignInAuthentication googleUserAuthentication =
+          await googleSignInAccount!.authentication;
+
+      final userIdToken = googleUserAuthentication.idToken ?? '';
+      if (userIdToken.isEmpty) {
+        throw const ServerException(
+          message: 'Could not retrieve userIdToken',
+          statusCode: '505',
+        );
+      }
+
+      return userIdToken;
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      debugPrint('------- [RemoteDataSource Error] : $e ');
+      debugPrintStack(stackTrace: s);
+      throw ServerException(
+        message: e.toString(),
+        statusCode: '505',
+      );
+    }
+  }
+
+  @override
+  Future<String> createUser(DataMap jsonPayload) async {
     // Call createUser endpoint.
     debugPrint('------- Calling createUser Endpoint.');
     try {
-      final response = await _httpClient.get(
+      final response = await _httpClient.post(
         Uri.https('$baseUrl:$port', kCreateUserEndpoint),
         headers: {
           'Content-Type': 'application/json',
         },
+        body: jsonEncode(jsonPayload),
       );
-      if (response.statusCode != 200 && response.statusCode != 302) {
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
         debugPrint('------- ServerException has occurred.');
         throw ServerException(
           message: response.body,
@@ -55,29 +97,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
-      // // Step 2: Open the URL in a new browser tab
-      // debugPrint('https://$baseUrl:$port$kCreateUserEndpoint');
-      // final newWindow =
-      //     html.window.open('https://$baseUrl:$port$kCreateUserEndpoint', 'OAuth');
-      //
-      // // Step 3: Wait for JWT Token
-      // final completer = Completer<String>();
-      //
-      // // Listen for a message from the new window
-      // html.window.onMessage.listen((event) {
-      //   if (event.data != null && event.data is String) {
-      //     // Complete the Completer with the JWT token
-      //     completer.complete(event.data as String);
-      //     // Close the new window
-      //     newWindow.close();
-      //   }
-      // });
-      //
-      // // Wait until the Completer's Future completes
-      // final response = await completer.future;
-      // debugPrint(response);
-
-      final receivedJson = jsonDecode(response as String) as DataMap;
+      final receivedJson = jsonDecode(response.body) as DataMap;
       debugPrint(receivedJson.toString());
       return receivedJson['token'].toString();
     } on ServerException {

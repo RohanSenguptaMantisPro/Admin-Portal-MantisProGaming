@@ -35,19 +35,19 @@ void main() {
   );
   const tUserToken = 'test user token';
 
-  group('createUser', () {
+  group('googleSignInService', () {
     test(
       'should return [String] when call to remote source is successful',
       () async {
-        when(() => remoteDataSource.createUser()).thenAnswer(
+        when(() => remoteDataSource.googleSignInService()).thenAnswer(
           (_) async => tUserToken,
         );
 
-        final result = await repoImpl.createUser();
+        final result = await repoImpl.googleSignInService();
 
         expect(result, equals(const Right<dynamic, String>(tUserToken)));
 
-        verify(() => remoteDataSource.createUser()).called(1);
+        verify(() => remoteDataSource.googleSignInService()).called(1);
 
         verifyNoMoreInteractions(remoteDataSource);
       },
@@ -57,11 +57,11 @@ void main() {
       'should return [ServerFailure] when call to remote source is '
       'unsuccessful',
       () async {
-        when(() => remoteDataSource.createUser()).thenThrow(
+        when(() => remoteDataSource.googleSignInService()).thenThrow(
           tLoginException,
         );
 
-        final result = await repoImpl.createUser();
+        final result = await repoImpl.googleSignInService();
 
         expect(
           result,
@@ -75,20 +75,68 @@ void main() {
           ),
         );
 
-        verify(() => remoteDataSource.createUser()).called(1);
+        verify(() => remoteDataSource.googleSignInService()).called(1);
 
         verifyNoMoreInteractions(remoteDataSource);
       },
     );
   });
 
+  group('createUser', () {
+    test(
+      'should return [String] when call to remote source is successful',
+      () async {
+        when(() => remoteDataSource.createUser(any())).thenAnswer(
+          (_) async => tUserToken,
+        );
+
+        final result = await repoImpl.createUser({'data': 'encryptedData'});
+
+        expect(result, equals(const Right<dynamic, String>(tUserToken)));
+
+        verify(() => remoteDataSource.createUser({'data': 'encryptedData'}))
+            .called(1);
+
+        verifyNoMoreInteractions(remoteDataSource);
+      },
+    );
+
+    test(
+      'should return [ServerFailure] when call to remote source is '
+      'unsuccessful',
+      () async {
+        when(() => remoteDataSource.createUser(any())).thenThrow(
+          tLoginException,
+        );
+
+        final result = await repoImpl.createUser({'data': 'encryptedData'});
+
+        expect(
+          result,
+          equals(
+            Left<dynamic, void>(
+              ServerFailure(
+                message: 'Could not log in',
+                statusCode: '404',
+              ),
+            ),
+          ),
+        );
+
+        verify(() => remoteDataSource.createUser({'data': 'encryptedData'}))
+            .called(1);
+
+        verifyNoMoreInteractions(remoteDataSource);
+      },
+    );
+  });
 
   group('isAdmin', () {
     test(
       'should return [bool] when call to remote source is successful',
-          () async {
+      () async {
         when(() => remoteDataSource.isAdmin(any())).thenAnswer(
-              (_) async => true,
+          (_) async => true,
         );
 
         final result = await repoImpl.isAdmin(tUserToken);
@@ -103,8 +151,8 @@ void main() {
 
     test(
       'should return [ServerFailure] when call to remote source is '
-          'unsuccessful',
-          () async {
+      'unsuccessful',
+      () async {
         when(() => remoteDataSource.isAdmin(any())).thenThrow(
           tLoginException,
         );
@@ -130,13 +178,12 @@ void main() {
     );
   });
 
-
   group('cacheUserToken', () {
     test(
       'should return [void] when call to remote source is successful',
-          () async {
+      () async {
         when(() => remoteDataSource.cacheUserToken(any())).thenAnswer(
-              (_) async => Future.value(),
+          (_) async => Future.value(),
         );
 
         final result = await repoImpl.cacheUserToken(tUserToken);
@@ -151,8 +198,8 @@ void main() {
 
     test(
       'should return [ServerFailure] when call to remote source is '
-          'unsuccessful',
-          () async {
+      'unsuccessful',
+      () async {
         when(() => remoteDataSource.cacheUserToken(any())).thenThrow(
           tLoginException,
         );
@@ -177,7 +224,6 @@ void main() {
       },
     );
   });
-
 
   group('isUserLoggedIn', () {
     test(

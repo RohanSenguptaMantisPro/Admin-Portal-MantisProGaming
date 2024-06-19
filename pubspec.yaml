@@ -10,6 +10,7 @@ environment:
   sdk: '>=3.3.4 <4.0.0'
 
 dependencies:
+  asn1lib: ^1.5.3
   bloc: ^8.1.4
   bloc_test: ^9.1.7
   cupertino_icons: ^1.0.6
@@ -23,10 +24,13 @@ dependencies:
   get_it: ^7.7.0
   getwidget: ^4.0.0
   google_fonts: ^6.2.1
+  google_sign_in: ^6.2.1
+  google_sign_in_web: ^0.12.4+1
   http: ^1.2.1
   mocktail: ^1.0.3
   oktoast: ^3.4.0
   path_provider: ^2.1.2
+  pointycastle: ^3.9.1
   provider: ^6.1.2
   shared_preferences: ^2.2.3
 

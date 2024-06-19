@@ -20,15 +20,15 @@ void main() {
   test(
     'should call the [AuthRepo.createUser]',
     () async {
-      when(() => authRepo.createUser()).thenAnswer(
+      when(() => authRepo.createUser(any())).thenAnswer(
         (_) async => const Right(tUserToken),
       );
 
-      final result = await createUser();
+      final result = await createUser({'data' : 'encryptedData'});
 
       expect(result, equals(const Right<dynamic, String>(tUserToken)));
 
-      verify(() => authRepo.createUser()).called(1);
+      verify(() => authRepo.createUser({'data' : 'encryptedData'})).called(1);
 
       verifyNoMoreInteractions(authRepo);
     },
