@@ -1,3 +1,4 @@
+import 'package:admin_portal_mantis_pro_gaming/core/utils/browser_info.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/encryption_service.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/cache_user_token.dart';
@@ -7,6 +8,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecase
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/is_user_logged_in.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:flutter/cupertino.dart';
 
 part 'authentication_event.dart';
 
@@ -66,8 +68,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (encryptedDataMap == null) {
         emit(const AuthError('Error in encryption.'));
       }
+
+      //   accessing device info.
+      final Map<String, dynamic>? systemInfo = await deviceInfo();
+      if (systemInfo == null) {
+        emit(const AuthError('Error in encryption.'));
+      }
+
+      debugPrint('--------encryptedDataMap : $encryptedDataMap');
+      debugPrint('--------systemInfo : $systemInfo');
+
       // create user http call.
-      final createdUserToken = await _createUser(encryptedDataMap!);
+      final createdUserToken =
+          await _createUser({...encryptedDataMap!, ...systemInfo!});
+      // merged two maps.
 
       await createdUserToken.fold(
         (failure) async {

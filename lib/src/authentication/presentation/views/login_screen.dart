@@ -1,16 +1,21 @@
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/services/injection_container.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_toast.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/widgets/center_text_box.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/dashboard/presentation/views/dashboard.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:google_sign_in_web/web_only.dart' as web;
+
+import 'dart:html' as html;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,6 +28,33 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+
+    // call signInSilently() here : meaning add the createUserEvent
+    // so that is googleUserAccount != null it will do it auto signin
+    // else, it will give automatically no user interaction : one tap ux.
+    // and then logs user in as it normally does with implemented logic.
+    //  ADD BLOC EVENT
+    // context.read<AuthBloc>().add(
+    //       const CreateUserEvent(),
+    //     );
+
+    // and somehow, web.renderButton() will be called on user button press.
+    // and listener here for that if user is authenticated.
+    // then : add the createUserEvent event inside listener
+    // (  rest will run the same, return idtoken . encryption
+    // . )
+    sl<GoogleSignIn>()
+        .onCurrentUserChanged
+        .listen((GoogleSignInAccount? account) async {
+      // However, on web...
+      if (kIsWeb && account != null) {
+        //add bloc event
+        context.read<AuthBloc>().add(
+              const CreateUserEvent(),
+            );
+      }
+    });
+
     // context.read<AuthBloc>().add(
     //       const IsUserLoggedInEvent(),
     //     );
@@ -230,7 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           : SizedBox(
                               width: 270,
                               height: 40,
-                              child: ElevatedButton.icon(
+                              child: /*ElevatedButton.icon(
                                 onPressed: () {
                                   //  ADD BLOC EVENT
                                   context.read<AuthBloc>().add(
@@ -256,12 +288,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   'Continue with Google',
                                   style: context.theme.textTheme.bodyMedium,
                                 ),
-                              ),
-                                  /*web.renderButton(
+                              ),*/
+                                  web.renderButton(
                                 configuration: web.GSIButtonConfiguration(
                                     // buttonStyle
                                     ),
-                              ),*/
+                              ),
                             ),
                 ),
               ],

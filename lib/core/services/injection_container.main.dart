@@ -54,6 +54,8 @@ Future<void> _initAuth() async {
     ..registerLazySingleton(() => googleSignIn)
     ..registerLazySingleton(() => prefs)
     ..registerLazySingleton(() => httpClient);
+
+
 }
 //
 // Future<void> _initOnBoarding() async {
