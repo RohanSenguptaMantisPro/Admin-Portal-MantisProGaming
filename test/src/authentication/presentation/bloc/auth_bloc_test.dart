@@ -1,5 +1,5 @@
 import 'package:admin_portal_mantis_pro_gaming/core/errors/failures.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/encryption_service.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/utils/encryption_service.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/cache_user_token.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/create_user.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/google_sign_in_service.dart';

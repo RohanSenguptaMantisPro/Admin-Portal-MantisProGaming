@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/rsa_encryption.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/utils/rsa_encryption.dart';
 import 'package:pointycastle/export.dart';
 
 class AESService {

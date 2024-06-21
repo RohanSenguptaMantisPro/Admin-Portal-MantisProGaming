@@ -1,5 +1,5 @@
-import 'package:admin_portal_mantis_pro_gaming/core/utils/aes_encryption.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/rsa_encryption.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/utils/aes_encryption.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/utils/rsa_encryption.dart';
 
 class EncryptionService {
   const EncryptionService({

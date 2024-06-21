@@ -15,8 +15,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:google_sign_in_web/web_only.dart' as web;
 
-import 'dart:html' as html;
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -25,39 +23,41 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  int callCounter = 0;
+
   @override
   void initState() {
     super.initState();
 
-    // call signInSilently() here : meaning add the createUserEvent
-    // so that is googleUserAccount != null it will do it auto signin
-    // else, it will give automatically no user interaction : one tap ux.
-    // and then logs user in as it normally does with implemented logic.
-    //  ADD BLOC EVENT
-    // context.read<AuthBloc>().add(
-    //       const CreateUserEvent(),
-    //     );
-
-    // and somehow, web.renderButton() will be called on user button press.
+    // web.renderButton() will be called on user button press.
     // and listener here for that if user is authenticated.
     // then : add the createUserEvent event inside listener
     // (  rest will run the same, return idtoken . encryption
     // . )
+    // so once web.renderButton is pressed here and googleSignInAccount
+    // data is generated in remoteDataSource method
+    // signInSilently will also take the already existing userData
+    // generate the idToken, no need to press signin again by user on
+    // oneTapUx.
     sl<GoogleSignIn>()
         .onCurrentUserChanged
         .listen((GoogleSignInAccount? account) async {
       // However, on web...
       if (kIsWeb && account != null) {
         //add bloc event
-        context.read<AuthBloc>().add(
-              const CreateUserEvent(),
-            );
+        if (callCounter == 0) {
+          context.read<AuthBloc>().add(
+                const CreateUserEvent(),
+              );
+        }
+        callCounter++;
       }
     });
 
-    // context.read<AuthBloc>().add(
-    //       const IsUserLoggedInEvent(),
-    //     );
+    // auto login user if token is saved.
+    context.read<AuthBloc>().add(
+          const IsUserLoggedInEvent(),
+        );
   }
 
   @override

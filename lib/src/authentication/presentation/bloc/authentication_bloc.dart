@@ -1,5 +1,5 @@
-import 'package:admin_portal_mantis_pro_gaming/core/utils/browser_info.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/encryption_service.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/utils/browser_info.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/utils/encryption_service.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/cache_user_token.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/create_user.dart';
@@ -69,7 +69,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(const AuthError('Error in encryption.'));
       }
 
-      //   accessing device info.
+      //   accessing device inf utils method call.
       final Map<String, dynamic>? systemInfo = await deviceInfo();
       if (systemInfo == null) {
         emit(const AuthError('Error in encryption.'));
