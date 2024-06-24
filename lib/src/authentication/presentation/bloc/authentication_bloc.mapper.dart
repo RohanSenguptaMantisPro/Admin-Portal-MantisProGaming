@@ -1260,17 +1260,17 @@ class IsLoggedInStatusMapper extends ClassMapperBase<IsLoggedInStatus> {
   @override
   final String id = 'IsLoggedInStatus';
 
-  static bool _$isLoggedIn(IsLoggedInStatus v) => v.isLoggedIn;
-  static const Field<IsLoggedInStatus, bool> _f$isLoggedIn =
-      Field('isLoggedIn', _$isLoggedIn);
+  static String _$loggedInUserToken(IsLoggedInStatus v) => v.loggedInUserToken;
+  static const Field<IsLoggedInStatus, String> _f$loggedInUserToken =
+      Field('loggedInUserToken', _$loggedInUserToken);
 
   @override
   final MappableFields<IsLoggedInStatus> fields = const {
-    #isLoggedIn: _f$isLoggedIn,
+    #loggedInUserToken: _f$loggedInUserToken,
   };
 
   static IsLoggedInStatus _instantiate(DecodingData data) {
-    return IsLoggedInStatus(isLoggedIn: data.dec(_f$isLoggedIn));
+    return IsLoggedInStatus(loggedInUserToken: data.dec(_f$loggedInUserToken));
   }
 
   @override
@@ -1328,7 +1328,7 @@ extension IsLoggedInStatusValueCopy<$R, $Out>
 abstract class IsLoggedInStatusCopyWith<$R, $In extends IsLoggedInStatus, $Out>
     implements AuthStateCopyWith<$R, $In, $Out> {
   @override
-  $R call({bool? isLoggedIn});
+  $R call({String? loggedInUserToken});
   IsLoggedInStatusCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -1342,11 +1342,12 @@ class _IsLoggedInStatusCopyWithImpl<$R, $Out>
   late final ClassMapperBase<IsLoggedInStatus> $mapper =
       IsLoggedInStatusMapper.ensureInitialized();
   @override
-  $R call({bool? isLoggedIn}) => $apply(
-      FieldCopyWithData({if (isLoggedIn != null) #isLoggedIn: isLoggedIn}));
+  $R call({String? loggedInUserToken}) => $apply(FieldCopyWithData(
+      {if (loggedInUserToken != null) #loggedInUserToken: loggedInUserToken}));
   @override
   IsLoggedInStatus $make(CopyWithData data) => IsLoggedInStatus(
-      isLoggedIn: data.get(#isLoggedIn, or: $value.isLoggedIn));
+      loggedInUserToken:
+          data.get(#loggedInUserToken, or: $value.loggedInUserToken));
 
   @override
   IsLoggedInStatusCopyWith<$R2, IsLoggedInStatus, $Out2> $chain<$R2, $Out2>(

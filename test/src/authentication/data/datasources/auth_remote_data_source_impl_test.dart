@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/datasources/auth_remote_data_sources.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/models/admin_details_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
@@ -51,6 +52,7 @@ void main() {
   });
 
   const tUserToken = 'test user token';
+  const tAdminDetailsModel = AdminDetailsModel.empty();
 
   // google signin.
   group('GoogleSignIn', () {
@@ -140,10 +142,10 @@ void main() {
 
     test(
       'should throw [ServerException] when the status code is not 200 or '
-          '201',
-          () async {
+      '201',
+      () async {
         when(
-              () => mockClient.post(
+          () => mockClient.post(
             any(),
             headers: any(
               named: 'headers',
@@ -151,7 +153,7 @@ void main() {
             body: any(named: 'body'),
           ),
         ).thenAnswer(
-              (_) async => http.Response(
+          (_) async => http.Response(
             'Could not log user in',
             500,
           ),
@@ -160,7 +162,7 @@ void main() {
         final methodCall = remoteDataSourceImpl.createUser;
 
         expect(
-              () async => methodCall({'data': 'encryptedData'}),
+          () async => methodCall({'data': 'encryptedData'}),
           throwsA(
             const ServerException(
               message: 'Could not log user in',
@@ -170,7 +172,7 @@ void main() {
         );
 
         verify(
-              () => mockClient.post(
+          () => mockClient.post(
             Uri.https('$baseUrl:$port', kCreateUserEndpoint),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({'data': 'encryptedData'}),
@@ -357,7 +359,7 @@ void main() {
 
         final result = await remoteDataSourceImpl.isUserLoggedIn();
 
-        expect(result, true);
+        expect(result, tUserToken);
 
         verify(() => mockSharedPreferences.getString(kUserToken)).called(1);
 
@@ -374,7 +376,7 @@ void main() {
 
         final result = await remoteDataSourceImpl.isUserLoggedIn();
 
-        expect(result, false);
+        expect(result, '');
 
         verify(() => mockSharedPreferences.getString(kUserToken)).called(1);
 
@@ -400,6 +402,98 @@ void main() {
         verify(() => mockSharedPreferences.getString(kUserToken)).called(1);
 
         verifyNoMoreInteractions(mockSharedPreferences);
+      },
+    );
+  });
+
+//   fetchUserData.
+  group('fetchUserData.', () {
+    test(
+      'should return AdminDetailsModel when the status code is 200 or 201',
+      () async {
+        when(
+          () => mockClient.get(
+            any(),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer(
+          (_) async => http.Response(
+            jsonEncode(
+              {
+                'data': {
+                  'data': {
+                    'accountType': '',
+                    'name': '',
+                    'email': '',
+                    'displayPicture': '',
+                  },
+                },
+              },
+            ),
+            200,
+          ),
+        );
+
+        final methodCall = await remoteDataSourceImpl.fetchUserData(tUserToken);
+
+        expect(
+          methodCall,
+          equals(tAdminDetailsModel),
+        );
+
+        verify(
+          () => mockClient.get(
+            Uri.https('$baseUrl:$port', kGetUserDataEndpoint),
+            headers: {
+              'Authorization': 'Bearer $tUserToken',
+            },
+          ),
+        ).called(1);
+
+        verifyNoMoreInteractions(mockClient);
+      },
+    );
+
+    test(
+      'should throw [ServerException] when the status code is not 200 or '
+      '201',
+      () async {
+        when(
+          () => mockClient.post(
+            any(),
+            headers: any(
+              named: 'headers',
+            ),
+            body: any(named: 'body'),
+          ),
+        ).thenAnswer(
+          (_) async => http.Response(
+            'Could not log user in',
+            500,
+          ),
+        );
+
+        final methodCall = remoteDataSourceImpl.createUser;
+
+        expect(
+          () async => methodCall({'data': 'encryptedData'}),
+          throwsA(
+            const ServerException(
+              message: 'Could not log user in',
+              statusCode: '500',
+            ),
+          ),
+        );
+
+        verify(
+          () => mockClient.post(
+            Uri.https('$baseUrl:$port', kCreateUserEndpoint),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({'data': 'encryptedData'}),
+          ),
+        ).called(1);
+
+        verifyNoMoreInteractions(mockClient);
       },
     );
   });

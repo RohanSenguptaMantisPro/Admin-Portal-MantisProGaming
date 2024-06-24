@@ -125,7 +125,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final result = await _isUserLoggedIn();
     result.fold(
       (failure) => emit(const LoggedInCheckFailed()),
-      (isUserLoggedIn) => emit(IsLoggedInStatus(isLoggedIn: isUserLoggedIn)),
+      (isUserLoggedIn) => emit(IsLoggedInStatus(loggedInUserToken: isUserLoggedIn)),
     );
   }
 }

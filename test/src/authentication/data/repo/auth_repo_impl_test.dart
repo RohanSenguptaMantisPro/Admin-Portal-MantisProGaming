@@ -1,7 +1,9 @@
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/errors/failures.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/datasources/auth_remote_data_sources.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/models/admin_details_model.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/repo/auth_repo_impl.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/entities/admin_details.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -17,13 +19,8 @@ void main() {
     repoImpl = AuthRepoImpl(remoteDataSource);
   });
 
-  // const tPassword = 'Test password';
-  // const tFullName = 'Test full name';
-  // const tEmail = 'Test email';
-  // const tUpdateAction = UpdateUserAction.password;
-  // const tUserData = 'New password';
-  //
-  // const tUser = LocalUserModel.empty();
+  const tAdminDetailsModel = AdminDetailsModel.empty();
+  const tAdminDetails = AdminDetails.empty();
 
   const tLoginException = ServerException(
     message: 'Could not log in',
@@ -33,6 +30,11 @@ void main() {
     message: 'Could not check if user is logged in',
     statusCode: '404',
   );
+  const tFetchAdminDataException = ServerException(
+    message: 'Could not fetch user data',
+    statusCode: '404',
+  );
+
   const tUserToken = 'test user token';
 
   group('googleSignInService', () {
@@ -230,12 +232,12 @@ void main() {
       'should return [false] when call to remote source is successful',
       () async {
         when(() => remoteDataSource.isUserLoggedIn()).thenAnswer(
-          (_) async => false,
+          (_) async => tUserToken,
         );
 
         final result = await repoImpl.isUserLoggedIn();
 
-        expect(result, equals(const Right<dynamic, bool>(false)));
+        expect(result, equals(const Right<dynamic, String>(tUserToken)));
 
         verify(() => remoteDataSource.isUserLoggedIn()).called(1);
 
@@ -266,6 +268,60 @@ void main() {
         );
 
         verify(() => remoteDataSource.isUserLoggedIn()).called(1);
+
+        verifyNoMoreInteractions(remoteDataSource);
+      },
+    );
+  });
+
+  // fetchUserData.
+  group('fetchUserData', () {
+    test(
+      'should return [AdminDetailsModel] when call to remote source is '
+      'successful',
+      () async {
+        when(() => remoteDataSource.fetchUserData(any())).thenAnswer(
+          (_) async => tAdminDetailsModel,
+        );
+
+        final result = await repoImpl.fetchUserData(tUserToken);
+
+        expect(
+          result,
+          equals(
+            const Right<dynamic, AdminDetails>(tAdminDetailsModel),
+          ),
+        );
+
+        verify(() => remoteDataSource.fetchUserData(tUserToken)).called(1);
+
+        verifyNoMoreInteractions(remoteDataSource);
+      },
+    );
+
+    test(
+      'should return [ServerFailure] when call to remote source is '
+      'unsuccessful',
+      () async {
+        when(() => remoteDataSource.fetchUserData(any())).thenThrow(
+          tFetchAdminDataException,
+        );
+
+        final result = await repoImpl.fetchUserData(tUserToken);
+
+        expect(
+          result,
+          equals(
+            Left<dynamic, void>(
+              ServerFailure(
+                message: 'Could not fetch user data',
+                statusCode: '404',
+              ),
+            ),
+          ),
+        );
+
+        verify(() => remoteDataSource.fetchUserData(tUserToken)).called(1);
 
         verifyNoMoreInteractions(remoteDataSource);
       },

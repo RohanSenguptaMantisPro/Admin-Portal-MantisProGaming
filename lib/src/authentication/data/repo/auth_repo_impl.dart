@@ -2,6 +2,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/errors/failures.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/datasources/auth_remote_data_sources.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/entities/admin_details.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/repo/auth_repo.dart';
 import 'package:dartz/dartz.dart';
 
@@ -51,7 +52,7 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  ResultFuture<bool> isUserLoggedIn() async {
+  ResultFuture<String> isUserLoggedIn() async {
     try {
       final result = await _remoteDataSource.isUserLoggedIn();
 
@@ -61,5 +62,14 @@ class AuthRepoImpl implements AuthRepo {
     }
   }
 
+  @override
+  ResultFuture<AdminDetails> fetchUserData(String userToken) async {
+    try {
+      final result = await _remoteDataSource.fetchUserData(userToken);
 
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure.fromException(e));
+    }
+  }
 }

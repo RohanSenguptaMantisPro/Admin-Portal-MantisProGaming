@@ -1,3 +1,4 @@
+import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
@@ -5,7 +6,8 @@ import 'package:admin_portal_mantis_pro_gaming/core/services/injection_container
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_toast.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/widgets/center_text_box.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/dashboard/presentation/views/dashboard.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/dashboard/home/presentation/views/dashboard.dart';
+
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
@@ -62,12 +64,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String receivedUserToken = '';
-
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         // checking if user is logged in
-        if (state is IsLoggedInStatus && state.isLoggedIn == true) {
+        if (state is IsLoggedInStatus && state.loggedInUserToken.isNotEmpty) {
+          // here if logged in initialise the setter with the received userToken
+          // to access elsewhere too.
+
+          context.read<UserTokenProvider>().initUser(state.loggedInUserToken);
+
+          // fetch admin profile data bloc event add here. and then setter to
+          // store user data.
+
           Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
         } // if couldn't auto log user in.
         else if (state is LoggedInCheckFailed) {
@@ -83,20 +91,31 @@ class _LoginScreenState extends State<LoginScreen> {
               'later!');
         } //on button click userToken received and saved.
         else if (state is CreatedUser && state.userToken.isNotEmpty) {
-          receivedUserToken = state.userToken;
+          // now to send this for isAdmin I am using the userToken again,
+          // so if stored in global file, we could access this with a getter.
+          // and set in that file with a setter.
+          // here if logged in initialise the setter with the received userToken
+          // to access elsewhere too.
+          context.read<UserTokenProvider>().initUser(state.userToken);
+
           context.read<AuthBloc>().add(
                 IsAdminEvent(userToken: state.userToken),
               );
         } // check admin or not.
         else if (state is AdminCheckStatus && state.isAdmin == true) {
+          final userToken = context.read<UserTokenProvider>().userToken;
+
           context.read<AuthBloc>().add(
-                CacheUserTokenEvent(receivedUserToken),
+                CacheUserTokenEvent(userToken!),
               );
         } else if (state is AdminCheckStatus && state.isAdmin == false) {
           showCustomToast(context, 'You do not have Admin Permission');
         } //if all ok and cachedUserToken go to dashboard page.
         else if (state is CachedUserToken) {
           Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
+
+          // fetch admin profile data bloc event add here. and then setter to
+          // store user data.
         }
       },
 

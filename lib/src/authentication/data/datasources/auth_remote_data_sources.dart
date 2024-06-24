@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/models/admin_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
@@ -20,7 +21,9 @@ abstract class AuthRemoteDataSource {
 
   Future<void> cacheUserToken(String userToken);
 
-  Future<bool> isUserLoggedIn();
+  Future<String> isUserLoggedIn();
+
+  Future<AdminDetailsModel> fetchUserData(String userToken);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -165,11 +168,48 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<bool> isUserLoggedIn() async {
+  Future<String> isUserLoggedIn() async {
     try {
-      return (_prefs.getString(kUserToken) != null) ? true : false;
+      final userToken = _prefs.getString(kUserToken);
+      return (userToken != null) ? userToken : '';
     } catch (e) {
       throw CacheException(message: e.toString());
+    }
+  }
+
+  @override
+  Future<AdminDetailsModel> fetchUserData(String userToken) async {
+    try {
+      // later to be configured according to the
+      // isAdmin endpoint.
+      final response = await _httpClient.get(
+        Uri.https('$baseUrl:$port', kGetUserDataEndpoint),
+        headers: {
+          'Authorization': 'Bearer $userToken',
+        },
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        debugPrint('------- ServerException has occurred.');
+        throw ServerException(
+          message: response.body,
+          statusCode: response.statusCode.toString(),
+        );
+      }
+
+      final receivedJson = jsonDecode(response.body);
+      debugPrint(receivedJson.toString());
+      return AdminDetailsModelMapper.fromJson(
+        receivedJson['data']['data'].toString(),
+      );
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      debugPrintStack(stackTrace: s);
+      throw ServerException(
+        message: e.toString(),
+        statusCode: '505',
+      );
     }
   }
 }

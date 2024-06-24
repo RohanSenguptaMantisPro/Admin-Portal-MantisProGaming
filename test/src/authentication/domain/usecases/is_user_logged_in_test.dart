@@ -15,16 +15,18 @@ void main() {
     isUserLoggedIn = IsUserLoggedIn(authRepo);
   });
 
+  const String tUserToken = 'test user token';
+
   test(
     'should call the [AuthRepo.isUserLoggedIn]',
-        () async {
+    () async {
       when(() => authRepo.isUserLoggedIn()).thenAnswer(
-            (_) async => const Right(false),
+        (_) async => const Right(tUserToken),
       );
 
       final result = await isUserLoggedIn();
 
-      expect(result, equals(const Right<dynamic, bool>(false)));
+      expect(result, equals(const Right<dynamic, String>(tUserToken)));
 
       verify(() => authRepo.isUserLoggedIn()).called(1);
 

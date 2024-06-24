@@ -49,9 +49,9 @@ class CheckingIsUserLoggedIn extends AuthState
 
 @MappableClass()
 class IsLoggedInStatus extends AuthState with IsLoggedInStatusMappable {
-  const IsLoggedInStatus({required this.isLoggedIn});
+  const IsLoggedInStatus({required this.loggedInUserToken});
 
-  final bool isLoggedIn;
+  final String loggedInUserToken;
 }
 
 @MappableClass()

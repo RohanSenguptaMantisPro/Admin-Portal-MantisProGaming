@@ -68,7 +68,11 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'should emit [AuthLoading, IsLoggedIn]',
       build: () {
-        when(() => isUserLoggedIn()).thenAnswer((_) async => const Right(true));
+        when(() => isUserLoggedIn()).thenAnswer(
+          (_) async => const Right(
+            tUserToken,
+          ),
+        );
         return authBloc;
       },
       act: (bloc) => bloc.add(
@@ -77,7 +81,7 @@ void main() {
       expect: () => [
         const AuthLoading(),
         const CheckingIsUserLoggedIn(),
-        const IsLoggedInStatus(isLoggedIn: true),
+        const IsLoggedInStatus(loggedInUserToken: tUserToken),
       ],
       verify: (_) {
         verify(() => isUserLoggedIn()).called(1);
