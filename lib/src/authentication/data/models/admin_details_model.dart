@@ -3,7 +3,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 
 part 'admin_details_model.mapper.dart';
 
-@MappableClass()
+@MappableClass(discriminatorValue: 'adminDetailsModel')
 class AdminDetailsModel extends AdminDetails with AdminDetailsModelMappable {
   const AdminDetailsModel({
     required super.accountType,
@@ -19,4 +19,7 @@ class AdminDetailsModel extends AdminDetails with AdminDetailsModelMappable {
           email: '',
           displayPicture: '',
         );
+
+  static AdminDetailsModel fromJson(String json) =>
+      AdminDetailsModelMapper.fromJson(json);
 }

@@ -6,14 +6,14 @@
 
 part of 'admin_details_model.dart';
 
-class AdminDetailsModelMapper extends ClassMapperBase<AdminDetailsModel> {
+class AdminDetailsModelMapper extends SubClassMapperBase<AdminDetailsModel> {
   AdminDetailsModelMapper._();
 
   static AdminDetailsModelMapper? _instance;
   static AdminDetailsModelMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = AdminDetailsModelMapper._());
-      AdminDetailsMapper.ensureInitialized();
+      AdminDetailsMapper.ensureInitialized().addSubMapper(_instance!);
     }
     return _instance!;
   }
@@ -40,6 +40,14 @@ class AdminDetailsModelMapper extends ClassMapperBase<AdminDetailsModel> {
     #email: _f$email,
     #displayPicture: _f$displayPicture,
   };
+
+  @override
+  final String discriminatorKey = 'type';
+  @override
+  final dynamic discriminatorValue = 'adminDetailsModel';
+  @override
+  late final ClassMapperBase superMapper =
+      AdminDetailsMapper.ensureInitialized();
 
   static AdminDetailsModel _instantiate(DecodingData data) {
     return AdminDetailsModel(

@@ -197,10 +197,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
-      final receivedJson = jsonDecode(response.body);
+      final receivedJson = jsonDecode(response.body) as DataMap;
+      final userData = receivedJson['data']['data'];
+
+      if (userData == null) {
+        throw const ServerException(
+          message: 'No User Data Available',
+          statusCode: '505',
+        );
+      }
+
       debugPrint(receivedJson.toString());
-      return AdminDetailsModelMapper.fromJson(
-        receivedJson['data']['data'].toString(),
+      return AdminDetailsModel.fromJson(
+        jsonEncode(userData),
       );
     } on ServerException {
       rethrow;

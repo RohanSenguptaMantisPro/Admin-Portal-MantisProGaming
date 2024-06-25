@@ -59,7 +59,16 @@ void main() {
     test('should return userIdToken when Google sign-in is successful',
         () async {
       // Arrange
-
+      when(
+        () => mockGoogleSignIn.signInSilently(),
+      ).thenAnswer(
+        (_) async => mockGoogleSignInAccount,
+      );
+      when(
+        () => mockGoogleSignInAccount.authentication,
+      ).thenAnswer(
+        (_) async => mockGoogleSignInAuthentication,
+      );
       when(() => mockGoogleSignInAuthentication.idToken).thenReturn(tUserToken);
 
       // Act
@@ -67,16 +76,26 @@ void main() {
 
       // Assert
       expect(result, tUserToken);
-      verify(() => mockGoogleSignIn.signIn()).called(1);
+      verify(() => mockGoogleSignIn.signInSilently()).called(1);
       verify(() => mockGoogleSignInAccount.authentication).called(1);
+      verify(() => mockGoogleSignInAuthentication.idToken).called(1);
 
       verifyNoMoreInteractions(mockGoogleSignIn);
-      verifyNoMoreInteractions(mockGoogleSignInAccount);
     });
 
     test('should throw ServerException when userIdToken is null', () async {
       // Arrange
 
+      when(
+            () => mockGoogleSignIn.signInSilently(),
+      ).thenAnswer(
+            (_) async => mockGoogleSignInAccount,
+      );
+      when(
+            () => mockGoogleSignInAccount.authentication,
+      ).thenAnswer(
+            (_) async => mockGoogleSignInAuthentication,
+      );
       when(() => mockGoogleSignInAuthentication.idToken).thenReturn(null);
 
       // Act
@@ -459,12 +478,11 @@ void main() {
       '201',
       () async {
         when(
-          () => mockClient.post(
+          () => mockClient.get(
             any(),
             headers: any(
               named: 'headers',
             ),
-            body: any(named: 'body'),
           ),
         ).thenAnswer(
           (_) async => http.Response(
@@ -473,10 +491,10 @@ void main() {
           ),
         );
 
-        final methodCall = remoteDataSourceImpl.createUser;
+        final methodCall = remoteDataSourceImpl.fetchUserData;
 
         expect(
-          () async => methodCall({'data': 'encryptedData'}),
+          () async => methodCall(tUserToken),
           throwsA(
             const ServerException(
               message: 'Could not log user in',
@@ -486,10 +504,11 @@ void main() {
         );
 
         verify(
-          () => mockClient.post(
-            Uri.https('$baseUrl:$port', kCreateUserEndpoint),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({'data': 'encryptedData'}),
+          () => mockClient.get(
+            Uri.https('$baseUrl:$port', kGetUserDataEndpoint),
+            headers: {
+              'Authorization': 'Bearer $tUserToken',
+            },
           ),
         ).called(1);
 
