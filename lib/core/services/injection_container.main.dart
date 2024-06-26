@@ -27,6 +27,8 @@ Future<void> _initAuth() async {
         isAdmin: sl(),
         cacheUserToken: sl(),
         isUserLoggedIn: sl(),
+        fetchUserData: sl(),
+        logOut: sl(),
         encryptionService: sl(),
       ),
     )
@@ -35,6 +37,8 @@ Future<void> _initAuth() async {
     ..registerLazySingleton(() => IsAdmin(sl()))
     ..registerLazySingleton(() => CacheUserToken(sl()))
     ..registerLazySingleton(() => IsUserLoggedIn(sl()))
+    ..registerLazySingleton(() => FetchUserData(sl()))
+    ..registerLazySingleton(() => LogOut(sl()))
     ..registerLazySingleton(
       () => EncryptionService(
         aesService: sl(),
@@ -54,8 +58,6 @@ Future<void> _initAuth() async {
     ..registerLazySingleton(() => googleSignIn)
     ..registerLazySingleton(() => prefs)
     ..registerLazySingleton(() => httpClient);
-
-
 }
 //
 // Future<void> _initOnBoarding() async {

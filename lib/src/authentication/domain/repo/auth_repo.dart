@@ -17,4 +17,6 @@ abstract class AuthRepo {
   ResultFuture<String> isUserLoggedIn();
 
   ResultFuture<AdminDetails> fetchUserData(String userToken);
+
+  ResultFuture<void> logOut();
 }

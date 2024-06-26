@@ -1,3 +1,4 @@
+import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/admin_user_data.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
@@ -75,8 +76,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
           // fetch admin profile data bloc event add here. and then setter to
           // store user data.
-
-          Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
+          context.read<AuthBloc>().add(
+                FetchAdminDataEvent(
+                  userToken: state.loggedInUserToken,
+                ),
+              );
         } // if couldn't auto log user in.
         else if (state is LoggedInCheckFailed) {
           showCustomToast(context, 'Auto login failed, please login');
@@ -112,10 +116,22 @@ class _LoginScreenState extends State<LoginScreen> {
           showCustomToast(context, 'You do not have Admin Permission');
         } //if all ok and cachedUserToken go to dashboard page.
         else if (state is CachedUserToken) {
-          Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
-
           // fetch admin profile data bloc event add here. and then setter to
           // store user data.
+          final userToken = context.read<UserTokenProvider>().userToken;
+
+          // call fetchUserData.
+          context.read<AuthBloc>().add(
+                FetchAdminDataEvent(
+                  userToken: userToken!,
+                ),
+              );
+        } else if (state is FetchAdminDataError) {
+          showCustomToast(context, 'Unable to access Admin Data');
+          Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
+        } else if (state is FetchedAdminData) {
+          context.read<AdminUserData>().initUser(state.adminDetails);
+          Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
         }
       },
 

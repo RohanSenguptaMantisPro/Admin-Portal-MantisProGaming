@@ -28,3 +28,15 @@ class CacheUserTokenEvent extends AuthEvent with CacheUserTokenEventMappable {
 class IsUserLoggedInEvent extends AuthEvent with IsUserLoggedInEventMappable {
   const IsUserLoggedInEvent();
 }
+
+@MappableClass()
+class FetchAdminDataEvent extends AuthEvent with FetchAdminDataEventMappable {
+  FetchAdminDataEvent({required this.userToken});
+
+  String userToken;
+}
+
+@MappableClass()
+class LogOutEvent extends AuthEvent with LogOutEventMappable {
+  const LogOutEvent();
+}

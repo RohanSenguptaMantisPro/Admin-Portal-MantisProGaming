@@ -327,4 +327,61 @@ void main() {
       },
     );
   });
+
+  //logout.
+  group('logOut', () {
+    test(
+      'should return [void] when call to remote source is '
+      'successful',
+      () async {
+        when(() => remoteDataSource.logOut()).thenAnswer(
+          (_) async => Future.value(),
+        );
+
+        final result = await repoImpl.logOut();
+
+        expect(
+          result,
+          equals(
+            const Right<dynamic, void>(null),
+          ),
+        );
+
+        verify(() => remoteDataSource.logOut()).called(1);
+
+        verifyNoMoreInteractions(remoteDataSource);
+      },
+    );
+
+    test(
+      'should return [ServerFailure] when call to remote source is '
+      'unsuccessful',
+      () async {
+        when(() => remoteDataSource.logOut()).thenThrow(
+          const ServerException(
+            message: 'Could not log user out',
+            statusCode: '404',
+          ),
+        );
+
+        final result = await repoImpl.logOut();
+
+        expect(
+          result,
+          equals(
+            Left<dynamic, void>(
+              ServerFailure(
+                message: 'Could not log user out',
+                statusCode: '404',
+              ),
+            ),
+          ),
+        );
+
+        verify(() => remoteDataSource.logOut()).called(1);
+
+        verifyNoMoreInteractions(remoteDataSource);
+      },
+    );
+  });
 }

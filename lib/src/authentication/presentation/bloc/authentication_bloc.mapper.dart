@@ -17,6 +17,8 @@ class AuthEventMapper extends ClassMapperBase<AuthEvent> {
       IsAdminEventMapper.ensureInitialized();
       CacheUserTokenEventMapper.ensureInitialized();
       IsUserLoggedInEventMapper.ensureInitialized();
+      FetchAdminDataEventMapper.ensureInitialized();
+      LogOutEventMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -473,6 +475,213 @@ class _IsUserLoggedInEventCopyWithImpl<$R, $Out>
           _IsUserLoggedInEventCopyWithImpl($value, $cast, t);
 }
 
+class FetchAdminDataEventMapper extends ClassMapperBase<FetchAdminDataEvent> {
+  FetchAdminDataEventMapper._();
+
+  static FetchAdminDataEventMapper? _instance;
+  static FetchAdminDataEventMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = FetchAdminDataEventMapper._());
+      AuthEventMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  @override
+  final String id = 'FetchAdminDataEvent';
+
+  static String _$userToken(FetchAdminDataEvent v) => v.userToken;
+  static const Field<FetchAdminDataEvent, String> _f$userToken =
+      Field('userToken', _$userToken);
+
+  @override
+  final MappableFields<FetchAdminDataEvent> fields = const {
+    #userToken: _f$userToken,
+  };
+
+  static FetchAdminDataEvent _instantiate(DecodingData data) {
+    return FetchAdminDataEvent(userToken: data.dec(_f$userToken));
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static FetchAdminDataEvent fromMap(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<FetchAdminDataEvent>(map);
+  }
+
+  static FetchAdminDataEvent fromJson(String json) {
+    return ensureInitialized().decodeJson<FetchAdminDataEvent>(json);
+  }
+}
+
+mixin FetchAdminDataEventMappable {
+  String toJson() {
+    return FetchAdminDataEventMapper.ensureInitialized()
+        .encodeJson<FetchAdminDataEvent>(this as FetchAdminDataEvent);
+  }
+
+  Map<String, dynamic> toMap() {
+    return FetchAdminDataEventMapper.ensureInitialized()
+        .encodeMap<FetchAdminDataEvent>(this as FetchAdminDataEvent);
+  }
+
+  FetchAdminDataEventCopyWith<FetchAdminDataEvent, FetchAdminDataEvent,
+          FetchAdminDataEvent>
+      get copyWith => _FetchAdminDataEventCopyWithImpl(
+          this as FetchAdminDataEvent, $identity, $identity);
+  @override
+  String toString() {
+    return FetchAdminDataEventMapper.ensureInitialized()
+        .stringifyValue(this as FetchAdminDataEvent);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return FetchAdminDataEventMapper.ensureInitialized()
+        .equalsValue(this as FetchAdminDataEvent, other);
+  }
+
+  @override
+  int get hashCode {
+    return FetchAdminDataEventMapper.ensureInitialized()
+        .hashValue(this as FetchAdminDataEvent);
+  }
+}
+
+extension FetchAdminDataEventValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, FetchAdminDataEvent, $Out> {
+  FetchAdminDataEventCopyWith<$R, FetchAdminDataEvent, $Out>
+      get $asFetchAdminDataEvent =>
+          $base.as((v, t, t2) => _FetchAdminDataEventCopyWithImpl(v, t, t2));
+}
+
+abstract class FetchAdminDataEventCopyWith<$R, $In extends FetchAdminDataEvent,
+    $Out> implements AuthEventCopyWith<$R, $In, $Out> {
+  @override
+  $R call({String? userToken});
+  FetchAdminDataEventCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
+      Then<$Out2, $R2> t);
+}
+
+class _FetchAdminDataEventCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, FetchAdminDataEvent, $Out>
+    implements FetchAdminDataEventCopyWith<$R, FetchAdminDataEvent, $Out> {
+  _FetchAdminDataEventCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<FetchAdminDataEvent> $mapper =
+      FetchAdminDataEventMapper.ensureInitialized();
+  @override
+  $R call({String? userToken}) =>
+      $apply(FieldCopyWithData({if (userToken != null) #userToken: userToken}));
+  @override
+  FetchAdminDataEvent $make(CopyWithData data) => FetchAdminDataEvent(
+      userToken: data.get(#userToken, or: $value.userToken));
+
+  @override
+  FetchAdminDataEventCopyWith<$R2, FetchAdminDataEvent, $Out2>
+      $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
+          _FetchAdminDataEventCopyWithImpl($value, $cast, t);
+}
+
+class LogOutEventMapper extends ClassMapperBase<LogOutEvent> {
+  LogOutEventMapper._();
+
+  static LogOutEventMapper? _instance;
+  static LogOutEventMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = LogOutEventMapper._());
+      AuthEventMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  @override
+  final String id = 'LogOutEvent';
+
+  @override
+  final MappableFields<LogOutEvent> fields = const {};
+
+  static LogOutEvent _instantiate(DecodingData data) {
+    return LogOutEvent();
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static LogOutEvent fromMap(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<LogOutEvent>(map);
+  }
+
+  static LogOutEvent fromJson(String json) {
+    return ensureInitialized().decodeJson<LogOutEvent>(json);
+  }
+}
+
+mixin LogOutEventMappable {
+  String toJson() {
+    return LogOutEventMapper.ensureInitialized()
+        .encodeJson<LogOutEvent>(this as LogOutEvent);
+  }
+
+  Map<String, dynamic> toMap() {
+    return LogOutEventMapper.ensureInitialized()
+        .encodeMap<LogOutEvent>(this as LogOutEvent);
+  }
+
+  LogOutEventCopyWith<LogOutEvent, LogOutEvent, LogOutEvent> get copyWith =>
+      _LogOutEventCopyWithImpl(this as LogOutEvent, $identity, $identity);
+  @override
+  String toString() {
+    return LogOutEventMapper.ensureInitialized()
+        .stringifyValue(this as LogOutEvent);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return LogOutEventMapper.ensureInitialized()
+        .equalsValue(this as LogOutEvent, other);
+  }
+
+  @override
+  int get hashCode {
+    return LogOutEventMapper.ensureInitialized().hashValue(this as LogOutEvent);
+  }
+}
+
+extension LogOutEventValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, LogOutEvent, $Out> {
+  LogOutEventCopyWith<$R, LogOutEvent, $Out> get $asLogOutEvent =>
+      $base.as((v, t, t2) => _LogOutEventCopyWithImpl(v, t, t2));
+}
+
+abstract class LogOutEventCopyWith<$R, $In extends LogOutEvent, $Out>
+    implements AuthEventCopyWith<$R, $In, $Out> {
+  @override
+  $R call();
+  LogOutEventCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
+}
+
+class _LogOutEventCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, LogOutEvent, $Out>
+    implements LogOutEventCopyWith<$R, LogOutEvent, $Out> {
+  _LogOutEventCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<LogOutEvent> $mapper =
+      LogOutEventMapper.ensureInitialized();
+  @override
+  $R call() => $apply(FieldCopyWithData({}));
+  @override
+  LogOutEvent $make(CopyWithData data) => LogOutEvent();
+
+  @override
+  LogOutEventCopyWith<$R2, LogOutEvent, $Out2> $chain<$R2, $Out2>(
+          Then<$Out2, $R2> t) =>
+      _LogOutEventCopyWithImpl($value, $cast, t);
+}
+
 class AuthStateMapper extends ClassMapperBase<AuthState> {
   AuthStateMapper._();
 
@@ -489,6 +698,9 @@ class AuthStateMapper extends ClassMapperBase<AuthState> {
       CheckingIsUserLoggedInMapper.ensureInitialized();
       IsLoggedInStatusMapper.ensureInitialized();
       LoggedInCheckFailedMapper.ensureInitialized();
+      FetchedAdminDataMapper.ensureInitialized();
+      FetchAdminDataErrorMapper.ensureInitialized();
+      LoggedOutMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -1455,4 +1667,324 @@ class _LoggedInCheckFailedCopyWithImpl<$R, $Out>
   LoggedInCheckFailedCopyWith<$R2, LoggedInCheckFailed, $Out2>
       $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
           _LoggedInCheckFailedCopyWithImpl($value, $cast, t);
+}
+
+class FetchedAdminDataMapper extends ClassMapperBase<FetchedAdminData> {
+  FetchedAdminDataMapper._();
+
+  static FetchedAdminDataMapper? _instance;
+  static FetchedAdminDataMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = FetchedAdminDataMapper._());
+      AuthStateMapper.ensureInitialized();
+      AdminDetailsMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  @override
+  final String id = 'FetchedAdminData';
+
+  static AdminDetails _$adminDetails(FetchedAdminData v) => v.adminDetails;
+  static const Field<FetchedAdminData, AdminDetails> _f$adminDetails =
+      Field('adminDetails', _$adminDetails);
+
+  @override
+  final MappableFields<FetchedAdminData> fields = const {
+    #adminDetails: _f$adminDetails,
+  };
+
+  static FetchedAdminData _instantiate(DecodingData data) {
+    return FetchedAdminData(adminDetails: data.dec(_f$adminDetails));
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static FetchedAdminData fromMap(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<FetchedAdminData>(map);
+  }
+
+  static FetchedAdminData fromJson(String json) {
+    return ensureInitialized().decodeJson<FetchedAdminData>(json);
+  }
+}
+
+mixin FetchedAdminDataMappable {
+  String toJson() {
+    return FetchedAdminDataMapper.ensureInitialized()
+        .encodeJson<FetchedAdminData>(this as FetchedAdminData);
+  }
+
+  Map<String, dynamic> toMap() {
+    return FetchedAdminDataMapper.ensureInitialized()
+        .encodeMap<FetchedAdminData>(this as FetchedAdminData);
+  }
+
+  FetchedAdminDataCopyWith<FetchedAdminData, FetchedAdminData, FetchedAdminData>
+      get copyWith => _FetchedAdminDataCopyWithImpl(
+          this as FetchedAdminData, $identity, $identity);
+  @override
+  String toString() {
+    return FetchedAdminDataMapper.ensureInitialized()
+        .stringifyValue(this as FetchedAdminData);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return FetchedAdminDataMapper.ensureInitialized()
+        .equalsValue(this as FetchedAdminData, other);
+  }
+
+  @override
+  int get hashCode {
+    return FetchedAdminDataMapper.ensureInitialized()
+        .hashValue(this as FetchedAdminData);
+  }
+}
+
+extension FetchedAdminDataValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, FetchedAdminData, $Out> {
+  FetchedAdminDataCopyWith<$R, FetchedAdminData, $Out>
+      get $asFetchedAdminData =>
+          $base.as((v, t, t2) => _FetchedAdminDataCopyWithImpl(v, t, t2));
+}
+
+abstract class FetchedAdminDataCopyWith<$R, $In extends FetchedAdminData, $Out>
+    implements AuthStateCopyWith<$R, $In, $Out> {
+  AdminDetailsCopyWith<$R, AdminDetails, AdminDetails> get adminDetails;
+  @override
+  $R call({AdminDetails? adminDetails});
+  FetchedAdminDataCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
+      Then<$Out2, $R2> t);
+}
+
+class _FetchedAdminDataCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, FetchedAdminData, $Out>
+    implements FetchedAdminDataCopyWith<$R, FetchedAdminData, $Out> {
+  _FetchedAdminDataCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<FetchedAdminData> $mapper =
+      FetchedAdminDataMapper.ensureInitialized();
+  @override
+  AdminDetailsCopyWith<$R, AdminDetails, AdminDetails> get adminDetails =>
+      $value.adminDetails.copyWith.$chain((v) => call(adminDetails: v));
+  @override
+  $R call({AdminDetails? adminDetails}) => $apply(FieldCopyWithData(
+      {if (adminDetails != null) #adminDetails: adminDetails}));
+  @override
+  FetchedAdminData $make(CopyWithData data) => FetchedAdminData(
+      adminDetails: data.get(#adminDetails, or: $value.adminDetails));
+
+  @override
+  FetchedAdminDataCopyWith<$R2, FetchedAdminData, $Out2> $chain<$R2, $Out2>(
+          Then<$Out2, $R2> t) =>
+      _FetchedAdminDataCopyWithImpl($value, $cast, t);
+}
+
+class FetchAdminDataErrorMapper extends ClassMapperBase<FetchAdminDataError> {
+  FetchAdminDataErrorMapper._();
+
+  static FetchAdminDataErrorMapper? _instance;
+  static FetchAdminDataErrorMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = FetchAdminDataErrorMapper._());
+      AuthStateMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  @override
+  final String id = 'FetchAdminDataError';
+
+  static String _$message(FetchAdminDataError v) => v.message;
+  static const Field<FetchAdminDataError, String> _f$message =
+      Field('message', _$message);
+
+  @override
+  final MappableFields<FetchAdminDataError> fields = const {
+    #message: _f$message,
+  };
+
+  static FetchAdminDataError _instantiate(DecodingData data) {
+    return FetchAdminDataError(message: data.dec(_f$message));
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static FetchAdminDataError fromMap(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<FetchAdminDataError>(map);
+  }
+
+  static FetchAdminDataError fromJson(String json) {
+    return ensureInitialized().decodeJson<FetchAdminDataError>(json);
+  }
+}
+
+mixin FetchAdminDataErrorMappable {
+  String toJson() {
+    return FetchAdminDataErrorMapper.ensureInitialized()
+        .encodeJson<FetchAdminDataError>(this as FetchAdminDataError);
+  }
+
+  Map<String, dynamic> toMap() {
+    return FetchAdminDataErrorMapper.ensureInitialized()
+        .encodeMap<FetchAdminDataError>(this as FetchAdminDataError);
+  }
+
+  FetchAdminDataErrorCopyWith<FetchAdminDataError, FetchAdminDataError,
+          FetchAdminDataError>
+      get copyWith => _FetchAdminDataErrorCopyWithImpl(
+          this as FetchAdminDataError, $identity, $identity);
+  @override
+  String toString() {
+    return FetchAdminDataErrorMapper.ensureInitialized()
+        .stringifyValue(this as FetchAdminDataError);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return FetchAdminDataErrorMapper.ensureInitialized()
+        .equalsValue(this as FetchAdminDataError, other);
+  }
+
+  @override
+  int get hashCode {
+    return FetchAdminDataErrorMapper.ensureInitialized()
+        .hashValue(this as FetchAdminDataError);
+  }
+}
+
+extension FetchAdminDataErrorValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, FetchAdminDataError, $Out> {
+  FetchAdminDataErrorCopyWith<$R, FetchAdminDataError, $Out>
+      get $asFetchAdminDataError =>
+          $base.as((v, t, t2) => _FetchAdminDataErrorCopyWithImpl(v, t, t2));
+}
+
+abstract class FetchAdminDataErrorCopyWith<$R, $In extends FetchAdminDataError,
+    $Out> implements AuthStateCopyWith<$R, $In, $Out> {
+  @override
+  $R call({String? message});
+  FetchAdminDataErrorCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
+      Then<$Out2, $R2> t);
+}
+
+class _FetchAdminDataErrorCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, FetchAdminDataError, $Out>
+    implements FetchAdminDataErrorCopyWith<$R, FetchAdminDataError, $Out> {
+  _FetchAdminDataErrorCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<FetchAdminDataError> $mapper =
+      FetchAdminDataErrorMapper.ensureInitialized();
+  @override
+  $R call({String? message}) =>
+      $apply(FieldCopyWithData({if (message != null) #message: message}));
+  @override
+  FetchAdminDataError $make(CopyWithData data) =>
+      FetchAdminDataError(message: data.get(#message, or: $value.message));
+
+  @override
+  FetchAdminDataErrorCopyWith<$R2, FetchAdminDataError, $Out2>
+      $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
+          _FetchAdminDataErrorCopyWithImpl($value, $cast, t);
+}
+
+class LoggedOutMapper extends ClassMapperBase<LoggedOut> {
+  LoggedOutMapper._();
+
+  static LoggedOutMapper? _instance;
+  static LoggedOutMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = LoggedOutMapper._());
+      AuthStateMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  @override
+  final String id = 'LoggedOut';
+
+  @override
+  final MappableFields<LoggedOut> fields = const {};
+
+  static LoggedOut _instantiate(DecodingData data) {
+    return LoggedOut();
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static LoggedOut fromMap(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<LoggedOut>(map);
+  }
+
+  static LoggedOut fromJson(String json) {
+    return ensureInitialized().decodeJson<LoggedOut>(json);
+  }
+}
+
+mixin LoggedOutMappable {
+  String toJson() {
+    return LoggedOutMapper.ensureInitialized()
+        .encodeJson<LoggedOut>(this as LoggedOut);
+  }
+
+  Map<String, dynamic> toMap() {
+    return LoggedOutMapper.ensureInitialized()
+        .encodeMap<LoggedOut>(this as LoggedOut);
+  }
+
+  LoggedOutCopyWith<LoggedOut, LoggedOut, LoggedOut> get copyWith =>
+      _LoggedOutCopyWithImpl(this as LoggedOut, $identity, $identity);
+  @override
+  String toString() {
+    return LoggedOutMapper.ensureInitialized()
+        .stringifyValue(this as LoggedOut);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return LoggedOutMapper.ensureInitialized()
+        .equalsValue(this as LoggedOut, other);
+  }
+
+  @override
+  int get hashCode {
+    return LoggedOutMapper.ensureInitialized().hashValue(this as LoggedOut);
+  }
+}
+
+extension LoggedOutValueCopy<$R, $Out> on ObjectCopyWith<$R, LoggedOut, $Out> {
+  LoggedOutCopyWith<$R, LoggedOut, $Out> get $asLoggedOut =>
+      $base.as((v, t, t2) => _LoggedOutCopyWithImpl(v, t, t2));
+}
+
+abstract class LoggedOutCopyWith<$R, $In extends LoggedOut, $Out>
+    implements AuthStateCopyWith<$R, $In, $Out> {
+  @override
+  $R call();
+  LoggedOutCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
+}
+
+class _LoggedOutCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, LoggedOut, $Out>
+    implements LoggedOutCopyWith<$R, LoggedOut, $Out> {
+  _LoggedOutCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<LoggedOut> $mapper =
+      LoggedOutMapper.ensureInitialized();
+  @override
+  $R call() => $apply(FieldCopyWithData({}));
+  @override
+  LoggedOut $make(CopyWithData data) => LoggedOut();
+
+  @override
+  LoggedOutCopyWith<$R2, LoggedOut, $Out2> $chain<$R2, $Out2>(
+          Then<$Out2, $R2> t) =>
+      _LoggedOutCopyWithImpl($value, $cast, t);
 }

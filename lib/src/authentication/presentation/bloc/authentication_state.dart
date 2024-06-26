@@ -55,7 +55,25 @@ class IsLoggedInStatus extends AuthState with IsLoggedInStatusMappable {
 }
 
 @MappableClass()
-class LoggedInCheckFailed extends AuthState
-    with LoggedInCheckFailedMappable {
+class LoggedInCheckFailed extends AuthState with LoggedInCheckFailedMappable {
   const LoggedInCheckFailed();
+}
+
+@MappableClass()
+class FetchedAdminData extends AuthState with FetchedAdminDataMappable {
+  FetchedAdminData({required this.adminDetails});
+
+  AdminDetails adminDetails;
+}
+
+@MappableClass()
+class FetchAdminDataError extends AuthState with FetchAdminDataErrorMappable {
+  const FetchAdminDataError({required this.message});
+
+  final String message;
+}
+
+@MappableClass()
+class LoggedOut extends AuthState with LoggedOutMappable {
+  const LoggedOut();
 }

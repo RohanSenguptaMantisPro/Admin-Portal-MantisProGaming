@@ -1,3 +1,4 @@
+import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/admin_user_data.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,4 +15,6 @@ extension ContextExt on BuildContext {
   double get height => screenSize.height;
 
   UserTokenProvider get userTokenProvider => read<UserTokenProvider>();
+
+  AdminUserData get adminUserData => read<AdminUserData>();
 }

@@ -4,6 +4,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/datasources/auth_remote_data_sources.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/models/admin_details_model.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
@@ -87,14 +88,14 @@ void main() {
       // Arrange
 
       when(
-            () => mockGoogleSignIn.signInSilently(),
+        () => mockGoogleSignIn.signInSilently(),
       ).thenAnswer(
-            (_) async => mockGoogleSignInAccount,
+        (_) async => mockGoogleSignInAccount,
       );
       when(
-            () => mockGoogleSignInAccount.authentication,
+        () => mockGoogleSignInAccount.authentication,
       ).thenAnswer(
-            (_) async => mockGoogleSignInAuthentication,
+        (_) async => mockGoogleSignInAuthentication,
       );
       when(() => mockGoogleSignInAuthentication.idToken).thenReturn(null);
 
@@ -513,6 +514,67 @@ void main() {
         ).called(1);
 
         verifyNoMoreInteractions(mockClient);
+      },
+    );
+  });
+
+//   logOut.
+  group('logOut', () {
+    test(
+      'should call [SharedPreferences] to log user out',
+      () async {
+        when(() => mockSharedPreferences.remove(any())).thenAnswer(
+          (_) async => true,
+        );
+
+        await remoteDataSourceImpl.logOut();
+
+        verify(
+          () => mockSharedPreferences.remove(kUserToken),
+        ).called(1);
+        verifyNoMoreInteractions(mockSharedPreferences);
+      },
+    );
+
+    test(
+      'should call [SharedPreferences] to log user out',
+          () async {
+        when(() => mockSharedPreferences.remove(any())).thenAnswer(
+              (_) async => false,
+        );
+
+        final methodCall = remoteDataSourceImpl.logOut;
+
+        expect(
+              () async => methodCall(),
+          throwsA(isA<CacheException>()),
+        );
+
+        verify(
+              () => mockSharedPreferences.remove(kUserToken),
+        ).called(1);
+        verifyNoMoreInteractions(mockSharedPreferences);
+      },
+    );
+
+    test(
+      'should throw a [CacheException] when there is an error caching the data',
+      () async {
+        when(
+          () => mockSharedPreferences.remove(any()),
+        ).thenThrow(Exception());
+
+        final methodCall = remoteDataSourceImpl.logOut;
+
+        expect(
+          () async => methodCall(),
+          throwsA(isA<CacheException>()),
+        );
+
+        verify(
+          () => mockSharedPreferences.remove(kUserToken),
+        ).called(1);
+        verifyNoMoreInteractions(mockSharedPreferences);
       },
     );
   });

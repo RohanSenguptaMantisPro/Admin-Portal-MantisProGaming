@@ -24,6 +24,8 @@ abstract class AuthRemoteDataSource {
   Future<String> isUserLoggedIn();
 
   Future<AdminDetailsModel> fetchUserData(String userToken);
+
+  Future<void> logOut();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -216,6 +218,27 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (e, s) {
       debugPrintStack(stackTrace: s);
       throw ServerException(
+        message: e.toString(),
+        statusCode: '505',
+      );
+    }
+  }
+
+  @override
+  Future<void> logOut() async {
+    try {
+      final result = await _prefs.remove(kUserToken);
+
+      if (!result) {
+        throw const CacheException(
+          message: 'Could not log user out',
+          statusCode: '505',
+        );
+      }
+    } on CacheException {
+      rethrow;
+    } catch (e) {
+      throw CacheException(
         message: e.toString(),
         statusCode: '505',
       );
