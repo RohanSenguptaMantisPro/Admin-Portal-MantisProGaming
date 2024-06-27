@@ -4,7 +4,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/datasources/auth_remote_data_sources.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/models/admin_details_model.dart';
-import 'package:dartz/dartz.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
@@ -526,32 +526,38 @@ void main() {
         when(() => mockSharedPreferences.remove(any())).thenAnswer(
           (_) async => true,
         );
+        when(() => mockGoogleSignIn.signOut()).thenAnswer(
+          (_) async => null,
+        );
 
         await remoteDataSourceImpl.logOut();
 
         verify(
           () => mockSharedPreferences.remove(kUserToken),
         ).called(1);
+        verify(() => mockGoogleSignIn.signOut()).called(1);
         verifyNoMoreInteractions(mockSharedPreferences);
+        verifyNoMoreInteractions(mockGoogleSignIn);
       },
     );
 
     test(
-      'should call [SharedPreferences] to log user out',
-          () async {
+      'should return [CacheException] to log user out',
+      () async {
+        // when(() => mockGoogleSignIn)
         when(() => mockSharedPreferences.remove(any())).thenAnswer(
-              (_) async => false,
+          (_) async => false,
         );
 
         final methodCall = remoteDataSourceImpl.logOut;
 
         expect(
-              () async => methodCall(),
+          () async => methodCall(),
           throwsA(isA<CacheException>()),
         );
 
         verify(
-              () => mockSharedPreferences.remove(kUserToken),
+          () => mockSharedPreferences.remove(kUserToken),
         ).called(1);
         verifyNoMoreInteractions(mockSharedPreferences);
       },

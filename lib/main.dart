@@ -1,9 +1,10 @@
+import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/admin_user_data.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/services/injection_container.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/services/router.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/dashboard/home/presentation/providers/dashboard_controller.dart';
-
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,6 +32,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => DashboardController(),
         ),
+        ChangeNotifierProvider(create: (_) => UserTokenProvider()),
+        ChangeNotifierProvider(create: (_) => AdminUserData()),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -60,7 +63,7 @@ class MyApp extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-          
+
                 titleMedium: GoogleFonts.poppins(
                   textStyle: const TextStyle(
                     fontSize: 23,
@@ -75,7 +78,7 @@ class MyApp extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-          
+
                 bodyMedium: GoogleFonts.poppins(
                   textStyle: const TextStyle(
                     fontSize: 14,
@@ -83,7 +86,7 @@ class MyApp extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-          
+
                 bodySmall: GoogleFonts.poppins(
                   textStyle: const TextStyle(
                     fontSize: 12,
@@ -91,7 +94,7 @@ class MyApp extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-          
+
                 labelSmall: GoogleFonts.poppins(
                   textStyle: const TextStyle(
                     fontSize: 11,
@@ -100,7 +103,7 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
               ),
-          
+
               colorScheme: ColorScheme.fromSwatch(
                 accentColor: Colours.primaryColour,
               ),

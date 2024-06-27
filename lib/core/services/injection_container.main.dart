@@ -30,6 +30,7 @@ Future<void> _initAuth() async {
         fetchUserData: sl(),
         logOut: sl(),
         encryptionService: sl(),
+        browserInfo: sl(),
       ),
     )
     ..registerLazySingleton(() => GoogleSignInService(sl()))
@@ -44,6 +45,9 @@ Future<void> _initAuth() async {
         aesService: sl(),
         rsaService: sl(),
       ),
+    )
+    ..registerLazySingleton(
+      BrowserInfo.new,
     )
     ..registerLazySingleton(() => rsaService)
     ..registerLazySingleton(() => aesService)

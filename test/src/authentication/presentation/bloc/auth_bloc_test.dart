@@ -51,7 +51,7 @@ void main() {
   const tEncryptedDataMap = {'data': 'encryptedData'};
   const tDeviceInfoMap = {
     'deviceModel': 'MantisAdminPortal-browserinfo',
-    'deviceUid': 'ipaddress',
+    'deviceUid': 'id',
     'systemLocale': 'locale',
   };
 
@@ -75,6 +75,7 @@ void main() {
       fetchUserData: fetchUserData,
       logOut: logOut,
       encryptionService: encryptionService,
+      browserInfo: mockBrowserInfo,
     );
   });
 
@@ -207,7 +208,8 @@ void main() {
         verify(() => googleSignInService()).called(1);
         verify(() => encryptionService.encrypt(tUserToken)).called(1);
         verify(() => mockBrowserInfo.deviceInfo()).called(1);
-        verify(() => createUser(tEncryptedDataMap)).called(1);
+        verify(() => createUser({...tEncryptedDataMap, ...tDeviceInfoMap}))
+            .called(1);
         verifyNoMoreInteractions(googleSignInService);
         verifyNoMoreInteractions(encryptionService);
         verifyNoMoreInteractions(mockBrowserInfo);

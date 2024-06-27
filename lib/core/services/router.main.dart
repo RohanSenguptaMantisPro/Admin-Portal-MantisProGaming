@@ -8,14 +8,17 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         settings: settings,
       );
     case Dashboard.routeName:
+      final args = (settings.arguments ?? 1) as int;
       return _pageBuilder(
-        (_) => const Dashboard(),
+        (_) => Dashboard(
+          autoLogIn: args,
+        ),
         settings: settings,
       );
 
     default:
       return _pageBuilder(
-        (_) => const Dashboard(),
+        (_) => const LoginScreen(),
         settings: settings,
       );
   }

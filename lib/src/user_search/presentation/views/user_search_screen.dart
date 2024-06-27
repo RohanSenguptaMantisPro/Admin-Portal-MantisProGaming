@@ -6,7 +6,6 @@ import 'package:admin_portal_mantis_pro_gaming/src/user_search/presentation/widg
 import 'package:admin_portal_mantis_pro_gaming/src/user_search/presentation/widgets/filter_dropdown_tile.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user_search/presentation/widgets/search_user_form.dart';
 
-
 import 'package:flutter/material.dart';
 
 class UserSearchScreen extends StatefulWidget {
@@ -17,6 +16,7 @@ class UserSearchScreen extends StatefulWidget {
 }
 
 class _UserSearchScreenState extends State<UserSearchScreen> {
+  @override
   final textEditingController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 

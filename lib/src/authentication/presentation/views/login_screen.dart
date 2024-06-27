@@ -31,7 +31,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-
     // web.renderButton() will be called on user button press.
     // and listener here for that if user is authenticated.
     // then : add the createUserEvent event inside listener
@@ -56,11 +55,6 @@ class _LoginScreenState extends State<LoginScreen> {
         callCounter++;
       }
     });
-
-    // auto login user if token is saved.
-    context.read<AuthBloc>().add(
-          const IsUserLoggedInEvent(),
-        );
   }
 
   @override
@@ -68,24 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         // checking if user is logged in
-        if (state is IsLoggedInStatus && state.loggedInUserToken.isNotEmpty) {
-          // here if logged in initialise the setter with the received userToken
-          // to access elsewhere too.
-
-          context.read<UserTokenProvider>().initUser(state.loggedInUserToken);
-
-          // fetch admin profile data bloc event add here. and then setter to
-          // store user data.
-          context.read<AuthBloc>().add(
-                FetchAdminDataEvent(
-                  userToken: state.loggedInUserToken,
-                ),
-              );
-        } // if couldn't auto log user in.
-        else if (state is LoggedInCheckFailed) {
-          showCustomToast(context, 'Auto login failed, please login');
-        } // if any error.
-        else if (state is AuthError) {
+        if (state is AuthError) {
           debugPrint('----- listener state : $state');
           debugPrint('----- Something went wrong : ${state.message}');
 
@@ -120,6 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // store user data.
           final userToken = context.read<UserTokenProvider>().userToken;
 
+          // debugPrint('-------Done.');
           // call fetchUserData.
           context.read<AuthBloc>().add(
                 FetchAdminDataEvent(
@@ -128,10 +106,12 @@ class _LoginScreenState extends State<LoginScreen> {
               );
         } else if (state is FetchAdminDataError) {
           showCustomToast(context, 'Unable to access Admin Data');
-          Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
+          Navigator.of(context)
+              .pushReplacementNamed(Dashboard.routeName, arguments: 0);
         } else if (state is FetchedAdminData) {
           context.read<AdminUserData>().initUser(state.adminDetails);
-          Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
+          Navigator.of(context)
+              .pushReplacementNamed(Dashboard.routeName, arguments: 0);
         }
       },
 

@@ -3,6 +3,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecase
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/log_out.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/utils/aes_encryption.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/utils/browser_info.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/utils/encryption_service.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/utils/rsa_encryption.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/datasources/auth_remote_data_sources.dart';

@@ -108,7 +108,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      debugPrint('------- [RemoteDataSource Error] : $e ');
+      debugPrint('------- [RemoteDataSource createUser Error] : $e ');
       debugPrintStack(stackTrace: s);
       throw ServerException(
         message: e.toString(),
@@ -229,12 +229,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final result = await _prefs.remove(kUserToken);
 
-      if (!result) {
+      if (result == false) {
         throw const CacheException(
           message: 'Could not log user out',
           statusCode: '505',
         );
       }
+      await _googleSignIn.signOut();
     } on CacheException {
       rethrow;
     } catch (e) {

@@ -30,6 +30,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required FetchUserData fetchUserData,
     required LogOut logOut,
     required EncryptionService encryptionService,
+    required BrowserInfo browserInfo,
   })  : _googleSignInService = googleSignInService,
         _createUser = createUser,
         _isAdmin = isAdmin,
@@ -38,6 +39,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _fetchUserData = fetchUserData,
         _logOut = logOut,
         _encryptionService = encryptionService,
+        _browserInfo = browserInfo,
         super(const AuthInitial()) {
     on<AuthEvent>((event, emit) {
       emit(const AuthLoading());
@@ -58,6 +60,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final FetchUserData _fetchUserData;
   final LogOut _logOut;
   final EncryptionService _encryptionService;
+  final BrowserInfo _browserInfo;
 
   Future<void> _createUserHandler(
     CreateUserEvent event,
@@ -82,7 +85,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
 
       //   accessing device info utils method call.
-      final Map<String, dynamic>? systemInfo = await BrowserInfo().deviceInfo();
+      final DataMap? systemInfo = await _browserInfo.deviceInfo();
       if (systemInfo == null) {
         emit(const AuthError('Error in encryption.'));
         return;
