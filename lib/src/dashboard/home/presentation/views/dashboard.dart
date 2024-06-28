@@ -47,7 +47,7 @@ class _DashboardState extends State<Dashboard> {
     return Consumer<DashboardController>(
       builder: (_, dashboardController, __) {
         return BlocConsumer<AuthBloc, AuthState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is IsLoggedInStatus &&
                 state.loggedInUserToken.isNotEmpty) {
               // here if logged in initialise the setter with the received userToken
@@ -60,7 +60,8 @@ class _DashboardState extends State<Dashboard> {
                   .read<UserTokenProvider>()
                   .initUser(state.loggedInUserToken);
 
-              // fetch admin profile data bloc event add here. and then setter to
+              // fetch admin profile data bloc event add here. and then setter
+              // to
               // store user data.
               context.read<AuthBloc>().add(
                     FetchAdminDataEvent(
@@ -69,21 +70,22 @@ class _DashboardState extends State<Dashboard> {
                   );
             } // if couldn't auto log user in.
             else if (state is LoggedInCheckFailed) {
+              showCustomToast(context, 'Auto login failed, please login');
               context.read<AuthBloc>().add(
                     const LogOutEvent(),
                   );
 
-              unawaited(
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/',
-                  (route) => false,
-                ),
+              await Navigator.of(context).pushNamedAndRemoveUntil(
+                '/',
+                (route) => false,
               );
-              showCustomToast(context, 'Auto login failed, please login');
             } else if (state is FetchAdminDataError) {
               showCustomToast(context, 'Unable to access Admin Data');
             } else if (state is FetchedAdminData) {
               context.read<AdminUserData>().initUser(state.adminDetails);
+            } else if (state is LoggedOut) {
+              await Future<void>.delayed(const Duration(seconds: 1));
+              dashboardController.changeIndex(1);
             }
           },
           builder: (context, state) {
@@ -97,227 +99,200 @@ class _DashboardState extends State<Dashboard> {
                     )
                   : Row(
                       children: [
-                        Expanded(
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: Colours.backgroundColorDark,
+                        Container(
+                          width: 250,
+                          decoration: const BoxDecoration(
+                            color: Colours.backgroundColorDark,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              left: 7,
+                              right: 7,
+                              top: 20,
                             ),
-                            child: LayoutBuilder(
-                              builder: (layoutContext, boxConstraints) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 7,
-                                    right: 7,
-                                    top: 10,
+                            //ListView:  So that the column is scrollable
+                            // if not
+                            // enough space.
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 40,
+                                  width: 150,
+                                  // height: 60,
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      // TODO(RohanSengupta): Because of this fit
+                                      // the images tries to fit in, so when the
+                                      // box gets small the image also gets small.
+                                      // to be changed to don't shrink the
+                                      // dashboard after a certain point.
+                                      image: AssetImage(
+                                        MediaRes.darkVersionMantisProGamingLogo,
+                                      ),
+                                    ),
                                   ),
-                                  //ListView:  So that the column is scrollable
-                                  // if not
-                                  // enough space.
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                ),
+                                Container(
+                                  height: 500,
+                                  decoration: const BoxDecoration(
+                                    color: Colours.backgroundColorDark,
+                                    // border: Border.all(
+                                    //   width: 2,
+                                    //   color: Colors.yellow,
+                                    // ),
+                                  ),
+                                  child: ListView(
                                     children: [
-                                      Container(
-                                        height: 45,
-                                        width: 150,
-                                        // height: 60,
-                                        decoration: const BoxDecoration(
-                                          // border: Border.all(
-                                          //   width: 2,
-                                          //   color: Colors.red,
-                                          // ),
-                                          image: DecorationImage(
-                                            fit: BoxFit.contain,
-                                            // TODO(RohanSengupta): Because of this fit
-                                            // the images tries to fit in, so when the
-                                            // box gets small the image also gets small.
-                                            // to be changed to don't shrink the
-                                            // dashboard after a certain point.
-                                            image: AssetImage(
-                                              MediaRes.mantisProGamingLogo,
-                                            ),
-                                          ),
-                                        ),
+                                      const SizedBox(
+                                        height: 35,
                                       ),
-                                      Container(
-                                        height: 500,
-                                        decoration: const BoxDecoration(
-                                          color: Colours.backgroundColorDark,
-                                          // border: Border.all(
-                                          //   width: 2,
-                                          //   color: Colors.yellow,
-                                          // ),
-                                        ),
-                                        child: ListView(
-                                          children: [
-                                            const SizedBox(
-                                              height: 35,
-                                            ),
-                                            DashboardContainer(
-                                              currentPageIndex: 0,
-                                              changeIndexFunction:
-                                                  dashboardController
-                                                      .changeIndex,
-                                              icon: Icons.dashboard,
-                                              title: 'Global Dashboard',
-                                              isCurrentPageActive:
-                                                  (dashboardController
-                                                              .currentIndex ==
-                                                          0)
-                                                      ? true
-                                                      : false,
-                                            ),
-                                            const SizedBox(
-                                              height: 8,
-                                            ),
-                                            DashboardContainer(
-                                              currentPageIndex: 1,
-                                              changeIndexFunction:
-                                                  dashboardController
-                                                      .changeIndex,
-                                              icon: Icons.supervisor_account,
-                                              title: 'User Search',
-                                              isCurrentPageActive:
-                                                  dashboardController
-                                                              .currentIndex ==
-                                                          1
-                                                      ? true
-                                                      : false,
-                                            ),
-                                            const SizedBox(
-                                              height: 8,
-                                            ),
-                                            DashboardContainer(
-                                              currentPageIndex: 2,
-                                              changeIndexFunction:
-                                                  dashboardController
-                                                      .changeIndex,
-                                              icon: Icons.watch_later,
-                                              title: 'Time Tracking',
-                                              isCurrentPageActive:
-                                                  dashboardController
-                                                              .currentIndex ==
-                                                          2
-                                                      ? true
-                                                      : false,
-                                            ),
-                                            const SizedBox(
-                                              height: 8,
-                                            ),
-                                            DashboardContainer(
-                                              currentPageIndex: 3,
-                                              changeIndexFunction:
-                                                  dashboardController
-                                                      .changeIndex,
-                                              icon: Icons
-                                                  .confirmation_num_outlined,
-                                              title: 'Incentives',
-                                              isCurrentPageActive:
-                                                  dashboardController
-                                                              .currentIndex ==
-                                                          3
-                                                      ? true
-                                                      : false,
-                                            ),
-                                            const SizedBox(
-                                              height: 8,
-                                            ),
-                                            DashboardContainer(
-                                              currentPageIndex: 4,
-                                              changeIndexFunction:
-                                                  dashboardController
-                                                      .changeIndex,
-                                              icon: Icons.gamepad,
-                                              title: 'Feedback',
-                                              isCurrentPageActive:
-                                                  dashboardController
-                                                              .currentIndex ==
-                                                          4
-                                                      ? true
-                                                      : false,
-                                            ),
-                                          ],
-                                        ),
+                                      DashboardContainer(
+                                        currentPageIndex: 0,
+                                        changeIndexFunction:
+                                            dashboardController.changeIndex,
+                                        iconAsset: MediaRes.codeBrowser,
+                                        title: 'Global Dashboard',
+                                        isCurrentPageActive:
+                                            (dashboardController.currentIndex ==
+                                                    0)
+                                                ? true
+                                                : false,
                                       ),
-                                      const Spacer(),
-                                      const Divider(),
-                                      InkWell(
-                                        onTap: () =>
-                                            dashboardController.changeIndex(5),
-                                        child: Builder(
-                                          builder: (_) {
-                                            final AdminDetails?
-                                                adminProfileData = context
-                                                    .read<AdminUserData>()
-                                                    .userData;
-
-                                            late ImageProvider<Object>
-                                                adminDisplayPicture;
-                                            if (adminProfileData != null) {
-                                              adminDisplayPicture =
-                                                  NetworkImage(
-                                                adminProfileData.displayPicture,
-                                              );
-                                            } else {
-                                              adminDisplayPicture =
-                                                  const AssetImage(
-                                                MediaRes.defaultUserImage,
-                                              );
-                                            }
-
-                                            return Container(
-                                              height: 65,
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                  // border: Border.all(
-                                                  //   width: 3,
-                                                  //   color: Colors.purple,
-                                                  // ),
-                                                  ),
-                                              child: ListTile(
-                                                mouseCursor:
-                                                    SystemMouseCursors.click,
-                                                minVerticalPadding: 0,
-                                                contentPadding:
-                                                    EdgeInsets.all(0),
-                                                leading: CircleAvatar(
-                                                  backgroundImage:
-                                                      adminDisplayPicture,
-                                                  onBackgroundImageError:
-                                                      (exception, stackTrace) {
-                                                    // Use default image on error
-                                                    debugPrint(
-                                                        '------Could not load user image,'
-                                                        ' error : $exception');
-                                                  },
-                                                  radius: 18,
-                                                ),
-                                                title: Text(
-                                                  adminProfileData != null
-                                                      ? adminProfileData.name
-                                                      : 'Admin Username',
-                                                  style: context.theme.textTheme
-                                                      .bodySmall,
-                                                ),
-                                                subtitle: Text(
-                                                  'Admin',
-                                                  style: context.theme.textTheme
-                                                      .bodySmall!
-                                                      .copyWith(
-                                                    fontSize: 10,
-                                                    color:
-                                                        Colours.greyTextColour,
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      DashboardContainer(
+                                        currentPageIndex: 1,
+                                        changeIndexFunction:
+                                            dashboardController.changeIndex,
+                                        iconAsset: MediaRes.usersFilled,
+                                        title: 'User Search',
+                                        isCurrentPageActive:
+                                            dashboardController.currentIndex ==
+                                                    1
+                                                ? true
+                                                : false,
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      DashboardContainer(
+                                        currentPageIndex: 2,
+                                        changeIndexFunction:
+                                            dashboardController.changeIndex,
+                                        iconAsset: MediaRes.clockIcon,
+                                        title: 'Time Tracking',
+                                        isCurrentPageActive:
+                                            dashboardController.currentIndex ==
+                                                    2
+                                                ? true
+                                                : false,
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      DashboardContainer(
+                                        currentPageIndex: 3,
+                                        changeIndexFunction:
+                                            dashboardController.changeIndex,
+                                        iconAsset: MediaRes.localActivity,
+                                        title: 'Incentives',
+                                        isCurrentPageActive:
+                                            dashboardController.currentIndex ==
+                                                    3
+                                                ? true
+                                                : false,
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      DashboardContainer(
+                                        currentPageIndex: 4,
+                                        changeIndexFunction:
+                                            dashboardController.changeIndex,
+                                        iconAsset: MediaRes.console,
+                                        title: 'Feedback',
+                                        isCurrentPageActive:
+                                            dashboardController.currentIndex ==
+                                                    4
+                                                ? true
+                                                : false,
                                       ),
                                     ],
                                   ),
-                                );
-                              },
+                                ),
+                                const Spacer(),
+                                const Divider(),
+                                InkWell(
+                                  onTap: () =>
+                                      dashboardController.changeIndex(5),
+                                  child: Builder(
+                                    builder: (_) {
+                                      final AdminDetails? adminProfileData =
+                                          context
+                                              .read<AdminUserData>()
+                                              .userData;
+
+                                      late ImageProvider<Object>
+                                          adminDisplayPicture;
+                                      if (adminProfileData != null) {
+                                        adminDisplayPicture = NetworkImage(
+                                          adminProfileData.displayPicture,
+                                        );
+                                      } else {
+                                        adminDisplayPicture = const AssetImage(
+                                          MediaRes.defaultUserImage,
+                                        );
+                                      }
+
+                                      return Container(
+                                        height: 65,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                            // border: Border.all(
+                                            //   width: 3,
+                                            //   color: Colors.purple,
+                                            // ),
+                                            ),
+                                        child: ListTile(
+                                          mouseCursor: SystemMouseCursors.click,
+                                          minVerticalPadding: 0,
+                                          contentPadding: EdgeInsets.all(0),
+                                          leading: CircleAvatar(
+                                            backgroundImage:
+                                                adminDisplayPicture,
+                                            onBackgroundImageError:
+                                                (exception, stackTrace) {
+                                              // Use default image on error
+                                              debugPrint(
+                                                  '------Could not load user image,'
+                                                  ' error : $exception');
+                                            },
+                                            radius: 18,
+                                          ),
+                                          title: Text(
+                                            adminProfileData != null
+                                                ? adminProfileData.name
+                                                : 'Admin Username',
+                                            style: context
+                                                .theme.textTheme.bodySmall,
+                                          ),
+                                          subtitle: Text(
+                                            'Admin',
+                                            style: context
+                                                .theme.textTheme.bodySmall!
+                                                .copyWith(
+                                              fontSize: 10,
+                                              color: Colours.greyTextColour,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -327,7 +302,6 @@ class _DashboardState extends State<Dashboard> {
                         // screen will be shown from the list of screens in
                         // DashBoardController.
                         Expanded(
-                          flex: 6,
                           child: Container(
                             decoration: const BoxDecoration(
                               color: Colours.backgroundColourLightDark,

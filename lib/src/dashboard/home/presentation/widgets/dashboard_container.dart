@@ -1,10 +1,11 @@
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
 import 'package:flutter/material.dart';
 
 class DashboardContainer extends StatelessWidget {
   const DashboardContainer({
-    required this.icon,
+    required this.iconAsset,
     required this.title,
     required this.isCurrentPageActive,
     required this.currentPageIndex,
@@ -12,7 +13,7 @@ class DashboardContainer extends StatelessWidget {
     super.key,
   });
 
-  final IconData icon;
+  final String iconAsset;
   final String title;
   final bool isCurrentPageActive;
   final int currentPageIndex;
@@ -37,29 +38,30 @@ class DashboardContainer extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Container(
-            //   width: 20,
-            //   height: 20,
-            //   decoration: BoxDecoration(
-            //     border: Border.all(
-            //         width: 2, color: Colors.pink),
-            //     image: DecorationImage(
-            //       image: AssetImage(
-            //         MediaRes.dashboardIconImage,
-            //       ),
-            //       fit: BoxFit.cover,
-            //     ),
-            //   ),
-            // ),
-            Icon(
-              // TODO(RohanSengupta): to be
-              //  changed with custom icon later.
-              icon,
-              color: isCurrentPageActive
-                  ? Colours.primaryColour
-                  : Colours.dashBoardIconColour,
-              size: 20,
+            Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  colorFilter: isCurrentPageActive
+                      ? const ColorFilter.mode(Colors.green, BlendMode.srcIn)
+                      : null,
+                  image: AssetImage(
+                    iconAsset,
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
+            // Icon(
+            //   // TODO(RohanSengupta): to be
+            //   //  changed with custom icon later.
+            //   icon,
+            //   color: isCurrentPageActive
+            //       ? Colours.primaryColour
+            //       : Colours.dashBoardIconColour,
+            //   size: 20,
+            // ),
             const SizedBox(
               width: 8,
             ),

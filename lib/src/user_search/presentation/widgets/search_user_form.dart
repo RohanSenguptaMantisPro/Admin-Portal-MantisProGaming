@@ -40,7 +40,7 @@ class _SearchUserFormState extends State<SearchUserForm> {
           ),
           cursorColor: Colours.white,
           borderRadius: 8,
-          borderColor: Colours.grey,
+          borderColor: Colors.white.withOpacity(0.3),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 10,
             vertical: 0,

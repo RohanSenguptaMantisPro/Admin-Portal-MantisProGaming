@@ -25,24 +25,24 @@ class Colours {
 
   /// #458CFF
   static const primaryColour = Color(0xFF06BD46);
-  static const primaryColourLight = Color(0xFF253f36);
+  static final primaryColourLight = Color(0xFF0E4D27).withOpacity(0.5);
 
   /// #757C8E
   static const whiteTextColour = Color(0xFFfefefe);
   static const lightWhiteTextColour = Color(0xFF9b9da0);
-  static const greyTextColour = Colors.grey;
+  static final greyTextColour = Colors.grey.withOpacity(0.7);
 
   /// #FF5C5C
   static const redColour = Color(0xFFFF5C5C);
 
-  static const backgroundColourLightDark = Color(0xFF171719);
+  static const backgroundColourLightDark = Color(0xFF181A1E);
 
   static const backgroundColorDark = Color(0xFF05050f);
 
   static const dashBoardIconColour = Color(0xFF8f8f94);
 
   static const grey = Colors.grey;
-  static const greyBackground = Color(0xFF2f343b);
+  static const greyBackground = Color(0xFF2F343B);
 
   static const white = Colors.white;
 

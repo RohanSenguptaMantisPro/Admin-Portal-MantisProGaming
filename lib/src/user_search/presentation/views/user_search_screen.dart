@@ -1,7 +1,10 @@
+import 'dart:js_interop_unsafe';
+
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/custom_dropdown.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user_search/presentation/widgets/account_type_dropdown_menu.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user_search/presentation/widgets/filter_dropdown_tile.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user_search/presentation/widgets/search_user_form.dart';
@@ -94,22 +97,37 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                             layerLink: _accountTypeLayerLink,
                             overlayMenuWidget: const AccountTypeDropdownMenu(),
                             buttonWidget: ButtonWidget(
+                              borderColor: Colors.white.withOpacity(0.3),
                               onTap: onTapAccountType,
                               height: 35,
                               width: 150,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Account Type',
-                                    style: context.theme.textTheme.bodySmall,
-                                  ),
-                                  const Icon(
-                                    Icons.keyboard_arrow_down,
-                                    color: Colours.whiteIconsColor,
-                                  ),
-                                ],
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 3,
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          'Account Type',
+                                          style:
+                                              context.theme.textTheme.bodySmall,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        alignment: Alignment.centerRight,
+                                        child: const Icon(
+                                          Icons.keyboard_arrow_down,
+                                          color: Colours.whiteIconsColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -128,16 +146,24 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                         children: [
                           // sort button
                           ButtonWidget(
+                            borderColor: Colors.white.withOpacity(0.3),
                             height: 35,
                             width: 67,
                             onTap: () => (),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(
-                                  Icons.sort,
-                                  color: Colours.whiteIconsColor,
-                                  size: 18,
+                                const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: Image(
+                                    image: AssetImage(
+                                      MediaRes.sortOutlined,
+                                    ),
+                                    height: 10,
+                                    width: 10,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                                 Text(
                                   'Sort',
@@ -157,17 +183,24 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                             layerLink: _filterLayerLink,
                             overlayMenuWidget: FilterDropdown(),
                             buttonWidget: ButtonWidget(
+                              borderColor: Colors.white.withOpacity(0.3),
                               onTap: onTapFilter,
                               height: 35,
                               width: 75,
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Icon(
-                                    Icons.filter_alt_outlined,
-                                    size: 18,
-                                    color: Colours.whiteIconsColor,
+                                  const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: Image(
+                                      image: AssetImage(
+                                        MediaRes.filterFunnelOutlined,
+                                      ),
+                                      height: 10,
+                                      width: 10,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                   Text(
                                     'Filter',
@@ -195,7 +228,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
             child: Row(),
           ),
           Container(
-            height: 470,
+            height: 700,
             width: double.infinity,
             decoration: BoxDecoration(
               border: Border.all(

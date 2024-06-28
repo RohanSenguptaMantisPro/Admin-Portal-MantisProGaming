@@ -1,4 +1,3 @@
-import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:flutter/material.dart';
 
@@ -8,12 +7,14 @@ class ButtonWidget extends StatelessWidget {
     this.child,
     this.height,
     this.width,
+    this.borderColor,
     super.key,
   });
 
   final VoidCallback? onTap;
   final double? height;
   final double? width;
+  final Color? borderColor;
 
   final Widget? child;
 
@@ -31,18 +32,12 @@ class ButtonWidget extends StatelessWidget {
         color: Colours.greyBackground,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
-          side: const BorderSide(color: Colours.grey),
+          side: BorderSide(color: borderColor ?? Colours.grey),
         ),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(8),
-          child: Padding(
-            padding: const EdgeInsets.only(
-              left: 10,
-              right: 8,
-            ),
-            child: child,
-          ),
+          child: child,
         ),
       ),
     );
