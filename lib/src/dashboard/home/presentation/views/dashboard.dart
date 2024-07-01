@@ -13,10 +13,11 @@ import 'package:admin_portal_mantis_pro_gaming/src/dashboard/home/presentation/w
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
-  static const routeName = 'dashboard';
+  static const routeName = '/dashboard';
 
   const Dashboard({required this.autoLogIn, super.key});
 
@@ -34,6 +35,9 @@ class _DashboardState extends State<Dashboard> {
 
     // auto login user if token is saved.
     debugPrint('---checking user logged in');
+    debugPrint(
+      '--------${widget.autoLogIn}',
+    );
     if (widget.autoLogIn == 1) {
       context.read<AuthBloc>().add(
             const IsUserLoggedInEvent(),
@@ -50,7 +54,8 @@ class _DashboardState extends State<Dashboard> {
           listener: (context, state) async {
             if (state is IsLoggedInStatus &&
                 state.loggedInUserToken.isNotEmpty) {
-              // here if logged in initialise the setter with the received userToken
+              // here if logged in initialise the setter with the received
+              // userToken
               // to access elsewhere too.
               debugPrint(
                 '------------ user already logged in. '
@@ -75,10 +80,7 @@ class _DashboardState extends State<Dashboard> {
                     const LogOutEvent(),
                   );
 
-              await Navigator.of(context).pushNamedAndRemoveUntil(
-                '/',
-                (route) => false,
-              );
+              context.go('/');
             } else if (state is FetchAdminDataError) {
               showCustomToast(context, 'Unable to access Admin Data');
             } else if (state is FetchedAdminData) {

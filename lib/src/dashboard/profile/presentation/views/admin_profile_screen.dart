@@ -8,6 +8,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/b
 import 'package:admin_portal_mantis_pro_gaming/src/dashboard/profile/presentation/widgets/data_containers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/res/colours.dart';
 
@@ -45,10 +46,7 @@ class AdminProfileScreen extends StatelessWidget {
         if (state is AuthError) {
           showCustomToast(context, 'Could not log you out!');
         } else if (state is LoggedOut) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            '/',
-            (route) => false,
-          );
+          context.go('/');
         }
       },
       builder: (context, state) {

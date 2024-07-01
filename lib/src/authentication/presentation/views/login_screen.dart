@@ -14,6 +14,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:google_sign_in_web/web_only.dart' as web;
@@ -31,6 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+
+    debugPrint('---LogIn screen Init State');
     // web.renderButton() will be called on user button press.
     // and listener here for that if user is authenticated.
     // then : add the createUserEvent event inside listener
@@ -106,12 +109,16 @@ class _LoginScreenState extends State<LoginScreen> {
               );
         } else if (state is FetchAdminDataError) {
           showCustomToast(context, 'Unable to access Admin Data');
-          Navigator.of(context)
-              .pushReplacementNamed(Dashboard.routeName, arguments: 0);
+          // Navigator.of(context)
+          //     .pushReplacementNamed(Dashboard.routeName, arguments: 0);
+
+          context.go('${Dashboard.routeName}/2');
         } else if (state is FetchedAdminData) {
           context.read<AdminUserData>().initUser(state.adminDetails);
-          Navigator.of(context)
-              .pushReplacementNamed(Dashboard.routeName, arguments: 0);
+          // Navigator.of(context)
+          //     .pushReplacementNamed(Dashboard.routeName, arguments: 0);
+          debugPrint('---------login screen : Checkpoint');
+          context.go('${Dashboard.routeName}/2');
         }
       },
 

@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: OKToast(
-          child: MaterialApp(
+          child: MaterialApp.router(
             debugShowCheckedModeBanner: false,
             title: 'Education App',
             theme: ThemeData(
@@ -108,7 +108,8 @@ class MyApp extends StatelessWidget {
                 accentColor: Colours.primaryColour,
               ),
             ),
-            onGenerateRoute: generateRoute,
+            // onGenerateRoute: generateRoute,
+            routerConfig: generateRoute(),
           ),
         ),
       ),
