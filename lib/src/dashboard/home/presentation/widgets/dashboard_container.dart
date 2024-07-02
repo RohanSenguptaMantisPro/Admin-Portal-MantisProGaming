@@ -8,22 +8,21 @@ class DashboardContainer extends StatelessWidget {
     required this.iconAsset,
     required this.title,
     required this.isCurrentPageActive,
-    required this.currentPageIndex,
-    required this.changeIndexFunction,
+    required this.goRouter,
     super.key,
   });
 
   final String iconAsset;
   final String title;
   final bool isCurrentPageActive;
-  final int currentPageIndex;
-  final void Function(int index) changeIndexFunction;
+
+  final VoidCallback goRouter;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       mouseCursor: SystemMouseCursors.click,
-      onTap: () => changeIndexFunction(currentPageIndex),
+      onTap: goRouter,
       child: Container(
         padding: const EdgeInsets.only(
           left: 8,
@@ -43,9 +42,6 @@ class DashboardContainer extends StatelessWidget {
               height: 20,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  colorFilter: isCurrentPageActive
-                      ? const ColorFilter.mode(Colors.green, BlendMode.srcIn)
-                      : null,
                   image: AssetImage(
                     iconAsset,
                   ),
@@ -53,15 +49,6 @@ class DashboardContainer extends StatelessWidget {
                 ),
               ),
             ),
-            // Icon(
-            //   // TODO(RohanSengupta): to be
-            //   //  changed with custom icon later.
-            //   icon,
-            //   color: isCurrentPageActive
-            //       ? Colours.primaryColour
-            //       : Colours.dashBoardIconColour,
-            //   size: 20,
-            // ),
             const SizedBox(
               width: 8,
             ),

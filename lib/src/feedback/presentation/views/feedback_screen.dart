@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class FeedbackScreen extends StatelessWidget {
   const FeedbackScreen({super.key});
 
+  static const routeName = '/feedback';
+
   @override
   Widget build(BuildContext context) {
     return Center(

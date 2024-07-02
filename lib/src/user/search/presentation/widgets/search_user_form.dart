@@ -36,7 +36,7 @@ class _SearchUserFormState extends State<SearchUserForm> {
           filled: true,
           prefixIcon: const Icon(
             Icons.search,
-            color: Colours.greyIconColor,
+            color: Colours.lightWhiteIconColor,
           ),
           cursorColor: Colours.white,
           borderRadius: 8,

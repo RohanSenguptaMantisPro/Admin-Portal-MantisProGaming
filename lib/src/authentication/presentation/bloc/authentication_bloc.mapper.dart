@@ -698,6 +698,7 @@ class AuthStateMapper extends ClassMapperBase<AuthState> {
       CheckingIsUserLoggedInMapper.ensureInitialized();
       IsLoggedInStatusMapper.ensureInitialized();
       LoggedInCheckFailedMapper.ensureInitialized();
+      FetchingAdminDataMapper.ensureInitialized();
       FetchedAdminDataMapper.ensureInitialized();
       FetchAdminDataErrorMapper.ensureInitialized();
       LoggedOutMapper.ensureInitialized();
@@ -1667,6 +1668,108 @@ class _LoggedInCheckFailedCopyWithImpl<$R, $Out>
   LoggedInCheckFailedCopyWith<$R2, LoggedInCheckFailed, $Out2>
       $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
           _LoggedInCheckFailedCopyWithImpl($value, $cast, t);
+}
+
+class FetchingAdminDataMapper extends ClassMapperBase<FetchingAdminData> {
+  FetchingAdminDataMapper._();
+
+  static FetchingAdminDataMapper? _instance;
+  static FetchingAdminDataMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = FetchingAdminDataMapper._());
+      AuthStateMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  @override
+  final String id = 'FetchingAdminData';
+
+  @override
+  final MappableFields<FetchingAdminData> fields = const {};
+
+  static FetchingAdminData _instantiate(DecodingData data) {
+    return FetchingAdminData();
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static FetchingAdminData fromMap(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<FetchingAdminData>(map);
+  }
+
+  static FetchingAdminData fromJson(String json) {
+    return ensureInitialized().decodeJson<FetchingAdminData>(json);
+  }
+}
+
+mixin FetchingAdminDataMappable {
+  String toJson() {
+    return FetchingAdminDataMapper.ensureInitialized()
+        .encodeJson<FetchingAdminData>(this as FetchingAdminData);
+  }
+
+  Map<String, dynamic> toMap() {
+    return FetchingAdminDataMapper.ensureInitialized()
+        .encodeMap<FetchingAdminData>(this as FetchingAdminData);
+  }
+
+  FetchingAdminDataCopyWith<FetchingAdminData, FetchingAdminData,
+          FetchingAdminData>
+      get copyWith => _FetchingAdminDataCopyWithImpl(
+          this as FetchingAdminData, $identity, $identity);
+  @override
+  String toString() {
+    return FetchingAdminDataMapper.ensureInitialized()
+        .stringifyValue(this as FetchingAdminData);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return FetchingAdminDataMapper.ensureInitialized()
+        .equalsValue(this as FetchingAdminData, other);
+  }
+
+  @override
+  int get hashCode {
+    return FetchingAdminDataMapper.ensureInitialized()
+        .hashValue(this as FetchingAdminData);
+  }
+}
+
+extension FetchingAdminDataValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, FetchingAdminData, $Out> {
+  FetchingAdminDataCopyWith<$R, FetchingAdminData, $Out>
+      get $asFetchingAdminData =>
+          $base.as((v, t, t2) => _FetchingAdminDataCopyWithImpl(v, t, t2));
+}
+
+abstract class FetchingAdminDataCopyWith<$R, $In extends FetchingAdminData,
+    $Out> implements AuthStateCopyWith<$R, $In, $Out> {
+  @override
+  $R call();
+  FetchingAdminDataCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
+      Then<$Out2, $R2> t);
+}
+
+class _FetchingAdminDataCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, FetchingAdminData, $Out>
+    implements FetchingAdminDataCopyWith<$R, FetchingAdminData, $Out> {
+  _FetchingAdminDataCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<FetchingAdminData> $mapper =
+      FetchingAdminDataMapper.ensureInitialized();
+  @override
+  $R call() => $apply(FieldCopyWithData({}));
+  @override
+  FetchingAdminData $make(CopyWithData data) => FetchingAdminData();
+
+  @override
+  FetchingAdminDataCopyWith<$R2, FetchingAdminData, $Out2> $chain<$R2, $Out2>(
+          Then<$Out2, $R2> t) =>
+      _FetchingAdminDataCopyWithImpl($value, $cast, t);
 }
 
 class FetchedAdminDataMapper extends ClassMapperBase<FetchedAdminData> {

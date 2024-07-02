@@ -4,7 +4,6 @@ import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/services/injection_container.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/services/router.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/dashboard/home/presentation/providers/dashboard_controller.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,9 +28,6 @@ class MyApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => DashboardController(),
-        ),
         ChangeNotifierProvider(create: (_) => UserTokenProvider()),
         ChangeNotifierProvider(create: (_) => AdminUserData()),
       ],

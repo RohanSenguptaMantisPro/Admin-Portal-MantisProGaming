@@ -150,6 +150,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     FetchAdminDataEvent event,
     Emitter<AuthState> emit,
   ) async {
+    emit(const FetchingAdminData());
+
     final result = await _fetchUserData(event.userToken);
     result.fold(
       (failure) => emit(FetchAdminDataError(message: failure.message)),

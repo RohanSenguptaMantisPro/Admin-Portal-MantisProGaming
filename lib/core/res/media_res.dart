@@ -19,10 +19,20 @@ class MediaRes {
 //   icons
   static const googleIcon = '$_baseIcon/google_icon.png';
   static const sortOutlined = '$_baseIcon/sort-outlined.png';
+
+  //outlined
   static const filterFunnelOutlined = '$_baseIcon/filter-funnel-outlined.png';
   static const codeBrowser = '$_baseIcon/code-browser.png';
-  static const clockIcon = '$_baseIcon/clock-icon.png';
-  static const usersFilled = '$_baseIcon/user-outlined.png';
+  static const clockIcon = '$_baseIcon/clock.png';
+  static const userOutlined = '$_baseIcon/user-outlined.png';
   static const localActivity = '$_baseIcon/local-activity.png';
   static const console = '$_baseIcon/console.png';
+
+  //filled
+  static const filterFunnelfilled = '$_baseIcon/filter-funnel-filled.png';
+  static const codeBrowserFilled = '$_baseIcon/code-browser-filled.png';
+  static const clockIconFilled = '$_baseIcon/clock-filled.png';
+  static const userFilled = '$_baseIcon/users-filled.png';
+  static const localActivityFilled = '$_baseIcon/local-activity-filled.png';
+  static const consoleFilled = '$_baseIcon/console-filled.png';
 }

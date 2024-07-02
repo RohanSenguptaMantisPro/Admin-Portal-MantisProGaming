@@ -1,4 +1,3 @@
-import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/admin_user_data.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
@@ -7,7 +6,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/services/injection_container
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_toast.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/widgets/center_text_box.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/dashboard/home/presentation/views/dashboard.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/views/user_search_screen.dart';
 
 import 'package:flutter/foundation.dart';
 
@@ -34,6 +33,13 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
 
     debugPrint('---LogIn screen Init State');
+
+    //   is user already logged in check.
+    //
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AuthBloc>().add(const IsUserLoggedInEvent());
+    });
+
     // web.renderButton() will be called on user button press.
     // and listener here for that if user is authenticated.
     // then : add the createUserEvent event inside listener
@@ -65,7 +71,29 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         // checking if user is logged in
-        if (state is AuthError) {
+
+        if (state is IsLoggedInStatus && state.loggedInUserToken.isNotEmpty) {
+          // here if logged in initialise the setter with the received
+          // userToken
+          // to access elsewhere too.
+          debugPrint(
+            '------------ user already logged in. '
+            '${state.loggedInUserToken}',
+          );
+          context.read<UserTokenProvider>().initUser(state.loggedInUserToken);
+
+          // fetch admin profile data bloc event add here. and then setter
+          // to
+          // store user data.
+          context.read<AuthBloc>().add(
+                FetchAdminDataEvent(
+                  userToken: state.loggedInUserToken,
+                ),
+              );
+        } else if (state is LoggedInCheckFailed) {
+          showCustomToast(context, 'Auto login failed, please login');
+        } //
+        else if (state is AuthError) {
           debugPrint('----- listener state : $state');
           debugPrint('----- Something went wrong : ${state.message}');
 
@@ -107,18 +135,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   userToken: userToken!,
                 ),
               );
-        } else if (state is FetchAdminDataError) {
-          showCustomToast(context, 'Unable to access Admin Data');
-          // Navigator.of(context)
-          //     .pushReplacementNamed(Dashboard.routeName, arguments: 0);
-
-          context.go('${Dashboard.routeName}/2');
-        } else if (state is FetchedAdminData) {
-          context.read<AdminUserData>().initUser(state.adminDetails);
-          // Navigator.of(context)
-          //     .pushReplacementNamed(Dashboard.routeName, arguments: 0);
-          debugPrint('---------login screen : Checkpoint');
-          context.go('${Dashboard.routeName}/2');
+        } else if (state is FetchingAdminData) {
+          context.go(UserSearchScreen.routeName);
         }
       },
 
@@ -126,165 +144,173 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (context, state) {
         // don't show login page if checking user token status.
         debugPrint('---- new state : $state');
-        if (state is CheckingIsUserLoggedIn) {
-          return const CircularProgressIndicator();
-        } else {
-          return Container(
-            decoration: const BoxDecoration(
-              color: Colours.backgroundColorDark,
-            ),
-            child: Stack(
-              // stack : to insert a gradient in the middle on top of the column
-              children: [
-                Column(
-                  children: [
-                    Expanded(
-                      child: Stack(
-                        // stack : for the gradient on top of the first part of
-                        // the column.
-                        children: [
-                          // Top image container.
-                          Container(
-                            decoration: const BoxDecoration(
-                              // border: Border.all(color: Colors.white, width: 2),
-                              image: DecorationImage(
-                                image: AssetImage(MediaRes.loginScreenTopCover),
-                                fit: BoxFit.cover,
-                              ),
-                              // border: Border.all(color: Colors.purple, width: 2),
-                            ),
-                          ),
-                          // Gradient on top image Container.
-                          Container(
-                            height: context.height,
-                            width: context.width,
-                            decoration: BoxDecoration(
-                              // Gradient for the shadow effect
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Colours.loginSceenBlackGradient
-                                      .withOpacity(0.1),
-                                  Colours.loginSceenBlackGradient
-                                      .withOpacity(0.8),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Stack(
-                        // stack : to put gradient on top of the 2nd container
-                        // container the design svg.
-                        children: [
-                          // svg.
-                          Container(
-                            height: context.height,
-                            width: context.width,
-                            decoration: const BoxDecoration(
-                                // border: Border.all(
-                                //   color: Colors.yellowAccent,
-                                //   width: 2,
-                                // ),
-                                ),
-                            child: SvgPicture.asset(
-                              fit: BoxFit.cover,
-                              MediaRes.loginScreenBottomDesign,
-                            ),
-                          ),
-                          // gradient layer 1 on top of svg.
-                          Container(
-                            height: context.height,
-                            width: context.width,
-                            decoration: BoxDecoration(
-                              // Gradient for the shadow effect
-                              gradient: RadialGradient(
-                                center: Alignment.bottomCenter,
-                                // near the top right
-                                colors: <Color>[
-                                  Colours.loginScreenGreenGradient
-                                      .withOpacity(0.9),
-                                  Colours.loginScreenGreenGradient
-                                      .withOpacity(0.9),
-                                ],
-                              ),
-                            ),
-                          ),
-                          // gradient layer 2.
-                          Container(
-                            height: context.height,
-                            width: context.width,
-                            decoration: BoxDecoration(
-                              // Gradient for the shadow effect
-                              gradient: RadialGradient(
-                                center: Alignment.bottomCenter,
-                                // near the top right
-                                radius: 1.2,
-                                colors: <Color>[
-                                  Colours.loginSceenBlackGradient
-                                      .withOpacity(0.7),
-                                  Colours.loginSceenBlackGradient
-                                      .withOpacity(0.7),
-                                  Colours.loginSceenBlackGradient
-                                      .withOpacity(0.7),
-                                  Colours.loginSceenBlackGradient
-                                      .withOpacity(0.8),
-                                  Colours.loginSceenBlackGradient
-                                      .withOpacity(0.8),
-                                  Colours.loginSceenBlackGradient
-                                      .withOpacity(0.9),
-                                ],
-
-                                stops: const <double>[
-                                  0.1,
-                                  0.2,
-                                  0.3,
-                                  0.7,
-                                  0.8,
-                                  0.9,
-                                  // 1,
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                // gradient in the middle of the column.
-                Center(
-                  child: Container(
-                    width: double.infinity,
-                    height: context.height * 0.15,
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color:
-                              Colours.loginSceenBlackGradient.withOpacity(0.9),
-                          blurRadius: 50,
-                          spreadRadius: 30,
-                        ),
-                      ],
-                    ),
+        return Scaffold(
+          backgroundColor: Colours.backgroundColourLightDark,
+          body: (state is CheckingIsUserLoggedIn ||
+                  (state is IsLoggedInStatus &&
+                      state.loggedInUserToken.isNotEmpty))
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: Colours.primaryColour,
                   ),
-                ),
+                )
+              : Container(
+                  decoration: const BoxDecoration(
+                    color: Colours.backgroundColorDark,
+                  ),
+                  child: Stack(
+                    // stack : to insert a gradient in the middle on top of the column
+                    children: [
+                      Column(
+                        children: [
+                          Expanded(
+                            child: Stack(
+                              // stack : for the gradient on top of the first part of
+                              // the column.
+                              children: [
+                                // Top image container.
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    // border: Border.all(color: Colors.white, width: 2),
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          MediaRes.loginScreenTopCover),
+                                      fit: BoxFit.cover,
+                                    ),
+                                    // border: Border.all(color: Colors.purple, width: 2),
+                                  ),
+                                ),
+                                // Gradient on top image Container.
+                                Container(
+                                  height: context.height,
+                                  width: context.width,
+                                  decoration: BoxDecoration(
+                                    // Gradient for the shadow effect
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Colours.loginSceenBlackGradient
+                                            .withOpacity(0.1),
+                                        Colours.loginSceenBlackGradient
+                                            .withOpacity(0.8),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Stack(
+                              // stack : to put gradient on top of the 2nd container
+                              // container the design svg.
+                              children: [
+                                // svg.
+                                Container(
+                                  height: context.height,
+                                  width: context.width,
+                                  decoration: const BoxDecoration(
+                                      // border: Border.all(
+                                      //   color: Colors.yellowAccent,
+                                      //   width: 2,
+                                      // ),
+                                      ),
+                                  child: SvgPicture.asset(
+                                    fit: BoxFit.cover,
+                                    MediaRes.loginScreenBottomDesign,
+                                  ),
+                                ),
+                                // gradient layer 1 on top of svg.
+                                Container(
+                                  height: context.height,
+                                  width: context.width,
+                                  decoration: BoxDecoration(
+                                    // Gradient for the shadow effect
+                                    gradient: RadialGradient(
+                                      center: Alignment.bottomCenter,
+                                      // near the top right
+                                      colors: <Color>[
+                                        Colours.loginScreenGreenGradient
+                                            .withOpacity(0.9),
+                                        Colours.loginScreenGreenGradient
+                                            .withOpacity(0.9),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                // gradient layer 2.
+                                Container(
+                                  height: context.height,
+                                  width: context.width,
+                                  decoration: BoxDecoration(
+                                    // Gradient for the shadow effect
+                                    gradient: RadialGradient(
+                                      center: Alignment.bottomCenter,
+                                      // near the top right
+                                      radius: 1.2,
+                                      colors: <Color>[
+                                        Colours.loginSceenBlackGradient
+                                            .withOpacity(0.7),
+                                        Colours.loginSceenBlackGradient
+                                            .withOpacity(0.7),
+                                        Colours.loginSceenBlackGradient
+                                            .withOpacity(0.7),
+                                        Colours.loginSceenBlackGradient
+                                            .withOpacity(0.8),
+                                        Colours.loginSceenBlackGradient
+                                            .withOpacity(0.8),
+                                        Colours.loginSceenBlackGradient
+                                            .withOpacity(0.9),
+                                      ],
 
-                //   Center text box.
-                CenterTextBox(
-                  childButton: //for authLoadings show indicator else
-                      // just the button.
-                      (state is AuthLoading)
-                          ? const CircularProgressIndicator(
-                              color: Colours.primaryColour,
-                            )
-                          : SizedBox(
-                              width: 270,
-                              height: 40,
-                              child: /*ElevatedButton.icon(
+                                      stops: const <double>[
+                                        0.1,
+                                        0.2,
+                                        0.3,
+                                        0.7,
+                                        0.8,
+                                        0.9,
+                                        // 1,
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      // gradient in the middle of the column.
+                      Center(
+                        child: Container(
+                          width: double.infinity,
+                          height: context.height * 0.15,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colours.loginSceenBlackGradient
+                                    .withOpacity(0.9),
+                                blurRadius: 50,
+                                spreadRadius: 30,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      //   Center text box.
+                      CenterTextBox(
+                        childButton: //for authLoadings show indicator else
+                            // just the button.
+                            (state is AuthLoading)
+                                ? const CircularProgressIndicator(
+                                    color: Colours.primaryColour,
+                                  )
+                                : SizedBox(
+                                    width: 270,
+                                    height: 40,
+                                    child: /*ElevatedButton.icon(
                                 onPressed: () {
                                   //  ADD BLOC EVENT
                                   context.read<AuthBloc>().add(
@@ -311,17 +337,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                   style: context.theme.textTheme.bodyMedium,
                                 ),
                               ),*/
-                                  web.renderButton(
-                                configuration: web.GSIButtonConfiguration(
-                                    // buttonStyle
+                                        web.renderButton(
+                                      configuration: web.GSIButtonConfiguration(
+                                          // buttonStyle
+                                          ),
                                     ),
-                              ),
-                            ),
+                                  ),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          );
-        }
+        );
       },
     );
   }

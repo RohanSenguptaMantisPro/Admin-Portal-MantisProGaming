@@ -47,5 +47,5 @@ class Colours {
   static const white = Colors.white;
 
   static const whiteIconsColor = Color(0xFFfafafb);
-  static const greyIconColor = Colors.grey;
+  static const lightWhiteIconColor = Color(0xFF9b9da0);
 }

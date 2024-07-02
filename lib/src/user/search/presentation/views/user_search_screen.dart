@@ -5,14 +5,18 @@ import 'package:admin_portal_mantis_pro_gaming/core/common/widget/custom_dropdow
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/user_search/presentation/widgets/account_type_dropdown_menu.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/user_search/presentation/widgets/filter_dropdown_tile.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/user_search/presentation/widgets/search_user_form.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/views/user_details_screen.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/account_type_dropdown_menu.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/filter_dropdown_tile.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/search_user_form.dart';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class UserSearchScreen extends StatefulWidget {
   const UserSearchScreen({super.key});
+
+  static const routeName = '/user-search';
 
   @override
   State<UserSearchScreen> createState() => _UserSearchScreenState();
@@ -235,7 +239,16 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                 color: Colors.purple,
               ),
             ),
-            child: Column(),
+            child: Column(
+              children: [
+                TextButton(
+                  onPressed: () => context.push(
+                    '${UserSearchScreen.routeName}/${UserDetailsScreen.routeName}',
+                  ),
+                  child: const Text('User Details Screen'),
+                ),
+              ],
+            ),
           ),
           Container(
             height: 50,

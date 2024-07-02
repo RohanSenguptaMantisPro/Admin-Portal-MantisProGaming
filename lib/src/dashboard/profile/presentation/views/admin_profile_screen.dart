@@ -15,6 +15,8 @@ import '../../../../../core/res/colours.dart';
 class AdminProfileScreen extends StatelessWidget {
   const AdminProfileScreen({super.key});
 
+  static const routeName = '/admin-profile';
+
   @override
   Widget build(BuildContext context) {
     final AdminDetails? adminProfileData =

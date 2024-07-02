@@ -60,6 +60,11 @@ class LoggedInCheckFailed extends AuthState with LoggedInCheckFailedMappable {
 }
 
 @MappableClass()
+class FetchingAdminData extends AuthState with FetchingAdminDataMappable {
+  const FetchingAdminData();
+}
+
+@MappableClass()
 class FetchedAdminData extends AuthState with FetchedAdminDataMappable {
   FetchedAdminData({required this.adminDetails});
 

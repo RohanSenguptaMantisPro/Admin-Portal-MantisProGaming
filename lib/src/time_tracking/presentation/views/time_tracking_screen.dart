@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class TimeTrackingScreen extends StatelessWidget {
   const TimeTrackingScreen({super.key});
 
+  static const routeName = '/time-tracking';
+
   @override
   Widget build(BuildContext context) {
     return Center(

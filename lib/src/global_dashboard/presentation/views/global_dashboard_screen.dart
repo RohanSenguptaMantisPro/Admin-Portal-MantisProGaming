@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class GlobalDashboardScreen extends StatelessWidget {
   const GlobalDashboardScreen({super.key});
 
+  static const routeName = '/global-dashboard';
+
   @override
   Widget build(BuildContext context) {
     return Center(

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class IncentivesScreen extends StatelessWidget {
   const IncentivesScreen({super.key});
 
+  static const routeName = '/incentives';
+
   @override
   Widget build(BuildContext context) {
     return Center(
