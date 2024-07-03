@@ -1,0 +1,4 @@
+enum DropdownType {
+  searchBy,
+  accountStatus,
+}

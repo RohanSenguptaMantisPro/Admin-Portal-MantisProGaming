@@ -23,7 +23,6 @@ class UserSearchScreen extends StatefulWidget {
 }
 
 class _UserSearchScreenState extends State<UserSearchScreen> {
-  @override
   final textEditingController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
@@ -38,11 +37,15 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
   final LayerLink _filterLayerLink = LayerLink();
 
   void onTapAccountType() {
-    _accountTypeTooltipController.toggle();
+    setState(() {
+      _accountTypeTooltipController.toggle();
+    });
   }
 
   void onTapFilter() {
-    _filterToolTipController.toggle();
+    setState(() {
+      _filterToolTipController.toggle();
+    });
   }
 
   @override
@@ -92,9 +95,9 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                         children: [
                           // AccountTypeDropdown(),
 
-                          // CustomDropDown for customDesign and proper overlaying
-                          // over other widgets.
-                          CustomDropDown(
+                          // CustomDropDown for customDesign and proper
+                          // overlaying over other widgets.
+                          /*    CustomDropDown(
                             targetAnchor: Alignment.bottomLeft,
                             followerAnchor: Alignment.topLeft,
                             tooltipController: _accountTypeTooltipController,
@@ -142,7 +145,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                           SearchUserForm(
                             textEditingController: textEditingController,
                             formKey: formKey,
-                          ),
+                          ),*/
                         ],
                       ),
                       Row(
@@ -180,39 +183,47 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                             width: 10,
                           ),
                           // filter dropdown.
-                          CustomDropDown(
-                            targetAnchor: Alignment.bottomRight,
-                            followerAnchor: Alignment.topRight,
-                            tooltipController: _filterToolTipController,
-                            layerLink: _filterLayerLink,
-                            overlayMenuWidget: FilterDropdown(),
-                            buttonWidget: ButtonWidget(
-                              borderColor: Colors.white.withOpacity(0.3),
-                              onTap: onTapFilter,
-                              height: 35,
-                              width: 75,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: Image(
-                                      image: AssetImage(
-                                        MediaRes.filterFunnelOutlined,
+                          StatefulBuilder(
+                            builder: (BuildContext ctx, StateSetter setState) {
+                              return CustomDropDown(
+                                targetAnchor: Alignment.bottomRight,
+                                followerAnchor: Alignment.topRight,
+                                tooltipController: _filterToolTipController,
+                                layerLink: _filterLayerLink,
+                                overlayMenuWidget: FilterDropdown(),
+                                buttonWidget: ButtonWidget(
+                                  borderColor:
+                                      _filterToolTipController.isShowing
+                                          ? Colours.primaryColour
+                                          : Colors.white.withOpacity(0.3),
+                                  onTap: onTapFilter,
+                                  height: 35,
+                                  width: 75,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: Image(
+                                          image: AssetImage(
+                                            MediaRes.filterFunnelOutlined,
+                                          ),
+                                          height: 10,
+                                          width: 10,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
-                                      height: 10,
-                                      width: 10,
-                                      fit: BoxFit.cover,
-                                    ),
+                                      Text(
+                                        'Filter',
+                                        style:
+                                            context.theme.textTheme.bodySmall,
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    'Filter',
-                                    style: context.theme.textTheme.bodySmall,
-                                  ),
-                                ],
-                              ),
-                            ),
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),

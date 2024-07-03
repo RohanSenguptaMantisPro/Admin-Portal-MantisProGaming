@@ -35,7 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
     debugPrint('---LogIn screen Init State');
 
     //   is user already logged in check.
-    //
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AuthBloc>().add(const IsUserLoggedInEvent());
     });

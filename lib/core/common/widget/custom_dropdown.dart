@@ -25,7 +25,7 @@ class CustomDropDown extends StatelessWidget {
       child: OverlayPortal(
         controller: tooltipController,
         overlayChildBuilder: (BuildContext context) {
-          // Without using these FittedBox , the overlaywidget
+          // bug:  Without using these FittedBox , the overlay widget
           // either expands infinitely if using followerAnchor, or doesn't
           // appear if wrapped with Align.
           return FittedBox(

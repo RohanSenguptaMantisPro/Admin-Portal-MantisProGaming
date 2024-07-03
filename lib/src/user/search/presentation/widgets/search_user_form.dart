@@ -28,25 +28,10 @@ class _SearchUserFormState extends State<SearchUserForm> {
         child: IField(
           controller: widget.textEditingController,
           hintText: 'Search by account, name, userID...',
-          keyboardType: TextInputType.text,
-          hintStyle: context.theme.textTheme.bodySmall!.copyWith(
-            color: Colours.greyTextColour,
-          ),
-          fillColour: Colours.backgroundColorDark,
-          filled: true,
           prefixIcon: const Icon(
             Icons.search,
             color: Colours.lightWhiteIconColor,
           ),
-          cursorColor: Colours.white,
-          borderRadius: 8,
-          borderColor: Colors.white.withOpacity(0.3),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 10,
-            vertical: 0,
-          ),
-          cursorHeight: 15,
-          inputTextStyle: context.theme.textTheme.bodySmall,
         ),
       ),
     );

@@ -5,31 +5,19 @@ import 'package:flutter/material.dart';
 class IField extends StatelessWidget {
   const IField({
     required this.controller,
-    this.filled = false,
     this.obscureText = false,
     this.readOnly = false,
     super.key,
     this.validator,
-    this.fillColour,
     this.suffixIcon,
     this.hintText,
     this.keyboardType,
-    this.hintStyle,
     this.overrideValidator = false,
-    this.maxLines,
     this.prefixIcon,
-    this.cursorColor,
-    this.borderColor,
-    this.borderRadius,
-    this.contentPadding,
-    this.cursorHeight,
-    this.inputTextStyle,
   });
 
   final String? Function(String?)? validator;
   final TextEditingController controller;
-  final bool filled;
-  final Color? fillColour;
   final bool obscureText;
   final bool readOnly;
 
@@ -37,23 +25,15 @@ class IField extends StatelessWidget {
   final String? hintText;
   final TextInputType? keyboardType;
   final bool overrideValidator;
-  final TextStyle? hintStyle;
-  final int? maxLines;
+
   final Icon? prefixIcon;
-  final Color? cursorColor;
-  final Color? borderColor;
-  final double? borderRadius;
-  final EdgeInsetsGeometry? contentPadding;
-  final double? cursorHeight;
-  final TextStyle? inputTextStyle;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      cursorColor: cursorColor,
-      cursorHeight: cursorHeight,
-      style: inputTextStyle,
-      maxLines: maxLines,
+      cursorColor: Colours.white,
+      cursorHeight: 15,
+      style: context.theme.textTheme.bodySmall,
       controller: controller,
       validator: overrideValidator
           ? validator
@@ -76,30 +56,35 @@ class IField extends StatelessWidget {
         // ),
 
         border: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: borderColor ?? Colours.grey,
+          borderSide: const BorderSide(
+            color: Colours.grey,
           ),
-          borderRadius: BorderRadius.circular(borderRadius ?? 8),
+          borderRadius: BorderRadius.circular(8),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius ?? 8),
-          borderSide: BorderSide(
-            color: borderColor ?? Colours.grey,
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: Colours.grey,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius ?? 8),
-          borderSide: BorderSide(
-            color: borderColor ?? Colours.grey,
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: Colours.grey,
           ),
         ),
         // overwriting the default padding helps with that puffy look
-        contentPadding: contentPadding,
-        filled: filled,
-        fillColor: fillColour,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 0,
+        ),
+        filled: true,
+        fillColor: Colours.backgroundColorDark,
         suffixIcon: suffixIcon,
         hintText: hintText,
-        hintStyle: hintStyle,
+        hintStyle: context.theme.textTheme.bodySmall!.copyWith(
+          color: Colours.greyTextColour,
+        ),
       ),
     );
   }

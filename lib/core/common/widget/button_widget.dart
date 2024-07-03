@@ -8,6 +8,7 @@ class ButtonWidget extends StatelessWidget {
     this.height,
     this.width,
     this.borderColor,
+    this.buttonBackgroundColor,
     super.key,
   });
 
@@ -15,6 +16,7 @@ class ButtonWidget extends StatelessWidget {
   final double? height;
   final double? width;
   final Color? borderColor;
+  final Color? buttonBackgroundColor;
 
   final Widget? child;
 
@@ -29,10 +31,10 @@ class ButtonWidget extends StatelessWidget {
       height: height,
       width: width,
       child: Material(
-        color: Colours.greyBackground,
+        color: buttonBackgroundColor ?? Colours.greyBackground,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
-          side: BorderSide(color: borderColor ?? Colours.grey),
+          side: BorderSide(color: borderColor ?? Colors.transparent),
         ),
         child: InkWell(
           onTap: onTap,

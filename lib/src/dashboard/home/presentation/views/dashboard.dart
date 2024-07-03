@@ -38,25 +38,21 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
   }
 
+  String _activeRoute = UserSearchScreen.routeName;
+
+  void setActiveRoute(String routePath) {
+    setState(() {
+      _activeRoute = routePath;
+    });
+    context.go(routePath);
+  }
+
   // TODO(RohanSengupta): Later add on the mediaQuery screen responsiveness.
   @override
   Widget build(BuildContext context) {
-    String _activeRoute = UserSearchScreen.routeName;
-    debugPrint('----------${_activeRoute}');
-
-    void setActiveRoute(String routePath) {
-      setState(() {
-        _activeRoute = routePath;
-      });
-      context.go(routePath);
-    }
-
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) async {
-        if (state is LoggedOut) {
-          await Future<void>.delayed(const Duration(seconds: 1));
-          //   go to userSearch page again.
-        } else if (state is FetchAdminDataError) {
+        if (state is FetchAdminDataError) {
           showCustomToast(context, 'Unable to access Admin Data');
           // Navigator.of(context)
           //     .pushReplacementNamed(Dashboard.routeName, arguments: 0);
@@ -143,8 +139,8 @@ class _DashboardState extends State<Dashboard> {
                                   DashboardContainer(
                                     iconAsset: (_activeRoute ==
                                             UserSearchScreen.routeName)
-                                        ? MediaRes.userOutlined
-                                        : MediaRes.userFilled,
+                                        ? MediaRes.userFilled
+                                        : MediaRes.userOutlined,
                                     title: 'User Search',
                                     goRouter: () => setActiveRoute(
                                       UserSearchScreen.routeName,
