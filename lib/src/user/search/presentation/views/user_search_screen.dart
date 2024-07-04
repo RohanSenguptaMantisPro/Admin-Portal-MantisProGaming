@@ -1,17 +1,24 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:js_interop_unsafe';
 
+import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/custom_dropdown.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/views/user_details_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/account_type_dropdown_menu.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/filter_dropdown_tile.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/search_user_form.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
 
 class UserSearchScreen extends StatefulWidget {
   const UserSearchScreen({super.key});
@@ -21,8 +28,49 @@ class UserSearchScreen extends StatefulWidget {
   @override
   State<UserSearchScreen> createState() => _UserSearchScreenState();
 }
+/*
+
+Future<void> userDetails() async {
+  final queryParameters = {
+    'page': '1',
+    'limit': '10',
+    'field': 'name',
+    'query': 'sandipan',
+    'country': 'Unknown Country',
+    'accountStatus': 'unrestricted',
+  };
+
+  final response = await http.Client().get(
+    Uri.https(
+      '$baseUrl:$port',
+      kUserDetailsEndpoint,
+      queryParameters,
+    ),
+    headers: {
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2Njc1MmQzODRiYTAzMjJkYTQwOTMyNDQiLCJpYXQiOjE3MTk5MjE3NTY3OTAsImV4cCI6MTcxOTkyMjM2MTU5MH0._GyLaQYr2xa1ts200nuWCi8MYHAxKIC6pml6nnWFexc',
+    },
+  );
+
+  if (response.statusCode != 200 && response.statusCode != 201) {
+    debugPrint('------- ServerException has occurred.');
+  }
+
+  // final receivedJson = jsonDecode(response.body) as DataMap;
+  debugPrint(response.body);
+}
+*/
 
 class _UserSearchScreenState extends State<UserSearchScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    //
+
+    // userDetails();
+  }
+
   final textEditingController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
@@ -152,7 +200,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           // sort button
-                          ButtonWidget(
+                          /*ButtonWidget(
                             borderColor: Colors.white.withOpacity(0.3),
                             height: 35,
                             width: 67,
@@ -178,7 +226,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                                 ),
                               ],
                             ),
-                          ),
+                          ),*/
                           const SizedBox(
                             width: 10,
                           ),
