@@ -21,7 +21,7 @@ class UserDataMapper extends ClassMapperBase<UserData> {
   final String id = 'UserData';
 
   static String _$id(UserData v) => v.id;
-  static const Field<UserData, String> _f$id = Field('id', _$id);
+  static const Field<UserData, String> _f$id = Field('id', _$id, key: '_id');
   static String _$name(UserData v) => v.name;
   static const Field<UserData, String> _f$name = Field('name', _$name);
   static String _$userName(UserData v) => v.userName;

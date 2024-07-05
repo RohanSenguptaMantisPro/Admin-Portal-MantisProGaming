@@ -24,6 +24,9 @@ class UserSearchResponseModelMapper
   @override
   final String id = 'UserSearchResponseModel';
 
+  static String _$status(UserSearchResponseModel v) => v.status;
+  static const Field<UserSearchResponseModel, String> _f$status =
+      Field('status', _$status);
   static int _$page(UserSearchResponseModel v) => v.page;
   static const Field<UserSearchResponseModel, int> _f$page =
       Field('page', _$page);
@@ -39,6 +42,7 @@ class UserSearchResponseModelMapper
 
   @override
   final MappableFields<UserSearchResponseModel> fields = const {
+    #status: _f$status,
     #page: _f$page,
     #results: _f$results,
     #totalResults: _f$totalResults,
@@ -55,6 +59,7 @@ class UserSearchResponseModelMapper
 
   static UserSearchResponseModel _instantiate(DecodingData data) {
     return UserSearchResponseModel(
+        status: data.dec(_f$status),
         page: data.dec(_f$page),
         results: data.dec(_f$results),
         totalResults: data.dec(_f$totalResults),
@@ -121,7 +126,12 @@ abstract class UserSearchResponseModelCopyWith<
   @override
   ListCopyWith<$R, UserData, UserDataCopyWith<$R, UserData, UserData>> get data;
   @override
-  $R call({int? page, int? results, int? totalResults, List<UserData>? data});
+  $R call(
+      {String? status,
+      int? page,
+      int? results,
+      int? totalResults,
+      List<UserData>? data});
   UserSearchResponseModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -140,8 +150,14 @@ class _UserSearchResponseModelCopyWithImpl<$R, $Out>
       get data => ListCopyWith(
           $value.data, (v, t) => v.copyWith.$chain(t), (v) => call(data: v));
   @override
-  $R call({int? page, int? results, int? totalResults, List<UserData>? data}) =>
+  $R call(
+          {String? status,
+          int? page,
+          int? results,
+          int? totalResults,
+          List<UserData>? data}) =>
       $apply(FieldCopyWithData({
+        if (status != null) #status: status,
         if (page != null) #page: page,
         if (results != null) #results: results,
         if (totalResults != null) #totalResults: totalResults,
@@ -149,6 +165,7 @@ class _UserSearchResponseModelCopyWithImpl<$R, $Out>
       }));
   @override
   UserSearchResponseModel $make(CopyWithData data) => UserSearchResponseModel(
+      status: data.get(#status, or: $value.status),
       page: data.get(#page, or: $value.page),
       results: data.get(#results, or: $value.results),
       totalResults: data.get(#totalResults, or: $value.totalResults),

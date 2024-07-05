@@ -19,7 +19,10 @@ class UserData with UserDataMappable {
           email: '',
         );
 
+  @MappableField(key: '_id')
+  // This tells dart_mappable to use '_id' from JSON for this field
   final String id;
+
   final String name;
   final String userName;
   final String email;

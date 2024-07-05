@@ -21,6 +21,9 @@ class UserSearchResponseMapper extends ClassMapperBase<UserSearchResponse> {
   @override
   final String id = 'UserSearchResponse';
 
+  static String _$status(UserSearchResponse v) => v.status;
+  static const Field<UserSearchResponse, String> _f$status =
+      Field('status', _$status);
   static int _$page(UserSearchResponse v) => v.page;
   static const Field<UserSearchResponse, int> _f$page = Field('page', _$page);
   static int _$results(UserSearchResponse v) => v.results;
@@ -35,6 +38,7 @@ class UserSearchResponseMapper extends ClassMapperBase<UserSearchResponse> {
 
   @override
   final MappableFields<UserSearchResponse> fields = const {
+    #status: _f$status,
     #page: _f$page,
     #results: _f$results,
     #totalResults: _f$totalResults,
@@ -43,6 +47,7 @@ class UserSearchResponseMapper extends ClassMapperBase<UserSearchResponse> {
 
   static UserSearchResponse _instantiate(DecodingData data) {
     return UserSearchResponse(
+        status: data.dec(_f$status),
         page: data.dec(_f$page),
         results: data.dec(_f$results),
         totalResults: data.dec(_f$totalResults),
@@ -105,7 +110,12 @@ extension UserSearchResponseValueCopy<$R, $Out>
 abstract class UserSearchResponseCopyWith<$R, $In extends UserSearchResponse,
     $Out> implements ClassCopyWith<$R, $In, $Out> {
   ListCopyWith<$R, UserData, UserDataCopyWith<$R, UserData, UserData>> get data;
-  $R call({int? page, int? results, int? totalResults, List<UserData>? data});
+  $R call(
+      {String? status,
+      int? page,
+      int? results,
+      int? totalResults,
+      List<UserData>? data});
   UserSearchResponseCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -123,8 +133,14 @@ class _UserSearchResponseCopyWithImpl<$R, $Out>
       get data => ListCopyWith(
           $value.data, (v, t) => v.copyWith.$chain(t), (v) => call(data: v));
   @override
-  $R call({int? page, int? results, int? totalResults, List<UserData>? data}) =>
+  $R call(
+          {String? status,
+          int? page,
+          int? results,
+          int? totalResults,
+          List<UserData>? data}) =>
       $apply(FieldCopyWithData({
+        if (status != null) #status: status,
         if (page != null) #page: page,
         if (results != null) #results: results,
         if (totalResults != null) #totalResults: totalResults,
@@ -132,6 +148,7 @@ class _UserSearchResponseCopyWithImpl<$R, $Out>
       }));
   @override
   UserSearchResponse $make(CopyWithData data) => UserSearchResponse(
+      status: data.get(#status, or: $value.status),
       page: data.get(#page, or: $value.page),
       results: data.get(#results, or: $value.results),
       totalResults: data.get(#totalResults, or: $value.totalResults),

@@ -11,6 +11,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/views/user_details_screen.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/bloc/user_search_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/account_type_dropdown_menu.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/filter_dropdown_tile.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/search_user_form.dart';
@@ -28,47 +29,11 @@ class UserSearchScreen extends StatefulWidget {
   @override
   State<UserSearchScreen> createState() => _UserSearchScreenState();
 }
-/*
-
-Future<void> userDetails() async {
-  final queryParameters = {
-    'page': '1',
-    'limit': '10',
-    'field': 'name',
-    'query': 'sandipan',
-    'country': 'Unknown Country',
-    'accountStatus': 'unrestricted',
-  };
-
-  final response = await http.Client().get(
-    Uri.https(
-      '$baseUrl:$port',
-      kUserDetailsEndpoint,
-      queryParameters,
-    ),
-    headers: {
-      'Authorization':
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2Njc1MmQzODRiYTAzMjJkYTQwOTMyNDQiLCJpYXQiOjE3MTk5MjE3NTY3OTAsImV4cCI6MTcxOTkyMjM2MTU5MH0._GyLaQYr2xa1ts200nuWCi8MYHAxKIC6pml6nnWFexc',
-    },
-  );
-
-  if (response.statusCode != 200 && response.statusCode != 201) {
-    debugPrint('------- ServerException has occurred.');
-  }
-
-  // final receivedJson = jsonDecode(response.body) as DataMap;
-  debugPrint(response.body);
-}
-*/
 
 class _UserSearchScreenState extends State<UserSearchScreen> {
   @override
   void initState() {
     super.initState();
-
-    //
-
-    // userDetails();
   }
 
   final textEditingController = TextEditingController();
@@ -104,48 +69,53 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 40,
-          ),
-          Container(
-            height: 110,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colours.primaryColour,
+    return BlocConsumer<UserSearchBloc, UserSearchState>(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
+      builder: (context, state) {
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 40,
               ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: 25,
-                right: 25,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'User Search',
-                    style: context.theme.textTheme.titleMedium,
+              Container(
+                height: 110,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colours.primaryColour,
                   ),
-                  const Divider(
-                    thickness: 0.2,
-                    color: Colors.white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 25,
+                    right: 25,
                   ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        'User Search',
+                        style: context.theme.textTheme.titleMedium,
+                      ),
+                      const Divider(
+                        thickness: 0.2,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(height: 10),
                       Row(
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // AccountTypeDropdown(),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // AccountTypeDropdown(),
 
-                          // CustomDropDown for customDesign and proper
-                          // overlaying over other widgets.
-                          /*    CustomDropDown(
+                              // CustomDropDown for customDesign and proper
+                              // overlaying over other widgets.
+                              /*    CustomDropDown(
                             targetAnchor: Alignment.bottomLeft,
                             followerAnchor: Alignment.topLeft,
                             tooltipController: _accountTypeTooltipController,
@@ -194,13 +164,13 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                             textEditingController: textEditingController,
                             formKey: formKey,
                           ),*/
-                        ],
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // sort button
-                          /*ButtonWidget(
+                            ],
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // sort button
+                              /*ButtonWidget(
                             borderColor: Colors.white.withOpacity(0.3),
                             height: 35,
                             width: 67,
@@ -227,103 +197,107 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                               ],
                             ),
                           ),*/
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          // filter dropdown.
-                          StatefulBuilder(
-                            builder: (BuildContext ctx, StateSetter setState) {
-                              return CustomDropDown(
-                                targetAnchor: Alignment.bottomRight,
-                                followerAnchor: Alignment.topRight,
-                                tooltipController: _filterToolTipController,
-                                layerLink: _filterLayerLink,
-                                overlayMenuWidget: FilterDropdown(),
-                                buttonWidget: ButtonWidget(
-                                  borderColor:
-                                      _filterToolTipController.isShowing
-                                          ? Colours.primaryColour
-                                          : Colors.white.withOpacity(0.3),
-                                  onTap: onTapFilter,
-                                  height: 35,
-                                  width: 75,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: Image(
-                                          image: AssetImage(
-                                            MediaRes.filterFunnelOutlined,
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              // filter dropdown.
+                              StatefulBuilder(
+                                builder:
+                                    (BuildContext ctx, StateSetter setState) {
+                                  return CustomDropDown(
+                                    targetAnchor: Alignment.bottomRight,
+                                    followerAnchor: Alignment.topRight,
+                                    tooltipController: _filterToolTipController,
+                                    layerLink: _filterLayerLink,
+                                    overlayMenuWidget: FilterDropdown(),
+                                    buttonWidget: ButtonWidget(
+                                      borderColor:
+                                          _filterToolTipController.isShowing
+                                              ? Colours.primaryColour
+                                              : Colors.white.withOpacity(0.3),
+                                      onTap: onTapFilter,
+                                      height: 35,
+                                      width: 75,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: Image(
+                                              image: AssetImage(
+                                                MediaRes.filterFunnelOutlined,
+                                              ),
+                                              height: 10,
+                                              width: 10,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
-                                          height: 10,
-                                          width: 10,
-                                          fit: BoxFit.cover,
-                                        ),
+                                          Text(
+                                            'Filter',
+                                            style: context
+                                                .theme.textTheme.bodySmall,
+                                          ),
+                                        ],
                                       ),
-                                      Text(
-                                        'Filter',
-                                        style:
-                                            context.theme.textTheme.bodySmall,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            height: 45,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.yellow,
-              ),
-            ),
-            child: Row(),
-          ),
-          Container(
-            height: 700,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.purple,
-              ),
-            ),
-            child: Column(
-              children: [
-                TextButton(
-                  onPressed: () => context.push(
-                    '${UserSearchScreen.routeName}/${UserDetailsScreen.routeName}',
-                  ),
-                  child: const Text('User Details Screen'),
                 ),
-              ],
-            ),
-          ),
-          Container(
-            height: 50,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.blue,
               ),
-            ),
-            child: Row(),
+              Container(
+                height: 45,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.yellow,
+                  ),
+                ),
+                child: Row(),
+              ),
+              Container(
+                height: 700,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.purple,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    TextButton(
+                      onPressed: () => context.push(
+                        '${UserSearchScreen.routeName}/${UserDetailsScreen.routeName}',
+                      ),
+                      child: const Text('User Details Screen'),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: 50,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.blue,
+                  ),
+                ),
+                child: Row(),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+            ],
           ),
-          const SizedBox(
-            height: 16,
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

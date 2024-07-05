@@ -25,11 +25,11 @@ class UserSearchResultsParamsMapper
   static String _$userToken(UserSearchResultsParams v) => v.userToken;
   static const Field<UserSearchResultsParams, String> _f$userToken =
       Field('userToken', _$userToken);
-  static int _$pageNumber(UserSearchResultsParams v) => v.pageNumber;
-  static const Field<UserSearchResultsParams, int> _f$pageNumber =
+  static String _$pageNumber(UserSearchResultsParams v) => v.pageNumber;
+  static const Field<UserSearchResultsParams, String> _f$pageNumber =
       Field('pageNumber', _$pageNumber);
-  static int _$limit(UserSearchResultsParams v) => v.limit;
-  static const Field<UserSearchResultsParams, int> _f$limit =
+  static String _$limit(UserSearchResultsParams v) => v.limit;
+  static const Field<UserSearchResultsParams, String> _f$limit =
       Field('limit', _$limit);
   static String _$field(UserSearchResultsParams v) => v.field;
   static const Field<UserSearchResultsParams, String> _f$field =
@@ -125,8 +125,8 @@ abstract class UserSearchResultsParamsCopyWith<
     $Out> implements ClassCopyWith<$R, $In, $Out> {
   $R call(
       {String? userToken,
-      int? pageNumber,
-      int? limit,
+      String? pageNumber,
+      String? limit,
       String? field,
       String? query,
       String? country,
@@ -147,8 +147,8 @@ class _UserSearchResultsParamsCopyWithImpl<$R, $Out>
   @override
   $R call(
           {String? userToken,
-          int? pageNumber,
-          int? limit,
+          String? pageNumber,
+          String? limit,
           String? field,
           String? query,
           String? country,

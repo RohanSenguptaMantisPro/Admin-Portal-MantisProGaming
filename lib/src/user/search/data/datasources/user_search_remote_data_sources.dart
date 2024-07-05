@@ -12,8 +12,8 @@ abstract class UserSearchRemoteDataSources {
 
   Future<UserSearchResponseModel> userSearchResults({
     required String userToken,
-    required int pageNumber,
-    required int limit,
+    required String pageNumber,
+    required String limit,
     required String field,
     required String query,
     required String country,
@@ -31,18 +31,55 @@ class UserSearchDataSourceImpl implements UserSearchRemoteDataSources {
   @override
   Future<UserSearchResponseModel> userSearchResults({
     required String userToken,
-    required int pageNumber,
-    required int limit,
+    required String pageNumber,
+    required String limit,
     required String field,
     required String query,
     required String country,
     required String accountStatus,
   }) async {
+    Map<String, dynamic> queryParameters;
+
+    if (field.isEmpty) {
+      queryParameters = {
+        'page': pageNumber,
+        'limit': limit,
+        'query': query,
+        'country': country,
+        'accountStatus': accountStatus,
+      };
+    } else if (query.isEmpty) {
+      queryParameters = {
+        'page': pageNumber,
+        'limit': limit,
+        'field': field,
+        'country': country,
+        'accountStatus': accountStatus,
+      };
+    } else if (field.isEmpty && query.isEmpty) {
+      queryParameters = {
+        'page': pageNumber,
+        'limit': limit,
+        'country': country,
+        'accountStatus': accountStatus,
+      };
+    } else {
+      queryParameters = {
+        'page': pageNumber,
+        'limit': limit,
+        'field': field,
+        'query': query,
+        'country': country,
+        'accountStatus': accountStatus,
+      };
+    }
+
     try {
       final response = await _httpClient.get(
         Uri.https(
           '$baseUrl:$port',
           kUserDetailsEndpoint,
+          queryParameters,
         ),
         headers: {
           'Authorization': 'Bearer $userToken',
@@ -52,15 +89,15 @@ class UserSearchDataSourceImpl implements UserSearchRemoteDataSources {
       if (response.statusCode != 200 && response.statusCode != 201) {
         debugPrint('------- ServerException has occurred.');
         throw ServerException(
-          message: response.body,
+          message: response.body.toString(),
           statusCode: response.statusCode.toString(),
         );
       }
 
       final receivedJson = jsonDecode(response.body) as DataMap;
-      final userData = receivedJson['data']['data'];
+      final userData = receivedJson['data'] as List?;
 
-      if (userData == null) {
+      if (userData == null || userData.isEmpty) {
         throw const ServerException(
           message: 'No User Data Available',
           statusCode: '505',
@@ -69,7 +106,7 @@ class UserSearchDataSourceImpl implements UserSearchRemoteDataSources {
 
       debugPrint(receivedJson.toString());
       return UserSearchResponseModel.fromJson(
-        jsonEncode(userData),
+        response.body,
       );
     } on ServerException {
       rethrow;

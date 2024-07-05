@@ -38,9 +38,20 @@ class UserSearchResultsParams with UserSearchResultsParamsMappable {
     required this.accountStatus,
   });
 
+  const UserSearchResultsParams.empty()
+      : this(
+          userToken: '',
+          limit: '',
+          pageNumber: '',
+          field: '',
+          query: '',
+          country: '',
+          accountStatus: '',
+        );
+
   final String userToken;
-  final int pageNumber;
-  final int limit;
+  final String pageNumber;
+  final String limit;
   final String field;
   final String query;
   final String country;

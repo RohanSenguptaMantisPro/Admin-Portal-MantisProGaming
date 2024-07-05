@@ -6,6 +6,7 @@ part 'user_search_response.mapper.dart';
 @MappableClass(discriminatorKey: 'type')
 class UserSearchResponse with UserSearchResponseMappable {
   const UserSearchResponse({
+    required this.status,
     required this.page,
     required this.results,
     required this.totalResults,
@@ -14,14 +15,22 @@ class UserSearchResponse with UserSearchResponseMappable {
 
   const UserSearchResponse.empty()
       : this(
-          page: 0,
-          results: 0,
-          totalResults: 0,
-          data: const [],
+          status: '',
+          page: 1,
+          results: 1,
+          totalResults: 1,
+          data: const [UserData.empty()],
         );
 
+  final String status;
   final int page;
   final int results;
   final int totalResults;
   final List<UserData> data;
+//   note : as i am taking List<UserData> here.
+// as I took List<UserData> in UserSearchResponse in domain layer,
+// this UserSearchResponseModel also takes List<UserData>,
+// and dart_mappable also converts to List<UserData> items of
+// data :field.
+// not into UserDataModel.
 }

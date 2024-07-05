@@ -28,8 +28,8 @@ void main() {
   );
 
   const tUserToken = 'test user token';
-  const tPageNumber = 1;
-  const tPageLimit = 10;
+  const tPageNumber = '1';
+  const tPageLimit = '10';
   const tField = 'name';
   const tQuery = 'query';
   const tCountry = 'country';

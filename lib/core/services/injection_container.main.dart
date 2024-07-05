@@ -3,12 +3,17 @@ part of 'injection_container.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  await _initAuth();
+  //global injections.
+  final httpClient = http.Client();
+
+  await _initAuth(httpClient);
+  await _initUserSearch(httpClient);
 }
 
-Future<void> _initAuth() async {
+// Authentication.
+Future<void> _initAuth(http.Client httpClient) async {
   final prefs = await SharedPreferences.getInstance();
-  final httpClient = http.Client();
+
   final GoogleSignIn googleSignIn = GoogleSignIn(
     clientId: webClientId,
     scopes: [
@@ -63,23 +68,21 @@ Future<void> _initAuth() async {
     ..registerLazySingleton(() => prefs)
     ..registerLazySingleton(() => httpClient);
 }
-//
-// Future<void> _initOnBoarding() async {
-//   final prefs = await SharedPreferences.getInstance();
-//   // Feature --> OnBoarding
-//   // Business Logic
-//   sl
-//     ..registerFactory(
-//       () => OnBoardingCubit(
-//         cacheFirstTimer: sl(),
-//         checkIfUserIsFirstTimer: sl(),
-//       ),
-//     )
-//     ..registerLazySingleton(() => CacheFirstTimer(sl()))
-//     ..registerLazySingleton(() => CheckIfUserIsFirstTimer(sl()))
-//     ..registerLazySingleton<OnBoardingRepo>(() => OnBoardingRepoImpl(sl()))
-//     ..registerLazySingleton<OnBoardingLocalDataSource>(
-//       () => OnBoardingLocalDataSrcImpl(sl()),
-//     )
-//     ..registerLazySingleton(() => prefs);
-// }
+
+//userSearch.
+Future<void> _initUserSearch(http.Client httpClient) async {
+  sl
+    ..registerFactory(
+      () => UserSearchBloc(
+        userSearchResults: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => UserSearchResults(sl()))
+    ..registerLazySingleton<UserSearchRepo>(() => UserSearchRepoImpl(sl()))
+    ..registerLazySingleton<UserSearchRemoteDataSources>(
+      () => UserSearchDataSourceImpl(
+        httpClient: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => httpClient);
+}

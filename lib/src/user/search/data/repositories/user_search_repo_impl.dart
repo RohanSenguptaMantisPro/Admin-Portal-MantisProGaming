@@ -15,8 +15,8 @@ class UserSearchRepoImpl implements UserSearchRepo {
   @override
   ResultFuture<UserSearchResponse> userSearchResults({
     required String userToken,
-    required int pageNumber,
-    required int limit,
+    required String pageNumber,
+    required String limit,
     required String field,
     required String query,
     required String country,
