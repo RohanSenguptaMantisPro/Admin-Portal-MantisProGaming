@@ -38,6 +38,10 @@ class ButtonWidget extends StatelessWidget {
         ),
         child: InkWell(
           onTap: onTap,
+          // If isButtonActive is true (or non-null and true), it will use
+          // onTap as the callback If isButtonActive is false
+          // (or null, which becomes false due to the ?? false),
+          // it will use null as the callback, effectively disabling the tap.
           borderRadius: BorderRadius.circular(8),
           child: child,
         ),

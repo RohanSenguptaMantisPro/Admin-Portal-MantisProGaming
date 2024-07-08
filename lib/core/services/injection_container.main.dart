@@ -4,14 +4,14 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   //global injections.
-  final httpClient = http.Client();
 
-  await _initAuth(httpClient);
-  await _initUserSearch(httpClient);
+  await _initAuth();
+  await _initUserSearch();
 }
 
 // Authentication.
-Future<void> _initAuth(http.Client httpClient) async {
+Future<void> _initAuth() async {
+  final httpClient = http.Client();
   final prefs = await SharedPreferences.getInstance();
 
   final GoogleSignIn googleSignIn = GoogleSignIn(
@@ -70,7 +70,7 @@ Future<void> _initAuth(http.Client httpClient) async {
 }
 
 //userSearch.
-Future<void> _initUserSearch(http.Client httpClient) async {
+Future<void> _initUserSearch() async {
   sl
     ..registerFactory(
       () => UserSearchBloc(
@@ -83,6 +83,5 @@ Future<void> _initUserSearch(http.Client httpClient) async {
       () => UserSearchDataSourceImpl(
         httpClient: sl(),
       ),
-    )
-    ..registerLazySingleton(() => httpClient);
+    );
 }

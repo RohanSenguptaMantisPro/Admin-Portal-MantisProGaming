@@ -9,11 +9,14 @@ import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extension
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_toast.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/views/user_details_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/bloc/user_search_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/account_type_dropdown_menu.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/data_table.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/filter_dropdown_tile.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/pagination_bar.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/search_user_form.dart';
 
 import 'package:flutter/material.dart';
@@ -31,6 +34,10 @@ class UserSearchScreen extends StatefulWidget {
 }
 
 class _UserSearchScreenState extends State<UserSearchScreen> {
+  int currentPage = 1;
+  int totalPages = 1;
+  int resultsPerPage = 10;
+
   @override
   void initState() {
     super.initState();
@@ -67,11 +74,39 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
     super.dispose();
   }
 
+  void changePage(int newPageNumber) {
+    currentPage = newPageNumber;
+
+    final userToken = context.read<UserTokenProvider>().userToken;
+    // fetch same fields as selected before and stored in provider
+    // and put in blocEvent.
+
+    // context.read<UserSearchBloc>().add(SearchByEvent(
+    //     userToken: userToken ?? '',
+    //     pageNumber: newPageNumber.toString(),
+    //     limit: '10',
+    //     field: '',
+    //     query: query,
+    //     country: country,
+    //     accountStatus: accountStatus));
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserSearchBloc, UserSearchState>(
       listener: (context, state) {
-        // TODO: implement listener
+        if (state is UserSearchError) {
+          debugPrint('----- listener state : $state');
+          debugPrint('----- Something went wrong : ${state.message}');
+
+          showCustomToast(
+            context,
+            'Could not fetch user details.',
+          );
+        } else if (state is FetchedUserDetails) {
+          totalPages =
+              (state.userSearchResponse.totalResults / resultsPerPage).ceil();
+        }
       },
       builder: (context, state) {
         return SingleChildScrollView(
@@ -209,7 +244,9 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                                     followerAnchor: Alignment.topRight,
                                     tooltipController: _filterToolTipController,
                                     layerLink: _filterLayerLink,
-                                    overlayMenuWidget: FilterDropdown(),
+                                    overlayMenuWidget: FilterDropdown(
+                                      closeOnSubmit: onTapFilter,
+                                    ),
                                     buttonWidget: ButtonWidget(
                                       borderColor:
                                           _filterToolTipController.isShowing
@@ -254,15 +291,6 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                 ),
               ),
               Container(
-                height: 45,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.yellow,
-                  ),
-                ),
-                child: Row(),
-              ),
-              Container(
                 height: 700,
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -270,26 +298,46 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                     color: Colors.purple,
                   ),
                 ),
-                child: Column(
-                  children: [
-                    TextButton(
-                      onPressed: () => context.push(
-                        '${UserSearchScreen.routeName}/${UserDetailsScreen.routeName}',
-                      ),
-                      child: const Text('User Details Screen'),
-                    ),
-                  ],
-                ),
+                child: (state is UserSearchLoading)
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Colours.primaryColour,
+                        ),
+                      )
+                    : (state is FetchedUserDetails)
+                        ? UserDataTable(
+                            userDetailsData: state.userSearchResponse.data,
+                          )
+                        : const Center(
+                            child: Text('No User Data Available.'),
+                          ),
               ),
               Container(
-                height: 50,
+                height: 70,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.blue,
                   ),
                 ),
-                child: Row(),
+                // child: (state is UserSearchLoading)
+                //     ? const Center(
+                //         child: CircularProgressIndicator(
+                //           color: Colours.primaryColour,
+                //         ),
+                //       )
+                //     : (state is FetchedUserDetails)
+                //         ? PaginationBar(
+                //             currentPage: currentPage,
+                //             totalPages: totalPages,
+                //             onPageChanged: changePage,
+                //           )
+                //         : const Center(),
+                child: PaginationBar(
+                  currentPage: currentPage,
+                  totalPages: totalPages,
+                  onPageChanged: changePage,
+                ),
               ),
               const SizedBox(
                 height: 16,
