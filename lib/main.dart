@@ -1,4 +1,5 @@
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/admin_user_data.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_search_parameters.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/services/injection_container.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => UserTokenProvider()),
         ChangeNotifierProvider(create: (_) => AdminUserData()),
+        ChangeNotifierProvider(create: (_) => UserSearchParameters()),
       ],
       child: MultiBlocProvider(
         providers: [

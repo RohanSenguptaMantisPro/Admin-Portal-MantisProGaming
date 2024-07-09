@@ -1,9 +1,11 @@
+import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_search_parameters.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/custom_dropdown.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/i_field.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user/search/domain/usecases/user_search_results.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/bloc/user_search_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/account_status_dropdown_tile.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/search_by_dropdown_tile.dart';
@@ -21,9 +23,25 @@ class FilterDropdown extends StatefulWidget {
 
 class _FilterDropdownState extends State<FilterDropdown> {
   // TODO: optimise. toggle dropdown repeatation of code.
-  final textEditingController = TextEditingController();
+
+  final queryTextEditingController = TextEditingController();
   String searchByOption = '';
   String accountStatusOption = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    //if already used parameters available then use those.
+    final userSearchParameters =
+        context.read<UserSearchParameters>().searchParameters;
+
+    if (userSearchParameters != null) {
+      searchByOption = userSearchParameters.field;
+      accountStatusOption = userSearchParameters.accountStatus;
+      queryTextEditingController.text = userSearchParameters.query;
+    }
+  }
 
   final OverlayPortalController _searchByToolTipController =
       OverlayPortalController();
@@ -65,10 +83,12 @@ class _FilterDropdownState extends State<FilterDropdown> {
   }
 
   void resetFields() {
+    context.read<UserSearchParameters>().searchParameters = null;
+
     setState(() {
       searchByOption = '';
       accountStatusOption = '';
-      textEditingController.clear();
+      queryTextEditingController.clear();
     });
   }
 
@@ -205,7 +225,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
                     child: Form(
                       key: formKey,
                       child: IField(
-                        controller: textEditingController,
+                        controller: queryTextEditingController,
                         hintText: 'Search',
                         prefixIcon: const Icon(
                           Icons.search,
@@ -237,6 +257,19 @@ class _FilterDropdownState extends State<FilterDropdown> {
                           final userToken =
                               context.read<UserTokenProvider>().userToken;
 
+                          //Save search parameters in local provider.
+                          context.read<UserSearchParameters>().initSearchParams(
+                                UserSearchResultsParams(
+                                  userToken: '',
+                                  pageNumber: '1',
+                                  limit: '10',
+                                  field: searchByOption,
+                                  query: queryTextEditingController.text,
+                                  country: 'india',
+                                  accountStatus: accountStatusOption,
+                                ),
+                              );
+
                           // SearchBy Bloc event.
                           context.read<UserSearchBloc>().add(
                                 SearchByEvent(
@@ -244,7 +277,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
                                   pageNumber: '1',
                                   limit: '10',
                                   field: searchByOption,
-                                  query: textEditingController.text,
+                                  query: queryTextEditingController.text,
                                   country: 'india',
                                   accountStatus: accountStatusOption,
                                 ),

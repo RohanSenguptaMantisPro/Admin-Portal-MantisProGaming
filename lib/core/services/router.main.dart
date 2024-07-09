@@ -63,12 +63,14 @@ final appRoutes = [
         },
         routes: [
           GoRoute(
-            path: UserDetailsScreen.routeName,
+            path: '${UserDetailsScreen.routeName}/:uID',
             pageBuilder: (BuildContext context, GoRouterState state) {
               return customTransitionBuilder(
                 context,
                 state,
-                const UserDetailsScreen(),
+                UserDetailsScreen(
+                  uID: state.pathParameters['uID']!,
+                ),
               );
             },
           ),

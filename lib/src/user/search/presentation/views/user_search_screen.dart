@@ -1,28 +1,19 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:js_interop_unsafe';
-
+import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_search_parameters.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/custom_dropdown.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_toast.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/views/user_details_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/bloc/user_search_bloc.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/account_type_dropdown_menu.dart';
+
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/data_table.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/filter_dropdown_tile.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/pagination_bar.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/search_user_form.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
 
 class UserSearchScreen extends StatefulWidget {
   const UserSearchScreen({super.key});
@@ -35,16 +26,17 @@ class UserSearchScreen extends StatefulWidget {
 
 class _UserSearchScreenState extends State<UserSearchScreen> {
   int currentPage = 1;
-  int totalPages = 1;
+  int totalPages = 0;
+  int totalResults = 0;
   int resultsPerPage = 10;
+
+  final textEditingController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
   }
-
-  final textEditingController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
 
   // for Account Type dropdown overlay. CustomDropdown.
   final OverlayPortalController _accountTypeTooltipController =
@@ -78,17 +70,24 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
     currentPage = newPageNumber;
 
     final userToken = context.read<UserTokenProvider>().userToken;
-    // fetch same fields as selected before and stored in provider
+    // Fetch same fields as selected before and stored in provider
     // and put in blocEvent.
+    final userSearchParameters =
+        context.read<UserSearchParameters>().searchParameters;
 
-    // context.read<UserSearchBloc>().add(SearchByEvent(
-    //     userToken: userToken ?? '',
-    //     pageNumber: newPageNumber.toString(),
-    //     limit: '10',
-    //     field: '',
-    //     query: query,
-    //     country: country,
-    //     accountStatus: accountStatus));
+    if (userSearchParameters != null) {
+      context.read<UserSearchBloc>().add(
+            SearchByEvent(
+              userToken: userToken ?? '',
+              pageNumber: newPageNumber.toString(),
+              limit: userSearchParameters.limit,
+              field: userSearchParameters.field,
+              query: userSearchParameters.query,
+              country: userSearchParameters.country,
+              accountStatus: userSearchParameters.accountStatus,
+            ),
+          );
+    }
   }
 
   @override
@@ -106,6 +105,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
         } else if (state is FetchedUserDetails) {
           totalPages =
               (state.userSearchResponse.totalResults / resultsPerPage).ceil();
+          totalResults = state.userSearchResponse.totalResults;
         }
       },
       builder: (context, state) {
@@ -118,11 +118,11 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
               Container(
                 height: 110,
                 width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colours.primaryColour,
-                  ),
-                ),
+                decoration: const BoxDecoration(
+                    // border: Border.all(
+                    //   color: Colours.primaryColour,
+                    // ),
+                    ),
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 25,
@@ -293,11 +293,11 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
               Container(
                 height: 700,
                 width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.purple,
-                  ),
-                ),
+                decoration: const BoxDecoration(
+                    // border: Border.all(
+                    //   color: Colors.purple,
+                    // ),
+                    ),
                 child: (state is UserSearchLoading)
                     ? const Center(
                         child: CircularProgressIndicator(
@@ -305,8 +305,10 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                         ),
                       )
                     : (state is FetchedUserDetails)
-                        ? UserDataTable(
-                            userDetailsData: state.userSearchResponse.data,
+                        ? SingleChildScrollView(
+                            child: UserDataTable(
+                              userDetailsData: state.userSearchResponse.data,
+                            ),
                           )
                         : const Center(
                             child: Text('No User Data Available.'),
@@ -315,27 +317,15 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
               Container(
                 height: 70,
                 width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.blue,
-                  ),
-                ),
-                // child: (state is UserSearchLoading)
-                //     ? const Center(
-                //         child: CircularProgressIndicator(
-                //           color: Colours.primaryColour,
-                //         ),
-                //       )
-                //     : (state is FetchedUserDetails)
-                //         ? PaginationBar(
-                //             currentPage: currentPage,
-                //             totalPages: totalPages,
-                //             onPageChanged: changePage,
-                //           )
-                //         : const Center(),
+                decoration: const BoxDecoration(
+                    // border: Border.all(
+                    //   color: Colors.blue,
+                    // ),
+                    ),
                 child: PaginationBar(
                   currentPage: currentPage,
                   totalPages: totalPages,
+                  totalResults: totalResults,
                   onPageChanged: changePage,
                 ),
               ),
