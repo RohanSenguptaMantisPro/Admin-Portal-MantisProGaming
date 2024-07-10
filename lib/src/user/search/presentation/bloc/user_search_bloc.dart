@@ -41,7 +41,7 @@ class UserSearchBloc extends Bloc<UserSearchEvent, UserSearchState> {
     result.fold(
       (failure) => emit(UserSearchError(message: failure.message)),
       (userSearchResponse) => emit(
-        FetchedUserDetails(
+        FetchedUserData(
           userSearchResponse: userSearchResponse,
         ),
       ),

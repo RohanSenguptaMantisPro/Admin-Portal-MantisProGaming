@@ -185,7 +185,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // later to be configured according to the
       // isAdmin endpoint.
       final response = await _httpClient.get(
-        Uri.https('$baseUrl:$port', kGetUserDataEndpoint),
+        Uri.https('$baseUrl:$port', kGetAdminDataEndpoint),
         headers: {
           'Authorization': 'Bearer $userToken',
         },

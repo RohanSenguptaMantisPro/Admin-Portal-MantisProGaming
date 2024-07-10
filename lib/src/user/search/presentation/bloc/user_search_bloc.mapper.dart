@@ -227,7 +227,7 @@ class UserSearchStateMapper extends ClassMapperBase<UserSearchState> {
       UserSearchInitialMapper.ensureInitialized();
       UserSearchLoadingMapper.ensureInitialized();
       UserSearchErrorMapper.ensureInitialized();
-      FetchedUserDetailsMapper.ensureInitialized();
+      FetchedUserDataMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -580,13 +580,13 @@ class _UserSearchErrorCopyWithImpl<$R, $Out>
       _UserSearchErrorCopyWithImpl($value, $cast, t);
 }
 
-class FetchedUserDetailsMapper extends ClassMapperBase<FetchedUserDetails> {
-  FetchedUserDetailsMapper._();
+class FetchedUserDataMapper extends ClassMapperBase<FetchedUserData> {
+  FetchedUserDataMapper._();
 
-  static FetchedUserDetailsMapper? _instance;
-  static FetchedUserDetailsMapper ensureInitialized() {
+  static FetchedUserDataMapper? _instance;
+  static FetchedUserDataMapper ensureInitialized() {
     if (_instance == null) {
-      MapperContainer.globals.use(_instance = FetchedUserDetailsMapper._());
+      MapperContainer.globals.use(_instance = FetchedUserDataMapper._());
       UserSearchStateMapper.ensureInitialized();
       UserSearchResponseMapper.ensureInitialized();
     }
@@ -594,94 +594,91 @@ class FetchedUserDetailsMapper extends ClassMapperBase<FetchedUserDetails> {
   }
 
   @override
-  final String id = 'FetchedUserDetails';
+  final String id = 'FetchedUserData';
 
-  static UserSearchResponse _$userSearchResponse(FetchedUserDetails v) =>
+  static UserSearchResponse _$userSearchResponse(FetchedUserData v) =>
       v.userSearchResponse;
-  static const Field<FetchedUserDetails, UserSearchResponse>
+  static const Field<FetchedUserData, UserSearchResponse>
       _f$userSearchResponse = Field('userSearchResponse', _$userSearchResponse);
 
   @override
-  final MappableFields<FetchedUserDetails> fields = const {
+  final MappableFields<FetchedUserData> fields = const {
     #userSearchResponse: _f$userSearchResponse,
   };
 
-  static FetchedUserDetails _instantiate(DecodingData data) {
-    return FetchedUserDetails(
-        userSearchResponse: data.dec(_f$userSearchResponse));
+  static FetchedUserData _instantiate(DecodingData data) {
+    return FetchedUserData(userSearchResponse: data.dec(_f$userSearchResponse));
   }
 
   @override
   final Function instantiate = _instantiate;
 
-  static FetchedUserDetails fromMap(Map<String, dynamic> map) {
-    return ensureInitialized().decodeMap<FetchedUserDetails>(map);
+  static FetchedUserData fromMap(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<FetchedUserData>(map);
   }
 
-  static FetchedUserDetails fromJson(String json) {
-    return ensureInitialized().decodeJson<FetchedUserDetails>(json);
+  static FetchedUserData fromJson(String json) {
+    return ensureInitialized().decodeJson<FetchedUserData>(json);
   }
 }
 
-mixin FetchedUserDetailsMappable {
+mixin FetchedUserDataMappable {
   String toJson() {
-    return FetchedUserDetailsMapper.ensureInitialized()
-        .encodeJson<FetchedUserDetails>(this as FetchedUserDetails);
+    return FetchedUserDataMapper.ensureInitialized()
+        .encodeJson<FetchedUserData>(this as FetchedUserData);
   }
 
   Map<String, dynamic> toMap() {
-    return FetchedUserDetailsMapper.ensureInitialized()
-        .encodeMap<FetchedUserDetails>(this as FetchedUserDetails);
+    return FetchedUserDataMapper.ensureInitialized()
+        .encodeMap<FetchedUserData>(this as FetchedUserData);
   }
 
-  FetchedUserDetailsCopyWith<FetchedUserDetails, FetchedUserDetails,
-          FetchedUserDetails>
-      get copyWith => _FetchedUserDetailsCopyWithImpl(
-          this as FetchedUserDetails, $identity, $identity);
+  FetchedUserDataCopyWith<FetchedUserData, FetchedUserData, FetchedUserData>
+      get copyWith => _FetchedUserDataCopyWithImpl(
+          this as FetchedUserData, $identity, $identity);
   @override
   String toString() {
-    return FetchedUserDetailsMapper.ensureInitialized()
-        .stringifyValue(this as FetchedUserDetails);
+    return FetchedUserDataMapper.ensureInitialized()
+        .stringifyValue(this as FetchedUserData);
   }
 
   @override
   bool operator ==(Object other) {
-    return FetchedUserDetailsMapper.ensureInitialized()
-        .equalsValue(this as FetchedUserDetails, other);
+    return FetchedUserDataMapper.ensureInitialized()
+        .equalsValue(this as FetchedUserData, other);
   }
 
   @override
   int get hashCode {
-    return FetchedUserDetailsMapper.ensureInitialized()
-        .hashValue(this as FetchedUserDetails);
+    return FetchedUserDataMapper.ensureInitialized()
+        .hashValue(this as FetchedUserData);
   }
 }
 
-extension FetchedUserDetailsValueCopy<$R, $Out>
-    on ObjectCopyWith<$R, FetchedUserDetails, $Out> {
-  FetchedUserDetailsCopyWith<$R, FetchedUserDetails, $Out>
-      get $asFetchedUserDetails =>
-          $base.as((v, t, t2) => _FetchedUserDetailsCopyWithImpl(v, t, t2));
+extension FetchedUserDataValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, FetchedUserData, $Out> {
+  FetchedUserDataCopyWith<$R, FetchedUserData, $Out> get $asFetchedUserData =>
+      $base.as((v, t, t2) => _FetchedUserDataCopyWithImpl(v, t, t2));
 }
 
-abstract class FetchedUserDetailsCopyWith<$R, $In extends FetchedUserDetails,
-    $Out> implements UserSearchStateCopyWith<$R, $In, $Out> {
+abstract class FetchedUserDataCopyWith<$R, $In extends FetchedUserData, $Out>
+    implements UserSearchStateCopyWith<$R, $In, $Out> {
   UserSearchResponseCopyWith<$R, UserSearchResponse, UserSearchResponse>
       get userSearchResponse;
   @override
   $R call({UserSearchResponse? userSearchResponse});
-  FetchedUserDetailsCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
+  FetchedUserDataCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
 
-class _FetchedUserDetailsCopyWithImpl<$R, $Out>
-    extends ClassCopyWithBase<$R, FetchedUserDetails, $Out>
-    implements FetchedUserDetailsCopyWith<$R, FetchedUserDetails, $Out> {
-  _FetchedUserDetailsCopyWithImpl(super.value, super.then, super.then2);
+class _FetchedUserDataCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, FetchedUserData, $Out>
+    implements FetchedUserDataCopyWith<$R, FetchedUserData, $Out> {
+  _FetchedUserDataCopyWithImpl(super.value, super.then, super.then2);
 
   @override
-  late final ClassMapperBase<FetchedUserDetails> $mapper =
-      FetchedUserDetailsMapper.ensureInitialized();
+  late final ClassMapperBase<FetchedUserData> $mapper =
+      FetchedUserDataMapper.ensureInitialized();
   @override
   UserSearchResponseCopyWith<$R, UserSearchResponse, UserSearchResponse>
       get userSearchResponse => $value.userSearchResponse.copyWith
@@ -692,12 +689,12 @@ class _FetchedUserDetailsCopyWithImpl<$R, $Out>
         if (userSearchResponse != null) #userSearchResponse: userSearchResponse
       }));
   @override
-  FetchedUserDetails $make(CopyWithData data) => FetchedUserDetails(
+  FetchedUserData $make(CopyWithData data) => FetchedUserData(
       userSearchResponse:
           data.get(#userSearchResponse, or: $value.userSearchResponse));
 
   @override
-  FetchedUserDetailsCopyWith<$R2, FetchedUserDetails, $Out2> $chain<$R2, $Out2>(
+  FetchedUserDataCopyWith<$R2, FetchedUserData, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
-      _FetchedUserDetailsCopyWithImpl($value, $cast, t);
+      _FetchedUserDataCopyWithImpl($value, $cast, t);
 }

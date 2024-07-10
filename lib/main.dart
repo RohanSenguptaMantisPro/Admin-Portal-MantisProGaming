@@ -5,6 +5,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/services/injection_container.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/services/router.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/bloc/user_details_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/bloc/user_search_bloc.dart';
 
 import 'package:flutter/material.dart';
@@ -41,6 +42,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => sl<UserSearchBloc>(),
+          ),
+          BlocProvider(
+            create: (_) => sl<UserDetailsBloc>(),
           ),
         ],
         child: OKToast(

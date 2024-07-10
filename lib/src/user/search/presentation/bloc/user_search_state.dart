@@ -23,9 +23,9 @@ class UserSearchError extends UserSearchState with UserSearchErrorMappable {
 }
 
 @MappableClass()
-class FetchedUserDetails extends UserSearchState
-    with FetchedUserDetailsMappable {
-  FetchedUserDetails({required this.userSearchResponse});
+class FetchedUserData extends UserSearchState
+    with FetchedUserDataMappable {
+  FetchedUserData({required this.userSearchResponse});
 
   UserSearchResponse userSearchResponse;
 }

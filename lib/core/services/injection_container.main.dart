@@ -7,6 +7,7 @@ Future<void> init() async {
 
   await _initAuth();
   await _initUserSearch();
+  await _initUserDetails();
 }
 
 // Authentication.
@@ -81,6 +82,24 @@ Future<void> _initUserSearch() async {
     ..registerLazySingleton<UserSearchRepo>(() => UserSearchRepoImpl(sl()))
     ..registerLazySingleton<UserSearchRemoteDataSources>(
       () => UserSearchDataSourceImpl(
+        httpClient: sl(),
+      ),
+    );
+}
+
+//UserDetails
+Future<void> _initUserDetails() async {
+  sl
+    ..registerFactory(
+      () => UserDetailsBloc(
+        getUserDetails: sl(),
+        updateUserDetails: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => GetUserDetails(sl()))
+    ..registerLazySingleton<UserDetailsRepo>(() => UserDetailsRepoImpl(sl()))
+    ..registerLazySingleton<UserDetailsRemoteDataSources>(
+      () => UserDetailsDataScourceImpl(
         httpClient: sl(),
       ),
     );

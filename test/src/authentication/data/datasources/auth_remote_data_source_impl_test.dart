@@ -463,7 +463,7 @@ void main() {
 
         verify(
           () => mockClient.get(
-            Uri.https('$baseUrl:$port', kGetUserDataEndpoint),
+            Uri.https('$baseUrl:$port', kGetAdminDataEndpoint),
             headers: {
               'Authorization': 'Bearer $tUserToken',
             },
@@ -506,7 +506,7 @@ void main() {
 
         verify(
           () => mockClient.get(
-            Uri.https('$baseUrl:$port', kGetUserDataEndpoint),
+            Uri.https('$baseUrl:$port', kGetAdminDataEndpoint),
             headers: {
               'Authorization': 'Bearer $tUserToken',
             },

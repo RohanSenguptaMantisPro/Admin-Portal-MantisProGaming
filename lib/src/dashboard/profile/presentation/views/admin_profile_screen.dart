@@ -1,6 +1,7 @@
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/admin_user_data.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_toast.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/entities/admin_details.dart';
@@ -9,8 +10,6 @@ import 'package:admin_portal_mantis_pro_gaming/src/dashboard/profile/presentatio
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../../core/res/colours.dart';
 
 class AdminProfileScreen extends StatelessWidget {
   const AdminProfileScreen({super.key});
@@ -22,10 +21,12 @@ class AdminProfileScreen extends StatelessWidget {
     final AdminDetails? adminProfileData =
         context.read<AdminUserData>().userData;
 
-    late String accountType;
-    late String name;
-    late String email;
-    late ImageProvider<Object> adminDisplayPicture;
+    String accountType = '';
+    String name = '';
+    String email = '';
+    ImageProvider<Object> adminDisplayPicture = const AssetImage(
+      MediaRes.defaultUserImage,
+    );
 
     if (adminProfileData != null) {
       adminDisplayPicture = NetworkImage(
@@ -34,14 +35,14 @@ class AdminProfileScreen extends StatelessWidget {
       accountType = adminProfileData.accountType;
       name = adminProfileData.name;
       email = adminProfileData.email;
-    } else if (adminProfileData == null) {
-      adminDisplayPicture = const AssetImage(
-        MediaRes.defaultUserImage,
-      );
-      accountType = '--';
-      name = '--';
-      email = '--';
     }
+
+    final List<Map<String, String>> userData = [
+      {'title': 'Name', 'data': name},
+      {'title': 'Account Type', 'data': accountType},
+      {'title': 'Email', 'data': email},
+      // Add more data fields as needed
+    ];
 
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (buildContext, state) {
@@ -65,7 +66,7 @@ class AdminProfileScreen extends StatelessWidget {
                 ),
                 Container(
                   width: double.infinity,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       // border: Border.all(
                       //   color: Colours.primaryColour,
                       // ),
@@ -88,7 +89,7 @@ class AdminProfileScreen extends StatelessWidget {
                 Container(
                   height: 550,
                   width: double.infinity,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       // border: Border.all(
                       //   color: Colors.purple,
                       // ),
@@ -103,34 +104,50 @@ class AdminProfileScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      Row(
-                        children: [
-                          DataContainers(
-                            height: 30,
-                            width: 250,
-                            dataText: name.isEmpty ? '--' : name,
-                            title: 'Name',
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          DataContainers(
-                            height: 30,
-                            width: 250,
-                            dataText: accountType.isEmpty ? '--' : accountType,
-                            title: 'Account Type',
-                          ),
-                        ],
+                      Wrap(
+                        spacing: 10,
+                        runSpacing: 20,
+                        children: userData
+                            .map(
+                              (data) => DataContainers(
+                                height: 30,
+                                width: 250,
+                                dataText: (data['data']!).isEmpty
+                                    ? '--'
+                                    : data['data']!,
+                                title: data['title']!,
+                              ),
+                            )
+                            .toList(),
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      DataContainers(
-                        height: 30,
-                        width: 270,
-                        dataText: email.isEmpty ? '--' : email,
-                        title: 'Email',
-                      ),
+                      // Row(
+                      //   children: [
+                      //     DataContainers(
+                      //       height: 30,
+                      //       width: 250,
+                      //       dataText: name.isEmpty ? '--' : name,
+                      //       title: 'Name',
+                      //     ),
+                      //     const SizedBox(
+                      //       width: 10,
+                      //     ),
+                      //     DataContainers(
+                      //       height: 30,
+                      //       width: 250,
+                      //       dataText: accountType.isEmpty ? '--' : accountType,
+                      //       title: 'Account Type',
+                      //     ),
+                      //   ],
+                      // ),
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
+                      // DataContainers(
+                      //   height: 30,
+                      //   width: 270,
+                      //   dataText: email.isEmpty ? '--' : email,
+                      //   title: 'Email',
+                      // ),
                       const SizedBox(
                         height: 20,
                       ),

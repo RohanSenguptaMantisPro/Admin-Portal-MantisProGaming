@@ -102,7 +102,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
             context,
             'Could not fetch user details.',
           );
-        } else if (state is FetchedUserDetails) {
+        } else if (state is FetchedUserData) {
           totalPages =
               (state.userSearchResponse.totalResults / resultsPerPage).ceil();
           totalResults = state.userSearchResponse.totalResults;
@@ -304,7 +304,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                           color: Colours.primaryColour,
                         ),
                       )
-                    : (state is FetchedUserDetails)
+                    : (state is FetchedUserData)
                         ? SingleChildScrollView(
                             child: UserDataTable(
                               userDetailsData: state.userSearchResponse.data,

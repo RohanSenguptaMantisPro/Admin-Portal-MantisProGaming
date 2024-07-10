@@ -72,7 +72,7 @@ void main() {
       ),
       expect: () => [
         const UserSearchLoading(),
-        FetchedUserDetails(userSearchResponse: tUserSearchResponse),
+        FetchedUserData(userSearchResponse: tUserSearchResponse),
       ],
       verify: (_) {
         verify(

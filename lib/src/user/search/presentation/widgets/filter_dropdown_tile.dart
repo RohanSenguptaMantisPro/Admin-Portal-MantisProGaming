@@ -26,7 +26,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
 
   final queryTextEditingController = TextEditingController();
   String searchByOption = '';
-  String accountStatusOption = '';
+  String accountStatusOption = 'unrestricted';
 
   @override
   void initState() {
