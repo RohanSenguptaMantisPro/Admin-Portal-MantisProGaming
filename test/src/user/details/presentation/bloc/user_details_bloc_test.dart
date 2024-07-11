@@ -55,7 +55,7 @@ void main() {
 
   group('GetUserDetails', () {
     blocTest<UserDetailsBloc, UserDetailsState>(
-      'should emit [UserDetailsLoading, FetchedUserDetails]'
+      'should emit [GettingUserDetails, FetchedUserDetails]'
       ' when [GetUserDetailsEvent] '
       'is added and succeeds',
       build: () {
@@ -71,8 +71,8 @@ void main() {
         ),
       ),
       expect: () => [
-        const UserDetailsLoading(),
-        FetchedUserDetails(userDetails: tUserDetails),
+        const GettingUserDetails(),
+        const GotUserDetails(userDetails: tUserDetails),
       ],
       verify: (_) {
         verify(
@@ -85,7 +85,7 @@ void main() {
     );
 
     blocTest<UserDetailsBloc, UserDetailsState>(
-      'should emit [UserDetailsLoading, UserDetailsError] when '
+      'should emit [GettingUserDetails, GetUserDetailsError] when '
       'GetUserDetailsEvent is added '
       'and fails',
       build: () {
@@ -101,8 +101,8 @@ void main() {
         ),
       ),
       expect: () => [
-        const UserDetailsLoading(),
-        UserDetailsError(message: tServerFailure.message),
+        const GettingUserDetails(),
+        GetUserDetailsError(message: tServerFailure.message),
       ],
       verify: (_) {
         verify(
@@ -118,7 +118,7 @@ void main() {
   //update user details.
   group('UpdateUserDetails', () {
     blocTest<UserDetailsBloc, UserDetailsState>(
-      'should emit [UserDetailsLoading, UpdatingUserDetails, UpdatedUserDetails]'
+      'should emit [UpdatingUserDetails, UpdatedUserDetails]'
       ' when [UpdateUserDetailsEvent] '
       'is added and succeeds',
       build: () {
@@ -135,9 +135,8 @@ void main() {
         ),
       ),
       expect: () => [
-        const UserDetailsLoading(),
-        UpdatingUserDetails(),
-        UpdatedUserDetails(),
+        const UpdatingUserDetails(),
+        const UpdatedUserDetails(),
       ],
       verify: (_) {
         verify(
@@ -150,7 +149,7 @@ void main() {
     );
 
     blocTest<UserDetailsBloc, UserDetailsState>(
-      'should emit [UserDetailsLoading, UserDetailsError] when '
+      'should emit [UpdatingUserDetails, UpdateUserDetailsError] when '
       '[UpdateUserDetailsEvent] is added '
       'and fails',
       build: () {
@@ -167,9 +166,8 @@ void main() {
         ),
       ),
       expect: () => [
-        const UserDetailsLoading(),
-        UpdatingUserDetails(),
-        UserDetailsError(message: tServerFailure.message),
+        const UpdatingUserDetails(),
+        UpdateUserDetailsError(message: tServerFailure.message),
       ],
       verify: (_) {
         verify(

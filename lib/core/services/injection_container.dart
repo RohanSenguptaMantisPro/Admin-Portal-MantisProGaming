@@ -21,6 +21,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/user/details/data/datasources
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/data/repositories/user_details_repo_impl.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/domain/repository/user_details_repo.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/domain/usecases/get_user_details.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user/details/domain/usecases/update_user_details.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/bloc/user_details_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/data/datasources/user_search_remote_data_sources.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/data/repositories/user_search_repo_impl.dart';

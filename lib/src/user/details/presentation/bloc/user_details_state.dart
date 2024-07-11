@@ -12,34 +12,43 @@ class UserDetailsInitial extends UserDetailsState
 }
 
 @MappableClass()
-class UserDetailsLoading extends UserDetailsState
-    with UserDetailsLoadingMappable {
-  const UserDetailsLoading();
-}
-
-@MappableClass()
-class UserDetailsError extends UserDetailsState with UserDetailsErrorMappable {
-  const UserDetailsError({required this.message});
-
-  final String message;
-}
-
-@MappableClass()
-class FetchedUserDetails extends UserDetailsState
-    with FetchedUserDetailsMappable {
-  FetchedUserDetails({required this.userDetails});
-
-  UserDetails userDetails;
+class GettingUserDetails extends UserDetailsState
+    with GettingUserDetailsMappable {
+  const GettingUserDetails();
 }
 
 @MappableClass()
 class UpdatingUserDetails extends UserDetailsState
     with UpdatingUserDetailsMappable {
-  UpdatingUserDetails();
+  const UpdatingUserDetails();
+}
+
+@MappableClass()
+class GotUserDetails extends UserDetailsState
+    with GotUserDetailsMappable {
+  const GotUserDetails({required this.userDetails});
+
+  final UserDetails userDetails;
 }
 
 @MappableClass()
 class UpdatedUserDetails extends UserDetailsState
     with UpdatedUserDetailsMappable {
-  UpdatedUserDetails();
+  const UpdatedUserDetails();
+}
+
+@MappableClass()
+class GetUserDetailsError extends UserDetailsState
+    with GetUserDetailsErrorMappable {
+  const GetUserDetailsError({required this.message});
+
+  final String message;
+}
+
+@MappableClass()
+class UpdateUserDetailsError extends UserDetailsState
+    with UpdateUserDetailsErrorMappable {
+  const UpdateUserDetailsError({required this.message});
+
+  final String message;
 }

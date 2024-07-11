@@ -72,7 +72,7 @@ class MyApp extends StatelessWidget {
 
                 titleMedium: GoogleFonts.poppins(
                   textStyle: const TextStyle(
-                    fontSize: 23,
+                    fontSize: 27,
                     color: Colours.whiteTextColour,
                     fontWeight: FontWeight.bold,
                   ),

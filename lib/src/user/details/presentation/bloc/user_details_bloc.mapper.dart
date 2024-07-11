@@ -312,11 +312,12 @@ class UserDetailsStateMapper extends ClassMapperBase<UserDetailsState> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = UserDetailsStateMapper._());
       UserDetailsInitialMapper.ensureInitialized();
-      UserDetailsLoadingMapper.ensureInitialized();
-      UserDetailsErrorMapper.ensureInitialized();
-      FetchedUserDetailsMapper.ensureInitialized();
+      GettingUserDetailsMapper.ensureInitialized();
       UpdatingUserDetailsMapper.ensureInitialized();
+      GotUserDetailsMapper.ensureInitialized();
       UpdatedUserDetailsMapper.ensureInitialized();
+      GetUserDetailsErrorMapper.ensureInitialized();
+      UpdateUserDetailsErrorMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -459,330 +460,106 @@ class _UserDetailsInitialCopyWithImpl<$R, $Out>
       _UserDetailsInitialCopyWithImpl($value, $cast, t);
 }
 
-class UserDetailsLoadingMapper extends ClassMapperBase<UserDetailsLoading> {
-  UserDetailsLoadingMapper._();
+class GettingUserDetailsMapper extends ClassMapperBase<GettingUserDetails> {
+  GettingUserDetailsMapper._();
 
-  static UserDetailsLoadingMapper? _instance;
-  static UserDetailsLoadingMapper ensureInitialized() {
+  static GettingUserDetailsMapper? _instance;
+  static GettingUserDetailsMapper ensureInitialized() {
     if (_instance == null) {
-      MapperContainer.globals.use(_instance = UserDetailsLoadingMapper._());
+      MapperContainer.globals.use(_instance = GettingUserDetailsMapper._());
       UserDetailsStateMapper.ensureInitialized();
     }
     return _instance!;
   }
 
   @override
-  final String id = 'UserDetailsLoading';
+  final String id = 'GettingUserDetails';
 
   @override
-  final MappableFields<UserDetailsLoading> fields = const {};
+  final MappableFields<GettingUserDetails> fields = const {};
 
-  static UserDetailsLoading _instantiate(DecodingData data) {
-    return UserDetailsLoading();
+  static GettingUserDetails _instantiate(DecodingData data) {
+    return GettingUserDetails();
   }
 
   @override
   final Function instantiate = _instantiate;
 
-  static UserDetailsLoading fromMap(Map<String, dynamic> map) {
-    return ensureInitialized().decodeMap<UserDetailsLoading>(map);
+  static GettingUserDetails fromMap(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<GettingUserDetails>(map);
   }
 
-  static UserDetailsLoading fromJson(String json) {
-    return ensureInitialized().decodeJson<UserDetailsLoading>(json);
+  static GettingUserDetails fromJson(String json) {
+    return ensureInitialized().decodeJson<GettingUserDetails>(json);
   }
 }
 
-mixin UserDetailsLoadingMappable {
+mixin GettingUserDetailsMappable {
   String toJson() {
-    return UserDetailsLoadingMapper.ensureInitialized()
-        .encodeJson<UserDetailsLoading>(this as UserDetailsLoading);
+    return GettingUserDetailsMapper.ensureInitialized()
+        .encodeJson<GettingUserDetails>(this as GettingUserDetails);
   }
 
   Map<String, dynamic> toMap() {
-    return UserDetailsLoadingMapper.ensureInitialized()
-        .encodeMap<UserDetailsLoading>(this as UserDetailsLoading);
+    return GettingUserDetailsMapper.ensureInitialized()
+        .encodeMap<GettingUserDetails>(this as GettingUserDetails);
   }
 
-  UserDetailsLoadingCopyWith<UserDetailsLoading, UserDetailsLoading,
-          UserDetailsLoading>
-      get copyWith => _UserDetailsLoadingCopyWithImpl(
-          this as UserDetailsLoading, $identity, $identity);
+  GettingUserDetailsCopyWith<GettingUserDetails, GettingUserDetails,
+          GettingUserDetails>
+      get copyWith => _GettingUserDetailsCopyWithImpl(
+          this as GettingUserDetails, $identity, $identity);
   @override
   String toString() {
-    return UserDetailsLoadingMapper.ensureInitialized()
-        .stringifyValue(this as UserDetailsLoading);
+    return GettingUserDetailsMapper.ensureInitialized()
+        .stringifyValue(this as GettingUserDetails);
   }
 
   @override
   bool operator ==(Object other) {
-    return UserDetailsLoadingMapper.ensureInitialized()
-        .equalsValue(this as UserDetailsLoading, other);
+    return GettingUserDetailsMapper.ensureInitialized()
+        .equalsValue(this as GettingUserDetails, other);
   }
 
   @override
   int get hashCode {
-    return UserDetailsLoadingMapper.ensureInitialized()
-        .hashValue(this as UserDetailsLoading);
+    return GettingUserDetailsMapper.ensureInitialized()
+        .hashValue(this as GettingUserDetails);
   }
 }
 
-extension UserDetailsLoadingValueCopy<$R, $Out>
-    on ObjectCopyWith<$R, UserDetailsLoading, $Out> {
-  UserDetailsLoadingCopyWith<$R, UserDetailsLoading, $Out>
-      get $asUserDetailsLoading =>
-          $base.as((v, t, t2) => _UserDetailsLoadingCopyWithImpl(v, t, t2));
+extension GettingUserDetailsValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, GettingUserDetails, $Out> {
+  GettingUserDetailsCopyWith<$R, GettingUserDetails, $Out>
+      get $asGettingUserDetails =>
+          $base.as((v, t, t2) => _GettingUserDetailsCopyWithImpl(v, t, t2));
 }
 
-abstract class UserDetailsLoadingCopyWith<$R, $In extends UserDetailsLoading,
+abstract class GettingUserDetailsCopyWith<$R, $In extends GettingUserDetails,
     $Out> implements UserDetailsStateCopyWith<$R, $In, $Out> {
   @override
   $R call();
-  UserDetailsLoadingCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
+  GettingUserDetailsCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
 
-class _UserDetailsLoadingCopyWithImpl<$R, $Out>
-    extends ClassCopyWithBase<$R, UserDetailsLoading, $Out>
-    implements UserDetailsLoadingCopyWith<$R, UserDetailsLoading, $Out> {
-  _UserDetailsLoadingCopyWithImpl(super.value, super.then, super.then2);
+class _GettingUserDetailsCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, GettingUserDetails, $Out>
+    implements GettingUserDetailsCopyWith<$R, GettingUserDetails, $Out> {
+  _GettingUserDetailsCopyWithImpl(super.value, super.then, super.then2);
 
   @override
-  late final ClassMapperBase<UserDetailsLoading> $mapper =
-      UserDetailsLoadingMapper.ensureInitialized();
+  late final ClassMapperBase<GettingUserDetails> $mapper =
+      GettingUserDetailsMapper.ensureInitialized();
   @override
   $R call() => $apply(FieldCopyWithData({}));
   @override
-  UserDetailsLoading $make(CopyWithData data) => UserDetailsLoading();
+  GettingUserDetails $make(CopyWithData data) => GettingUserDetails();
 
   @override
-  UserDetailsLoadingCopyWith<$R2, UserDetailsLoading, $Out2> $chain<$R2, $Out2>(
+  GettingUserDetailsCopyWith<$R2, GettingUserDetails, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
-      _UserDetailsLoadingCopyWithImpl($value, $cast, t);
-}
-
-class UserDetailsErrorMapper extends ClassMapperBase<UserDetailsError> {
-  UserDetailsErrorMapper._();
-
-  static UserDetailsErrorMapper? _instance;
-  static UserDetailsErrorMapper ensureInitialized() {
-    if (_instance == null) {
-      MapperContainer.globals.use(_instance = UserDetailsErrorMapper._());
-      UserDetailsStateMapper.ensureInitialized();
-    }
-    return _instance!;
-  }
-
-  @override
-  final String id = 'UserDetailsError';
-
-  static String _$message(UserDetailsError v) => v.message;
-  static const Field<UserDetailsError, String> _f$message =
-      Field('message', _$message);
-
-  @override
-  final MappableFields<UserDetailsError> fields = const {
-    #message: _f$message,
-  };
-
-  static UserDetailsError _instantiate(DecodingData data) {
-    return UserDetailsError(message: data.dec(_f$message));
-  }
-
-  @override
-  final Function instantiate = _instantiate;
-
-  static UserDetailsError fromMap(Map<String, dynamic> map) {
-    return ensureInitialized().decodeMap<UserDetailsError>(map);
-  }
-
-  static UserDetailsError fromJson(String json) {
-    return ensureInitialized().decodeJson<UserDetailsError>(json);
-  }
-}
-
-mixin UserDetailsErrorMappable {
-  String toJson() {
-    return UserDetailsErrorMapper.ensureInitialized()
-        .encodeJson<UserDetailsError>(this as UserDetailsError);
-  }
-
-  Map<String, dynamic> toMap() {
-    return UserDetailsErrorMapper.ensureInitialized()
-        .encodeMap<UserDetailsError>(this as UserDetailsError);
-  }
-
-  UserDetailsErrorCopyWith<UserDetailsError, UserDetailsError, UserDetailsError>
-      get copyWith => _UserDetailsErrorCopyWithImpl(
-          this as UserDetailsError, $identity, $identity);
-  @override
-  String toString() {
-    return UserDetailsErrorMapper.ensureInitialized()
-        .stringifyValue(this as UserDetailsError);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return UserDetailsErrorMapper.ensureInitialized()
-        .equalsValue(this as UserDetailsError, other);
-  }
-
-  @override
-  int get hashCode {
-    return UserDetailsErrorMapper.ensureInitialized()
-        .hashValue(this as UserDetailsError);
-  }
-}
-
-extension UserDetailsErrorValueCopy<$R, $Out>
-    on ObjectCopyWith<$R, UserDetailsError, $Out> {
-  UserDetailsErrorCopyWith<$R, UserDetailsError, $Out>
-      get $asUserDetailsError =>
-          $base.as((v, t, t2) => _UserDetailsErrorCopyWithImpl(v, t, t2));
-}
-
-abstract class UserDetailsErrorCopyWith<$R, $In extends UserDetailsError, $Out>
-    implements UserDetailsStateCopyWith<$R, $In, $Out> {
-  @override
-  $R call({String? message});
-  UserDetailsErrorCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
-      Then<$Out2, $R2> t);
-}
-
-class _UserDetailsErrorCopyWithImpl<$R, $Out>
-    extends ClassCopyWithBase<$R, UserDetailsError, $Out>
-    implements UserDetailsErrorCopyWith<$R, UserDetailsError, $Out> {
-  _UserDetailsErrorCopyWithImpl(super.value, super.then, super.then2);
-
-  @override
-  late final ClassMapperBase<UserDetailsError> $mapper =
-      UserDetailsErrorMapper.ensureInitialized();
-  @override
-  $R call({String? message}) =>
-      $apply(FieldCopyWithData({if (message != null) #message: message}));
-  @override
-  UserDetailsError $make(CopyWithData data) =>
-      UserDetailsError(message: data.get(#message, or: $value.message));
-
-  @override
-  UserDetailsErrorCopyWith<$R2, UserDetailsError, $Out2> $chain<$R2, $Out2>(
-          Then<$Out2, $R2> t) =>
-      _UserDetailsErrorCopyWithImpl($value, $cast, t);
-}
-
-class FetchedUserDetailsMapper extends ClassMapperBase<FetchedUserDetails> {
-  FetchedUserDetailsMapper._();
-
-  static FetchedUserDetailsMapper? _instance;
-  static FetchedUserDetailsMapper ensureInitialized() {
-    if (_instance == null) {
-      MapperContainer.globals.use(_instance = FetchedUserDetailsMapper._());
-      UserDetailsStateMapper.ensureInitialized();
-      UserDetailsMapper.ensureInitialized();
-    }
-    return _instance!;
-  }
-
-  @override
-  final String id = 'FetchedUserDetails';
-
-  static UserDetails _$userDetails(FetchedUserDetails v) => v.userDetails;
-  static const Field<FetchedUserDetails, UserDetails> _f$userDetails =
-      Field('userDetails', _$userDetails);
-
-  @override
-  final MappableFields<FetchedUserDetails> fields = const {
-    #userDetails: _f$userDetails,
-  };
-
-  static FetchedUserDetails _instantiate(DecodingData data) {
-    return FetchedUserDetails(userDetails: data.dec(_f$userDetails));
-  }
-
-  @override
-  final Function instantiate = _instantiate;
-
-  static FetchedUserDetails fromMap(Map<String, dynamic> map) {
-    return ensureInitialized().decodeMap<FetchedUserDetails>(map);
-  }
-
-  static FetchedUserDetails fromJson(String json) {
-    return ensureInitialized().decodeJson<FetchedUserDetails>(json);
-  }
-}
-
-mixin FetchedUserDetailsMappable {
-  String toJson() {
-    return FetchedUserDetailsMapper.ensureInitialized()
-        .encodeJson<FetchedUserDetails>(this as FetchedUserDetails);
-  }
-
-  Map<String, dynamic> toMap() {
-    return FetchedUserDetailsMapper.ensureInitialized()
-        .encodeMap<FetchedUserDetails>(this as FetchedUserDetails);
-  }
-
-  FetchedUserDetailsCopyWith<FetchedUserDetails, FetchedUserDetails,
-          FetchedUserDetails>
-      get copyWith => _FetchedUserDetailsCopyWithImpl(
-          this as FetchedUserDetails, $identity, $identity);
-  @override
-  String toString() {
-    return FetchedUserDetailsMapper.ensureInitialized()
-        .stringifyValue(this as FetchedUserDetails);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return FetchedUserDetailsMapper.ensureInitialized()
-        .equalsValue(this as FetchedUserDetails, other);
-  }
-
-  @override
-  int get hashCode {
-    return FetchedUserDetailsMapper.ensureInitialized()
-        .hashValue(this as FetchedUserDetails);
-  }
-}
-
-extension FetchedUserDetailsValueCopy<$R, $Out>
-    on ObjectCopyWith<$R, FetchedUserDetails, $Out> {
-  FetchedUserDetailsCopyWith<$R, FetchedUserDetails, $Out>
-      get $asFetchedUserDetails =>
-          $base.as((v, t, t2) => _FetchedUserDetailsCopyWithImpl(v, t, t2));
-}
-
-abstract class FetchedUserDetailsCopyWith<$R, $In extends FetchedUserDetails,
-    $Out> implements UserDetailsStateCopyWith<$R, $In, $Out> {
-  UserDetailsCopyWith<$R, UserDetails, UserDetails> get userDetails;
-  @override
-  $R call({UserDetails? userDetails});
-  FetchedUserDetailsCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
-      Then<$Out2, $R2> t);
-}
-
-class _FetchedUserDetailsCopyWithImpl<$R, $Out>
-    extends ClassCopyWithBase<$R, FetchedUserDetails, $Out>
-    implements FetchedUserDetailsCopyWith<$R, FetchedUserDetails, $Out> {
-  _FetchedUserDetailsCopyWithImpl(super.value, super.then, super.then2);
-
-  @override
-  late final ClassMapperBase<FetchedUserDetails> $mapper =
-      FetchedUserDetailsMapper.ensureInitialized();
-  @override
-  UserDetailsCopyWith<$R, UserDetails, UserDetails> get userDetails =>
-      $value.userDetails.copyWith.$chain((v) => call(userDetails: v));
-  @override
-  $R call({UserDetails? userDetails}) => $apply(
-      FieldCopyWithData({if (userDetails != null) #userDetails: userDetails}));
-  @override
-  FetchedUserDetails $make(CopyWithData data) => FetchedUserDetails(
-      userDetails: data.get(#userDetails, or: $value.userDetails));
-
-  @override
-  FetchedUserDetailsCopyWith<$R2, FetchedUserDetails, $Out2> $chain<$R2, $Out2>(
-          Then<$Out2, $R2> t) =>
-      _FetchedUserDetailsCopyWithImpl($value, $cast, t);
+      _GettingUserDetailsCopyWithImpl($value, $cast, t);
 }
 
 class UpdatingUserDetailsMapper extends ClassMapperBase<UpdatingUserDetails> {
@@ -887,6 +664,119 @@ class _UpdatingUserDetailsCopyWithImpl<$R, $Out>
           _UpdatingUserDetailsCopyWithImpl($value, $cast, t);
 }
 
+class GotUserDetailsMapper extends ClassMapperBase<GotUserDetails> {
+  GotUserDetailsMapper._();
+
+  static GotUserDetailsMapper? _instance;
+  static GotUserDetailsMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = GotUserDetailsMapper._());
+      UserDetailsStateMapper.ensureInitialized();
+      UserDetailsMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  @override
+  final String id = 'GotUserDetails';
+
+  static UserDetails _$userDetails(GotUserDetails v) => v.userDetails;
+  static const Field<GotUserDetails, UserDetails> _f$userDetails =
+      Field('userDetails', _$userDetails);
+
+  @override
+  final MappableFields<GotUserDetails> fields = const {
+    #userDetails: _f$userDetails,
+  };
+
+  static GotUserDetails _instantiate(DecodingData data) {
+    return GotUserDetails(userDetails: data.dec(_f$userDetails));
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static GotUserDetails fromMap(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<GotUserDetails>(map);
+  }
+
+  static GotUserDetails fromJson(String json) {
+    return ensureInitialized().decodeJson<GotUserDetails>(json);
+  }
+}
+
+mixin GotUserDetailsMappable {
+  String toJson() {
+    return GotUserDetailsMapper.ensureInitialized()
+        .encodeJson<GotUserDetails>(this as GotUserDetails);
+  }
+
+  Map<String, dynamic> toMap() {
+    return GotUserDetailsMapper.ensureInitialized()
+        .encodeMap<GotUserDetails>(this as GotUserDetails);
+  }
+
+  GotUserDetailsCopyWith<GotUserDetails, GotUserDetails, GotUserDetails>
+      get copyWith => _GotUserDetailsCopyWithImpl(
+          this as GotUserDetails, $identity, $identity);
+  @override
+  String toString() {
+    return GotUserDetailsMapper.ensureInitialized()
+        .stringifyValue(this as GotUserDetails);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return GotUserDetailsMapper.ensureInitialized()
+        .equalsValue(this as GotUserDetails, other);
+  }
+
+  @override
+  int get hashCode {
+    return GotUserDetailsMapper.ensureInitialized()
+        .hashValue(this as GotUserDetails);
+  }
+}
+
+extension GotUserDetailsValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, GotUserDetails, $Out> {
+  GotUserDetailsCopyWith<$R, GotUserDetails, $Out> get $asGotUserDetails =>
+      $base.as((v, t, t2) => _GotUserDetailsCopyWithImpl(v, t, t2));
+}
+
+abstract class GotUserDetailsCopyWith<$R, $In extends GotUserDetails, $Out>
+    implements UserDetailsStateCopyWith<$R, $In, $Out> {
+  UserDetailsCopyWith<$R, UserDetails, UserDetails> get userDetails;
+  @override
+  $R call({UserDetails? userDetails});
+  GotUserDetailsCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
+      Then<$Out2, $R2> t);
+}
+
+class _GotUserDetailsCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, GotUserDetails, $Out>
+    implements GotUserDetailsCopyWith<$R, GotUserDetails, $Out> {
+  _GotUserDetailsCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<GotUserDetails> $mapper =
+      GotUserDetailsMapper.ensureInitialized();
+  @override
+  UserDetailsCopyWith<$R, UserDetails, UserDetails> get userDetails =>
+      $value.userDetails.copyWith.$chain((v) => call(userDetails: v));
+  @override
+  $R call({UserDetails? userDetails}) => $apply(
+      FieldCopyWithData({if (userDetails != null) #userDetails: userDetails}));
+  @override
+  GotUserDetails $make(CopyWithData data) => GotUserDetails(
+      userDetails: data.get(#userDetails, or: $value.userDetails));
+
+  @override
+  GotUserDetailsCopyWith<$R2, GotUserDetails, $Out2> $chain<$R2, $Out2>(
+          Then<$Out2, $R2> t) =>
+      _GotUserDetailsCopyWithImpl($value, $cast, t);
+}
+
 class UpdatedUserDetailsMapper extends ClassMapperBase<UpdatedUserDetails> {
   UpdatedUserDetailsMapper._();
 
@@ -987,4 +877,228 @@ class _UpdatedUserDetailsCopyWithImpl<$R, $Out>
   UpdatedUserDetailsCopyWith<$R2, UpdatedUserDetails, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
       _UpdatedUserDetailsCopyWithImpl($value, $cast, t);
+}
+
+class GetUserDetailsErrorMapper extends ClassMapperBase<GetUserDetailsError> {
+  GetUserDetailsErrorMapper._();
+
+  static GetUserDetailsErrorMapper? _instance;
+  static GetUserDetailsErrorMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = GetUserDetailsErrorMapper._());
+      UserDetailsStateMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  @override
+  final String id = 'GetUserDetailsError';
+
+  static String _$message(GetUserDetailsError v) => v.message;
+  static const Field<GetUserDetailsError, String> _f$message =
+      Field('message', _$message);
+
+  @override
+  final MappableFields<GetUserDetailsError> fields = const {
+    #message: _f$message,
+  };
+
+  static GetUserDetailsError _instantiate(DecodingData data) {
+    return GetUserDetailsError(message: data.dec(_f$message));
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static GetUserDetailsError fromMap(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<GetUserDetailsError>(map);
+  }
+
+  static GetUserDetailsError fromJson(String json) {
+    return ensureInitialized().decodeJson<GetUserDetailsError>(json);
+  }
+}
+
+mixin GetUserDetailsErrorMappable {
+  String toJson() {
+    return GetUserDetailsErrorMapper.ensureInitialized()
+        .encodeJson<GetUserDetailsError>(this as GetUserDetailsError);
+  }
+
+  Map<String, dynamic> toMap() {
+    return GetUserDetailsErrorMapper.ensureInitialized()
+        .encodeMap<GetUserDetailsError>(this as GetUserDetailsError);
+  }
+
+  GetUserDetailsErrorCopyWith<GetUserDetailsError, GetUserDetailsError,
+          GetUserDetailsError>
+      get copyWith => _GetUserDetailsErrorCopyWithImpl(
+          this as GetUserDetailsError, $identity, $identity);
+  @override
+  String toString() {
+    return GetUserDetailsErrorMapper.ensureInitialized()
+        .stringifyValue(this as GetUserDetailsError);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return GetUserDetailsErrorMapper.ensureInitialized()
+        .equalsValue(this as GetUserDetailsError, other);
+  }
+
+  @override
+  int get hashCode {
+    return GetUserDetailsErrorMapper.ensureInitialized()
+        .hashValue(this as GetUserDetailsError);
+  }
+}
+
+extension GetUserDetailsErrorValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, GetUserDetailsError, $Out> {
+  GetUserDetailsErrorCopyWith<$R, GetUserDetailsError, $Out>
+      get $asGetUserDetailsError =>
+          $base.as((v, t, t2) => _GetUserDetailsErrorCopyWithImpl(v, t, t2));
+}
+
+abstract class GetUserDetailsErrorCopyWith<$R, $In extends GetUserDetailsError,
+    $Out> implements UserDetailsStateCopyWith<$R, $In, $Out> {
+  @override
+  $R call({String? message});
+  GetUserDetailsErrorCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
+      Then<$Out2, $R2> t);
+}
+
+class _GetUserDetailsErrorCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, GetUserDetailsError, $Out>
+    implements GetUserDetailsErrorCopyWith<$R, GetUserDetailsError, $Out> {
+  _GetUserDetailsErrorCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<GetUserDetailsError> $mapper =
+      GetUserDetailsErrorMapper.ensureInitialized();
+  @override
+  $R call({String? message}) =>
+      $apply(FieldCopyWithData({if (message != null) #message: message}));
+  @override
+  GetUserDetailsError $make(CopyWithData data) =>
+      GetUserDetailsError(message: data.get(#message, or: $value.message));
+
+  @override
+  GetUserDetailsErrorCopyWith<$R2, GetUserDetailsError, $Out2>
+      $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
+          _GetUserDetailsErrorCopyWithImpl($value, $cast, t);
+}
+
+class UpdateUserDetailsErrorMapper
+    extends ClassMapperBase<UpdateUserDetailsError> {
+  UpdateUserDetailsErrorMapper._();
+
+  static UpdateUserDetailsErrorMapper? _instance;
+  static UpdateUserDetailsErrorMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = UpdateUserDetailsErrorMapper._());
+      UserDetailsStateMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  @override
+  final String id = 'UpdateUserDetailsError';
+
+  static String _$message(UpdateUserDetailsError v) => v.message;
+  static const Field<UpdateUserDetailsError, String> _f$message =
+      Field('message', _$message);
+
+  @override
+  final MappableFields<UpdateUserDetailsError> fields = const {
+    #message: _f$message,
+  };
+
+  static UpdateUserDetailsError _instantiate(DecodingData data) {
+    return UpdateUserDetailsError(message: data.dec(_f$message));
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static UpdateUserDetailsError fromMap(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<UpdateUserDetailsError>(map);
+  }
+
+  static UpdateUserDetailsError fromJson(String json) {
+    return ensureInitialized().decodeJson<UpdateUserDetailsError>(json);
+  }
+}
+
+mixin UpdateUserDetailsErrorMappable {
+  String toJson() {
+    return UpdateUserDetailsErrorMapper.ensureInitialized()
+        .encodeJson<UpdateUserDetailsError>(this as UpdateUserDetailsError);
+  }
+
+  Map<String, dynamic> toMap() {
+    return UpdateUserDetailsErrorMapper.ensureInitialized()
+        .encodeMap<UpdateUserDetailsError>(this as UpdateUserDetailsError);
+  }
+
+  UpdateUserDetailsErrorCopyWith<UpdateUserDetailsError, UpdateUserDetailsError,
+          UpdateUserDetailsError>
+      get copyWith => _UpdateUserDetailsErrorCopyWithImpl(
+          this as UpdateUserDetailsError, $identity, $identity);
+  @override
+  String toString() {
+    return UpdateUserDetailsErrorMapper.ensureInitialized()
+        .stringifyValue(this as UpdateUserDetailsError);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return UpdateUserDetailsErrorMapper.ensureInitialized()
+        .equalsValue(this as UpdateUserDetailsError, other);
+  }
+
+  @override
+  int get hashCode {
+    return UpdateUserDetailsErrorMapper.ensureInitialized()
+        .hashValue(this as UpdateUserDetailsError);
+  }
+}
+
+extension UpdateUserDetailsErrorValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, UpdateUserDetailsError, $Out> {
+  UpdateUserDetailsErrorCopyWith<$R, UpdateUserDetailsError, $Out>
+      get $asUpdateUserDetailsError =>
+          $base.as((v, t, t2) => _UpdateUserDetailsErrorCopyWithImpl(v, t, t2));
+}
+
+abstract class UpdateUserDetailsErrorCopyWith<
+    $R,
+    $In extends UpdateUserDetailsError,
+    $Out> implements UserDetailsStateCopyWith<$R, $In, $Out> {
+  @override
+  $R call({String? message});
+  UpdateUserDetailsErrorCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
+      Then<$Out2, $R2> t);
+}
+
+class _UpdateUserDetailsErrorCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, UpdateUserDetailsError, $Out>
+    implements
+        UpdateUserDetailsErrorCopyWith<$R, UpdateUserDetailsError, $Out> {
+  _UpdateUserDetailsErrorCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<UpdateUserDetailsError> $mapper =
+      UpdateUserDetailsErrorMapper.ensureInitialized();
+  @override
+  $R call({String? message}) =>
+      $apply(FieldCopyWithData({if (message != null) #message: message}));
+  @override
+  UpdateUserDetailsError $make(CopyWithData data) =>
+      UpdateUserDetailsError(message: data.get(#message, or: $value.message));
+
+  @override
+  UpdateUserDetailsErrorCopyWith<$R2, UpdateUserDetailsError, $Out2>
+      $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
+          _UpdateUserDetailsErrorCopyWithImpl($value, $cast, t);
 }

@@ -17,9 +17,6 @@ class UserDetailsBloc extends Bloc<UserDetailsEvent, UserDetailsState> {
   })  : _getUserDetails = getUserDetails,
         _updateUserDetails = updateUserDetails,
         super(const UserDetailsInitial()) {
-    on<UserDetailsEvent>((event, emit) {
-      emit(const UserDetailsLoading());
-    });
     on<GetUserDetailsEvent>(_getUserDetailsEventHandler);
     on<UpdateUserDetailsEvent>(_updateUserDetailsEventHandler);
   }
@@ -31,6 +28,8 @@ class UserDetailsBloc extends Bloc<UserDetailsEvent, UserDetailsState> {
     GetUserDetailsEvent event,
     Emitter<UserDetailsState> emit,
   ) async {
+    emit(const GettingUserDetails());
+
     final result = await _getUserDetails(
       GetUserDetailsParams(
         userToken: event.userToken,
@@ -39,9 +38,9 @@ class UserDetailsBloc extends Bloc<UserDetailsEvent, UserDetailsState> {
     );
 
     result.fold(
-      (failure) => emit(UserDetailsError(message: failure.message)),
+      (failure) => emit(GetUserDetailsError(message: failure.message)),
       (userDetails) => emit(
-        FetchedUserDetails(
+        GotUserDetails(
           userDetails: userDetails,
         ),
       ),
@@ -52,7 +51,7 @@ class UserDetailsBloc extends Bloc<UserDetailsEvent, UserDetailsState> {
     UpdateUserDetailsEvent event,
     Emitter<UserDetailsState> emit,
   ) async {
-    emit(UpdatingUserDetails());
+    emit(const UpdatingUserDetails());
 
     final result = await _updateUserDetails(
       UpdateUserDetailsParams(
@@ -63,9 +62,9 @@ class UserDetailsBloc extends Bloc<UserDetailsEvent, UserDetailsState> {
     );
 
     result.fold(
-      (failure) => emit(UserDetailsError(message: failure.message)),
+      (failure) => emit(UpdateUserDetailsError(message: failure.message)),
       (_) => emit(
-        UpdatedUserDetails(),
+        const UpdatedUserDetails(),
       ),
     );
   }

@@ -1,12 +1,12 @@
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/admin_user_data.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/common/widget/data_containers.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_toast.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/entities/admin_details.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/dashboard/profile/presentation/widgets/data_containers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

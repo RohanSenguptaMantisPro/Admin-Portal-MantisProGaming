@@ -97,6 +97,7 @@ Future<void> _initUserDetails() async {
       ),
     )
     ..registerLazySingleton(() => GetUserDetails(sl()))
+    ..registerLazySingleton(() => UpdateUserDetails(sl()))
     ..registerLazySingleton<UserDetailsRepo>(() => UserDetailsRepoImpl(sl()))
     ..registerLazySingleton<UserDetailsRemoteDataSources>(
       () => UserDetailsDataScourceImpl(

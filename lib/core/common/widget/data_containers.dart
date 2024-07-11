@@ -23,10 +23,6 @@ class DataContainers extends StatelessWidget {
       children: [
         Text(
           title,
-          style: context.theme.textTheme.labelSmall!.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
         ),
         SizedBox(
           // decoration: BoxDecoration(
