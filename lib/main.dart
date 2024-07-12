@@ -5,6 +5,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/services/injection_container.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/services/router.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/views/login_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/bloc/user_details_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/bloc/user_search_bloc.dart';
 
@@ -35,88 +36,75 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AdminUserData()),
         ChangeNotifierProvider(create: (_) => UserSearchParameters()),
       ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (_) => sl<AuthBloc>(),
-          ),
-          BlocProvider(
-            create: (_) => sl<UserSearchBloc>(),
-          ),
-          BlocProvider(
-            create: (_) => sl<UserDetailsBloc>(),
-          ),
-        ],
-        child: OKToast(
-          child: MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            title: 'Education App',
-            theme: ThemeData(
-              useMaterial3: true,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-              // fontFamily: Fonts.poppins,
-              appBarTheme: const AppBarTheme(
-                color: Colors.transparent,
-              ),
-              fontFamily: GoogleFonts.poppins().fontFamily,
-              textTheme: GoogleFonts.poppinsTextTheme(textTheme).copyWith(
-                // for different sized texts.
-                headlineLarge: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                    height: 1,
-                    fontSize: 90,
-                    color: Colours.whiteTextColour,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-
-                titleMedium: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                    fontSize: 27,
-                    color: Colours.whiteTextColour,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                titleSmall: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                    fontSize: 18,
-                    color: Colours.whiteTextColour,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-
-                bodyMedium: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    color: Colours.whiteTextColour,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-
-                bodySmall: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                    fontSize: 12,
-                    color: Colours.whiteTextColour,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-
-                labelSmall: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                    fontSize: 11,
-                    color: Colours.lightWhiteTextColour,
-                    fontWeight: FontWeight.w500,
-                  ),
+      child: OKToast(
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          title: 'Education App',
+          theme: ThemeData(
+            useMaterial3: true,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            // fontFamily: Fonts.poppins,
+            appBarTheme: const AppBarTheme(
+              color: Colors.transparent,
+            ),
+            fontFamily: GoogleFonts.poppins().fontFamily,
+            textTheme: GoogleFonts.poppinsTextTheme(textTheme).copyWith(
+              // for different sized texts.
+              headlineLarge: GoogleFonts.poppins(
+                textStyle: const TextStyle(
+                  height: 1,
+                  fontSize: 90,
+                  color: Colours.whiteTextColour,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
 
-              colorScheme: ColorScheme.fromSwatch(
-                accentColor: Colours.primaryColour,
+              titleMedium: GoogleFonts.poppins(
+                textStyle: const TextStyle(
+                  fontSize: 27,
+                  color: Colours.whiteTextColour,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              titleSmall: GoogleFonts.poppins(
+                textStyle: const TextStyle(
+                  fontSize: 18,
+                  color: Colours.whiteTextColour,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+
+              bodyMedium: GoogleFonts.poppins(
+                textStyle: const TextStyle(
+                  fontSize: 14,
+                  color: Colours.whiteTextColour,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+
+              bodySmall: GoogleFonts.poppins(
+                textStyle: const TextStyle(
+                  fontSize: 12,
+                  color: Colours.whiteTextColour,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+
+              labelSmall: GoogleFonts.poppins(
+                textStyle: const TextStyle(
+                  fontSize: 11,
+                  color: Colours.lightWhiteTextColour,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-            // onGenerateRoute: generateRoute,
-            routerConfig: generateRoute(),
+
+            colorScheme: ColorScheme.fromSwatch(
+              accentColor: Colours.primaryColour,
+            ),
           ),
+          // onGenerateRoute: generateRoute,
+          routerConfig: generateRoute(),
         ),
       ),
     );

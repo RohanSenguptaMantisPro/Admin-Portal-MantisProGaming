@@ -143,7 +143,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 searchByOption.isEmpty
-                                    ? 'Search By'
+                                    ? 'search by'
                                     : searchByOption,
                                 style: context.theme.textTheme.bodySmall,
                               ),
@@ -193,7 +193,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 accountStatusOption.isEmpty
-                                    ? 'Unrestricted'
+                                    ? 'unrestricted'
                                     : accountStatusOption,
                                 style: context.theme.textTheme.bodySmall,
                               ),

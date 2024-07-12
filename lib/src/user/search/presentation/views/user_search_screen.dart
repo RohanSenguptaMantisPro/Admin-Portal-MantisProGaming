@@ -33,11 +33,6 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
   final textEditingController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   // for Account Type dropdown overlay. CustomDropdown.
   final OverlayPortalController _accountTypeTooltipController =
       OverlayPortalController();
@@ -94,6 +89,8 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<UserSearchBloc, UserSearchState>(
       listener: (context, state) {
+        debugPrint('-------UserSearchScreen Current State : $state');
+
         if (state is UserSearchError) {
           debugPrint('----- listener state : $state');
           debugPrint('----- Something went wrong : ${state.message}');

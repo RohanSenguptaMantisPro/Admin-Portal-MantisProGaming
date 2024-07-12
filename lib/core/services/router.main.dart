@@ -23,7 +23,10 @@ RouterConfig<Object> generateRoute() {
   return GoRouter(
     initialLocation: '/',
     routes: appRoutes,
-    errorBuilder: (context, state) => const LoginScreen(),
+    errorBuilder: (context, state) => BlocProvider(
+      create: (_) => sl<AuthBloc>(),
+      child: const LoginScreen(),
+    ),
   );
 }
 
@@ -32,14 +35,26 @@ final appRoutes = [
 
   GoRoute(
     path: '/',
-    builder: (context, state) => const LoginScreen(),
+    builder: (context, state) => BlocProvider(
+      create: (_) => sl<AuthBloc>(),
+      child: const LoginScreen(),
+    ),
   ),
   //
 
   ShellRoute(
     navigatorKey: _shellNavigatorKey,
     pageBuilder: (BuildContext context, GoRouterState state, Widget child) {
-      return customTransitionBuilder(context, state, Dashboard(child: child));
+      return customTransitionBuilder(
+        context,
+        state,
+        BlocProvider(
+          create: (_) => sl<AuthBloc>(),
+          child: Dashboard(
+            child: child,
+          ),
+        ),
+      );
     },
     routes: <RouteBase>[
       GoRoute(
@@ -58,7 +73,10 @@ final appRoutes = [
           return customTransitionBuilder(
             context,
             state,
-            const UserSearchScreen(),
+            BlocProvider(
+              create: (_) => sl<UserSearchBloc>(),
+              child: const UserSearchScreen(),
+            ),
           );
         },
         routes: [
@@ -68,8 +86,11 @@ final appRoutes = [
               return customTransitionBuilder(
                 context,
                 state,
-                UserDetailsScreen(
-                  uID: state.pathParameters['uID']!,
+                BlocProvider(
+                  create: (_) => sl<UserDetailsBloc>(),
+                  child: UserDetailsScreen(
+                    uID: state.pathParameters['uID']!,
+                  ),
                 ),
               );
             },
@@ -100,7 +121,10 @@ final appRoutes = [
         path: FeedbackScreen.routeName,
         pageBuilder: (BuildContext context, GoRouterState state) {
           return customTransitionBuilder(
-              context, state, const FeedbackScreen());
+            context,
+            state,
+            const FeedbackScreen(),
+          );
         },
       ),
       GoRoute(
@@ -109,7 +133,10 @@ final appRoutes = [
           return customTransitionBuilder(
             context,
             state,
-            const AdminProfileScreen(),
+            BlocProvider(
+              create: (_) => sl<AuthBloc>(),
+              child: const AdminProfileScreen(),
+            ),
           );
         },
       ),

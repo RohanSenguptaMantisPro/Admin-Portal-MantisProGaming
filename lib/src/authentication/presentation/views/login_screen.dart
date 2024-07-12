@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/admin_user_data.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
@@ -27,6 +30,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   int callCounter = 0;
+  StreamSubscription<GoogleSignInAccount?>? _googleSignInSubcription;
 
   @override
   void initState() {
@@ -49,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // signInSilently will also take the already existing userData
     // generate the idToken, no need to press signin again by user on
     // oneTapUx.
-    sl<GoogleSignIn>()
+    _googleSignInSubcription = sl<GoogleSignIn>()
         .onCurrentUserChanged
         .listen((GoogleSignInAccount? account) async {
       // However, on web...
@@ -63,6 +67,12 @@ class _LoginScreenState extends State<LoginScreen> {
         callCounter++;
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _googleSignInSubcription?.cancel();
   }
 
   @override
@@ -134,7 +144,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   userToken: userToken!,
                 ),
               );
-        } else if (state is FetchingAdminData) {
+        } else if (state is FetchAdminDataError) {
+          showCustomToast(context, 'Unable to access Admin Data');
+          // Navigator.of(context)
+          //     .pushReplacementNamed(Dashboard.routeName, arguments: 0);
+          context.go(UserSearchScreen.routeName);
+        } else if (state is FetchedAdminData) {
+          context.read<AdminUserData>().initUser(state.adminDetails);
+          // Navigator.of(context)
+          //     .pushReplacementNamed(Dashboard.routeName, arguments: 0);
           context.go(UserSearchScreen.routeName);
         }
       },
@@ -145,9 +163,11 @@ class _LoginScreenState extends State<LoginScreen> {
         debugPrint('---- new state : $state');
         return Scaffold(
           backgroundColor: Colours.backgroundColourLightDark,
+          // login check, fetchAdminData all the time load the screen.
           body: (state is CheckingIsUserLoggedIn ||
                   (state is IsLoggedInStatus &&
-                      state.loggedInUserToken.isNotEmpty))
+                      state.loggedInUserToken.isNotEmpty) ||
+                  state is FetchingAdminData)
               ? const Center(
                   child: CircularProgressIndicator(
                     color: Colours.primaryColour,
@@ -302,6 +322,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       CenterTextBox(
                         childButton: //for authLoadings show indicator else
                             // just the button.
+                            // any authEvent will cause indicator.
                             (state is AuthLoading)
                                 ? const CircularProgressIndicator(
                                     color: Colours.primaryColour,

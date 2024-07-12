@@ -50,249 +50,226 @@ class _DashboardState extends State<Dashboard> {
   // TODO(RohanSengupta): Later add on the mediaQuery screen responsiveness.
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, state) async {
-        if (state is FetchAdminDataError) {
-          showCustomToast(context, 'Unable to access Admin Data');
-          // Navigator.of(context)
-          //     .pushReplacementNamed(Dashboard.routeName, arguments: 0);
-        } else if (state is FetchedAdminData) {
-          context.read<AdminUserData>().initUser(state.adminDetails);
-          // Navigator.of(context)
-          //     .pushReplacementNamed(Dashboard.routeName, arguments: 0);
-        }
-      },
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: Colours.backgroundColourLightDark,
-          body: (state is FetchingAdminData)
-              ? const Center(
-                  child: CircularProgressIndicator(
-                    color: Colours.primaryColour,
-                  ),
-                )
-              : Row(
-                  children: [
-                    Container(
-                      width: 250,
-                      decoration: const BoxDecoration(
-                        color: Colours.backgroundColorDark,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 7,
-                          right: 7,
-                          top: 20,
-                        ),
-                        //ListView:  So that the column is scrollable
-                        // if not
-                        // enough space.
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 40,
-                              width: 150,
-                              // height: 60,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  // TODO(RohanSengupta): Because of this fit
-                                  // the images tries to fit in, so when the
-                                  // box gets small the image also gets small.
-                                  // to be changed to don't shrink the
-                                  // dashboard after a certain point.
-                                  image: AssetImage(
-                                    MediaRes.darkVersionMantisProGamingLogo,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              height: 500,
-                              decoration: const BoxDecoration(
-                                color: Colours.backgroundColorDark,
-                                // border: Border.all(
-                                //   width: 2,
-                                //   color: Colors.yellow,
-                                // ),
-                              ),
-                              child: ListView(
-                                children: [
-                                  const SizedBox(
-                                    height: 35,
-                                  ),
-                                  DashboardContainer(
-                                    goRouter: () => setActiveRoute(
-                                      GlobalDashboardScreen.routeName,
-                                    ),
-                                    isCurrentPageActive: _activeRoute ==
-                                        GlobalDashboardScreen.routeName,
-                                    iconAsset: (_activeRoute ==
-                                            GlobalDashboardScreen.routeName)
-                                        ? MediaRes.codeBrowserFilled
-                                        : MediaRes.codeBrowser,
-                                    title: 'Global Dashboard',
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  DashboardContainer(
-                                    iconAsset: (_activeRoute ==
-                                            UserSearchScreen.routeName)
-                                        ? MediaRes.userFilled
-                                        : MediaRes.userOutlined,
-                                    title: 'User Search',
-                                    goRouter: () => setActiveRoute(
-                                      UserSearchScreen.routeName,
-                                    ),
-                                    isCurrentPageActive: _activeRoute ==
-                                        UserSearchScreen.routeName,
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  DashboardContainer(
-                                    iconAsset: (_activeRoute ==
-                                            TimeTrackingScreen.routeName)
-                                        ? MediaRes.clockIconFilled
-                                        : MediaRes.clockIcon,
-                                    title: 'Time Tracking',
-                                    goRouter: () => setActiveRoute(
-                                      TimeTrackingScreen.routeName,
-                                    ),
-                                    isCurrentPageActive: _activeRoute ==
-                                        TimeTrackingScreen.routeName,
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  DashboardContainer(
-                                    iconAsset: (_activeRoute ==
-                                            IncentivesScreen.routeName)
-                                        ? MediaRes.localActivityFilled
-                                        : MediaRes.localActivity,
-                                    title: 'Incentives',
-                                    goRouter: () => setActiveRoute(
-                                      IncentivesScreen.routeName,
-                                    ),
-                                    isCurrentPageActive: _activeRoute ==
-                                        IncentivesScreen.routeName,
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  DashboardContainer(
-                                    iconAsset: (_activeRoute ==
-                                            FeedbackScreen.routeName)
-                                        ? MediaRes.consoleFilled
-                                        : MediaRes.console,
-                                    title: 'Feedback',
-                                    goRouter: () => setActiveRoute(
-                                      FeedbackScreen.routeName,
-                                    ),
-                                    isCurrentPageActive: _activeRoute ==
-                                        FeedbackScreen.routeName,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Spacer(),
-                            const Divider(),
-                            InkWell(
-                              onTap: () =>
-                                  context.go(AdminProfileScreen.routeName),
-                              child: Builder(
-                                builder: (_) {
-                                  final AdminDetails? adminProfileData =
-                                      context.read<AdminUserData>().userData;
-
-                                  late ImageProvider<Object>
-                                      adminDisplayPicture;
-                                  if (adminProfileData != null) {
-                                    adminDisplayPicture = NetworkImage(
-                                      adminProfileData.displayPicture,
-                                    );
-                                  } else {
-                                    adminDisplayPicture = const AssetImage(
-                                      MediaRes.defaultUserImage,
-                                    );
-                                  }
-
-                                  return Container(
-                                    height: 65,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                        // border: Border.all(
-                                        //   width: 3,
-                                        //   color: Colors.purple,
-                                        // ),
-                                        ),
-                                    child: ListTile(
-                                      mouseCursor: SystemMouseCursors.click,
-                                      minVerticalPadding: 0,
-                                      contentPadding: EdgeInsets.all(0),
-                                      leading: CircleAvatar(
-                                        backgroundImage: adminDisplayPicture,
-                                        onBackgroundImageError:
-                                            (exception, stackTrace) {
-                                          // Use default image on error
-                                          debugPrint(
-                                              '------Could not load user image,'
-                                              ' error : $exception');
-                                        },
-                                        radius: 18,
-                                      ),
-                                      title: Text(
-                                        adminProfileData != null
-                                            ? adminProfileData.name
-                                            : 'Admin Username',
-                                        style:
-                                            context.theme.textTheme.bodySmall,
-                                      ),
-                                      subtitle: Text(
-                                        'Admin',
-                                        style: context
-                                            .theme.textTheme.bodySmall!
-                                            .copyWith(
-                                          fontSize: 10,
-                                          color: Colours.greyTextColour,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
+    return Scaffold(
+      backgroundColor: Colours.backgroundColourLightDark,
+      body: Row(
+        children: [
+          Container(
+            width: 250,
+            decoration: const BoxDecoration(
+              color: Colours.backgroundColorDark,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 7,
+                right: 7,
+                top: 20,
+              ),
+              //ListView:  So that the column is scrollable
+              // if not
+              // enough space.
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 40,
+                    width: 150,
+                    // height: 60,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        // TODO(RohanSengupta): Because of this fit
+                        // the images tries to fit in, so when the
+                        // box gets small the image also gets small.
+                        // to be changed to don't shrink the
+                        // dashboard after a certain point.
+                        image: AssetImage(
+                          MediaRes.darkVersionMantisProGamingLogo,
                         ),
                       ),
                     ),
+                  ),
+                  Container(
+                    height: 500,
+                    decoration: const BoxDecoration(
+                      color: Colours.backgroundColorDark,
+                      // border: Border.all(
+                      //   width: 2,
+                      //   color: Colors.yellow,
+                      // ),
+                    ),
+                    child: ListView(
+                      children: [
+                        const SizedBox(
+                          height: 35,
+                        ),
+                        DashboardContainer(
+                          goRouter: () => setActiveRoute(
+                            GlobalDashboardScreen.routeName,
+                          ),
+                          isCurrentPageActive:
+                              _activeRoute == GlobalDashboardScreen.routeName,
+                          iconAsset:
+                              (_activeRoute == GlobalDashboardScreen.routeName)
+                                  ? MediaRes.codeBrowserFilled
+                                  : MediaRes.codeBrowser,
+                          title: 'Global Dashboard',
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        DashboardContainer(
+                          iconAsset:
+                              (_activeRoute == UserSearchScreen.routeName)
+                                  ? MediaRes.userFilled
+                                  : MediaRes.userOutlined,
+                          title: 'User Search',
+                          goRouter: () => setActiveRoute(
+                            UserSearchScreen.routeName,
+                          ),
+                          isCurrentPageActive:
+                              _activeRoute == UserSearchScreen.routeName,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        DashboardContainer(
+                          iconAsset:
+                              (_activeRoute == TimeTrackingScreen.routeName)
+                                  ? MediaRes.clockIconFilled
+                                  : MediaRes.clockIcon,
+                          title: 'Time Tracking',
+                          goRouter: () => setActiveRoute(
+                            TimeTrackingScreen.routeName,
+                          ),
+                          isCurrentPageActive:
+                              _activeRoute == TimeTrackingScreen.routeName,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        DashboardContainer(
+                          iconAsset:
+                              (_activeRoute == IncentivesScreen.routeName)
+                                  ? MediaRes.localActivityFilled
+                                  : MediaRes.localActivity,
+                          title: 'Incentives',
+                          goRouter: () => setActiveRoute(
+                            IncentivesScreen.routeName,
+                          ),
+                          isCurrentPageActive:
+                              _activeRoute == IncentivesScreen.routeName,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        DashboardContainer(
+                          iconAsset: (_activeRoute == FeedbackScreen.routeName)
+                              ? MediaRes.consoleFilled
+                              : MediaRes.console,
+                          title: 'Feedback',
+                          goRouter: () => setActiveRoute(
+                            FeedbackScreen.routeName,
+                          ),
+                          isCurrentPageActive:
+                              _activeRoute == FeedbackScreen.routeName,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Spacer(),
+                  const Divider(),
+                  InkWell(
+                    onTap: () => context.go(AdminProfileScreen.routeName),
+                    child: Builder(
+                      builder: (_) {
+                        final AdminDetails? adminProfileData =
+                            context.read<AdminUserData>().userData;
 
-                    // so tab board above, add provider listener, so if index changes,
-                    // based on that with the help of IndexedStack the current index's
-                    // screen will be shown from the list of screens in
-                    // DashBoardController.
-                    Expanded(
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colours.backgroundColourLightDark,
-                          border: Border(
-                            left: BorderSide(
-                              color: Colours.grey,
+                        debugPrint(
+                          'AdminProfileScreen: fetched user data '
+                          ': $adminProfileData',
+                        );
+
+                        late ImageProvider<Object> adminDisplayPicture;
+                        if (adminProfileData != null) {
+                          adminDisplayPicture = NetworkImage(
+                            adminProfileData.displayPicture,
+                          );
+                        } else {
+                          adminDisplayPicture = const AssetImage(
+                            MediaRes.defaultUserImage,
+                          );
+                        }
+
+                        return Container(
+                          height: 65,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              // border: Border.all(
+                              //   width: 3,
+                              //   color: Colors.purple,
+                              // ),
+                              ),
+                          child: ListTile(
+                            mouseCursor: SystemMouseCursors.click,
+                            minVerticalPadding: 0,
+                            contentPadding: EdgeInsets.all(0),
+                            leading: CircleAvatar(
+                              backgroundImage: adminDisplayPicture,
+                              onBackgroundImageError: (exception, stackTrace) {
+                                // Use default image on error
+                                debugPrint('------Could not load user image,'
+                                    ' error : $exception');
+                              },
+                              radius: 18,
+                            ),
+                            title: Text(
+                              adminProfileData != null
+                                  ? adminProfileData.name
+                                  : 'Admin Username',
+                              style: context.theme.textTheme.bodySmall,
+                            ),
+                            subtitle: Text(
+                              'Admin',
+                              style:
+                                  context.theme.textTheme.bodySmall!.copyWith(
+                                fontSize: 10,
+                                color: Colours.greyTextColour,
+                              ),
                             ),
                           ),
-                        ),
-                        child: /* IndexedStack(
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // so tab board above, add provider listener, so if index changes,
+          // based on that with the help of IndexedStack the current index's
+          // screen will be shown from the list of screens in
+          // DashBoardController.
+          Expanded(
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colours.backgroundColourLightDark,
+                border: Border(
+                  left: BorderSide(
+                    color: Colours.grey,
+                  ),
+                ),
+              ),
+              child: /* IndexedStack(
                           index: dashboardController.currentIndex,
                           children: dashboardController.screens,
                         ),*/
-                            widget.child,
-                      ),
-                    ),
-                  ],
-                ),
-        );
-      },
+                  widget.child,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

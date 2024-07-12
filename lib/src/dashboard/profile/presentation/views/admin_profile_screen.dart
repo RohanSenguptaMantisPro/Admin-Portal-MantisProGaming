@@ -1,4 +1,5 @@
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/admin_user_data.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_search_parameters.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/data_containers.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
@@ -49,6 +50,9 @@ class AdminProfileScreen extends StatelessWidget {
         if (state is AuthError) {
           showCustomToast(context, 'Could not log you out!');
         } else if (state is LoggedOut) {
+          // delete any saved search parameters.
+          context.read<UserSearchParameters>().searchParameters = null;
+
           context.go('/');
         }
       },

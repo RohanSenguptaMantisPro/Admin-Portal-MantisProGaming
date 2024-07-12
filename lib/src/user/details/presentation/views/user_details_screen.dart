@@ -23,6 +23,11 @@ class UserDetailsScreen extends StatefulWidget {
 }
 
 class _UserDetailsScreenState extends State<UserDetailsScreen> {
+  List<String> accountStatusMenuList = [
+    'unrestricted',
+    'restricted',
+  ];
+
   late String? userToken;
 
   @override
@@ -126,6 +131,8 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             'Sorry! Something went wrong!',
           );
         } else if (state is GotUserDetails) {
+          debugPrint('------------- UserDetails :${state.userDetails}');
+
           // Populating with fetched data.
           displayPicture = state.userDetails.displayPicture ?? '';
           imageProvider = displayPicture.isNotEmpty
@@ -277,7 +284,10 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                 //   color: Colors.purple,
                                 // ),
                                 ),
-                            child: (state is GettingUserDetails)
+                            //Because first initialState is emitted.
+                            // to handle that.
+                            child: (state is UserDetailsInitial ||
+                                    state is GettingUserDetails)
                                 ? const Center(
                                     child: CircularProgressIndicator(
                                       color: Colours.primaryColour,
@@ -324,10 +334,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                         ),
                                         DropDown(
                                           title: 'Account Status',
-                                          menuItemList: const [
-                                            'unrestricted',
-                                            'restricted',
-                                          ],
+                                          menuItemList: accountStatusMenuList,
                                           onChanged: (newValue) {
                                             accountStatus = newValue;
                                           },
