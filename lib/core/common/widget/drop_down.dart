@@ -8,13 +8,17 @@ class DropDown extends StatefulWidget {
     required this.initialValue,
     required this.menuItemList,
     this.title,
+    this.dropdownWidth,
+    this.dropdownHeight,
     super.key,
   });
 
   final void Function(String) onChanged;
   final String initialValue;
-  final List<String> menuItemList;
+  final List<DropdownMenuItem<String>> menuItemList;
   final String? title;
+  final double? dropdownWidth;
+  final double? dropdownHeight;
 
   @override
   State<DropDown> createState() => _DropDownState();
@@ -26,7 +30,9 @@ class _DropDownState extends State<DropDown> {
   @override
   void initState() {
     super.initState();
+
     _currentValue = widget.initialValue;
+    debugPrint('--------Dropdown : $_currentValue');
   }
 
   @override
@@ -35,10 +41,10 @@ class _DropDownState extends State<DropDown> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(widget.title ?? ''),
+        if (widget.title != null) Text(widget.title!),
         Container(
-          height: 40,
-          width: 160,
+          height: widget.dropdownHeight ?? 40,
+          width: widget.dropdownWidth ?? 160,
           padding: const EdgeInsets.only(
             left: 10,
             right: 10,
@@ -71,13 +77,7 @@ class _DropDownState extends State<DropDown> {
                   }
                 },
 
-                items: widget.menuItemList
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+                items: widget.menuItemList,
               ),
             ),
           ),

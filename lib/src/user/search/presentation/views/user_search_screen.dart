@@ -1,16 +1,20 @@
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_search_parameters.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/common/enum/account_status_dropdown_menu.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/custom_dropdown.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/common/widget/drop_down.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_toast.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user/search/domain/usecases/user_search_results.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/bloc/user_search_bloc.dart';
 
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/data_table.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/filter_dropdown_tile.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/pagination_bar.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/search_user_form.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,24 +34,15 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
   int totalResults = 0;
   int resultsPerPage = 10;
 
+  String accountStatuOption = AccountStatusDropDownMenu.unrestricted.value;
+
   final textEditingController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-
-  // for Account Type dropdown overlay. CustomDropdown.
-  final OverlayPortalController _accountTypeTooltipController =
-      OverlayPortalController();
-  final LayerLink _accountTypeLayerLink = LayerLink();
 
   // for [filter] dropdown overlay.
   final OverlayPortalController _filterToolTipController =
       OverlayPortalController();
   final LayerLink _filterLayerLink = LayerLink();
-
-  void onTapAccountType() {
-    setState(() {
-      _accountTypeTooltipController.toggle();
-    });
-  }
 
   void onTapFilter() {
     setState(() {
@@ -143,59 +138,50 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              // AccountTypeDropdown(),
+                              // AccountTypeDropdown,
+                              DropDown(
+                                dropdownHeight: 40,
+                                dropdownWidth: 200,
+                                menuItemList: AccountStatusDropDownMenu.values
+                                    .map<DropdownMenuItem<String>>((
+                                  AccountStatusDropDownMenu accountStatus,
+                                ) {
+                                  return DropdownMenuItem<String>(
+                                    value: accountStatus.value,
+                                    child: Text(accountStatus.value),
+                                  );
+                                }).toList(),
+                                initialValue: accountStatuOption,
+                                onChanged: (newValue) {
+                                  //add bloc event to search with only account
+                                  //   status
 
-                              // CustomDropDown for customDesign and proper
-                              // overlaying over other widgets.
-                              /*    CustomDropDown(
-                            targetAnchor: Alignment.bottomLeft,
-                            followerAnchor: Alignment.topLeft,
-                            tooltipController: _accountTypeTooltipController,
-                            layerLink: _accountTypeLayerLink,
-                            overlayMenuWidget: const AccountTypeDropdownMenu(),
-                            buttonWidget: ButtonWidget(
-                              borderColor: Colors.white.withOpacity(0.3),
-                              onTap: onTapAccountType,
-                              height: 35,
-                              width: 150,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 3,
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          'Account Type',
-                                          style:
-                                              context.theme.textTheme.bodySmall,
+                                  final userToken = context
+                                      .read<UserTokenProvider>()
+                                      .userToken;
+
+                                  // SearchBy Bloc event.
+                                  context.read<UserSearchBloc>().add(
+                                        SearchByEvent(
+                                          userToken: userToken ?? '',
+                                          pageNumber: '1',
+                                          limit: '10',
+                                          field: '',
+                                          query: '',
+                                          country: 'india',
+                                          accountStatus: newValue,
                                         ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        alignment: Alignment.centerRight,
-                                        child: const Icon(
-                                          Icons.keyboard_arrow_down,
-                                          color: Colours.whiteIconsColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                      );
+                                },
                               ),
-                            ),
-                          ),
 
-                          const SizedBox(width: 8),
+                              const SizedBox(width: 8),
 
-                          // Search user text field.
-                          SearchUserForm(
-                            textEditingController: textEditingController,
-                            formKey: formKey,
-                          ),*/
+                              // Search user text field.
+                              SearchUserForm(
+                                textEditingController: textEditingController,
+                                formKey: formKey,
+                              ),
                             ],
                           ),
                           Row(

@@ -1,4 +1,5 @@
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/common/enum/account_status_dropdown_menu.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/data_containers.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/drop_down.dart';
@@ -7,6 +8,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_toast.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/bloc/user_details_bloc.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,11 +25,6 @@ class UserDetailsScreen extends StatefulWidget {
 }
 
 class _UserDetailsScreenState extends State<UserDetailsScreen> {
-  List<String> accountStatusMenuList = [
-    'unrestricted',
-    'restricted',
-  ];
-
   late String? userToken;
 
   @override
@@ -117,7 +114,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
     // Add more data fields as needed{'title': 'name', 'data': '', 'width' : },
   ];
 
-  String accountStatus = 'unrestricted';
+  String accountStatus = AccountStatusDropDownMenu.unrestricted.value;
   String displayPicture = '';
   ImageProvider imageProvider = const AssetImage(MediaRes.defaultUserImage);
 
@@ -334,7 +331,18 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                         ),
                                         DropDown(
                                           title: 'Account Status',
-                                          menuItemList: accountStatusMenuList,
+                                          // Converting items of AccountStatus
+                                          // enum to DropdownMenuItem<String>
+                                          // for dropdown options.
+                                          menuItemList: AccountStatusDropDownMenu.values
+                                              .map<DropdownMenuItem<String>>((
+                                            AccountStatusDropDownMenu accountStatus,
+                                          ) {
+                                            return DropdownMenuItem<String>(
+                                              value: accountStatus.value,
+                                              child: Text(accountStatus.value),
+                                            );
+                                          }).toList(),
                                           onChanged: (newValue) {
                                             accountStatus = newValue;
                                           },
