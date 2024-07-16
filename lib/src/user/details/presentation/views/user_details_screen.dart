@@ -8,6 +8,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_toast.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/bloc/user_details_bloc.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/widgets/bread_crumb_navigation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -261,6 +262,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                //route navigation path here.
+                                BreadcrumbNavigation(),
+
                                 Text(
                                   'User Details',
                                   style: context.theme.textTheme.titleMedium,
@@ -334,9 +338,13 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                           // Converting items of AccountStatus
                                           // enum to DropdownMenuItem<String>
                                           // for dropdown options.
-                                          menuItemList: AccountStatusDropDownMenu.values
-                                              .map<DropdownMenuItem<String>>((
-                                            AccountStatusDropDownMenu accountStatus,
+                                          menuItemList:
+                                              AccountStatusDropDownMenu.values
+                                                  .map<
+                                                      DropdownMenuItem<
+                                                          String>>((
+                                            AccountStatusDropDownMenu
+                                                accountStatus,
                                           ) {
                                             return DropdownMenuItem<String>(
                                               value: accountStatus.value,

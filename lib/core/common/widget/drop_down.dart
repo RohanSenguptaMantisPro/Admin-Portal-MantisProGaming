@@ -30,9 +30,17 @@ class _DropDownState extends State<DropDown> {
   @override
   void initState() {
     super.initState();
-
     _currentValue = widget.initialValue;
-    debugPrint('--------Dropdown : $_currentValue');
+  }
+
+  @override
+  void didUpdateWidget(covariant DropDown oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    //on widget rebuild/update with new config.
+    // initState doesn't get called on every widget rebuild.
+    // so updating values here.
+    _currentValue = widget.initialValue;
   }
 
   @override

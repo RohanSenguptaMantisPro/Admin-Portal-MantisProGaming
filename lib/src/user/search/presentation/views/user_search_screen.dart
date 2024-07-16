@@ -1,6 +1,7 @@
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_search_parameters.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/enum/account_status_dropdown_menu.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/common/enum/search_by_dropdown_menu.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/custom_dropdown.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/drop_down.dart';
@@ -29,15 +30,17 @@ class UserSearchScreen extends StatefulWidget {
 }
 
 class _UserSearchScreenState extends State<UserSearchScreen> {
+  final formKey = GlobalKey<FormState>();
+  String? userToken;
   int currentPage = 1;
   int totalPages = 0;
   int totalResults = 0;
   int resultsPerPage = 10;
 
-  String accountStatuOption = AccountStatusDropDownMenu.unrestricted.value;
+  String accountStatusOption = AccountStatusDropDownMenu.unrestricted.value;
+  String searchByOptions = SearchByDropDownMenu.none.value;
 
-  final textEditingController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final queryTextEditingController = TextEditingController();
 
   // for [filter] dropdown overlay.
   final OverlayPortalController _filterToolTipController =
@@ -45,25 +48,31 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
   final LayerLink _filterLayerLink = LayerLink();
 
   void onTapFilter() {
-    setState(() {
-      _filterToolTipController.toggle();
-    });
+    setState(_filterToolTipController.toggle);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    userToken = context.read<UserTokenProvider>().userToken;
   }
 
   @override
   void dispose() {
-    textEditingController.dispose();
+    queryTextEditingController.dispose();
     super.dispose();
   }
 
   void changePage(int newPageNumber) {
     currentPage = newPageNumber;
 
-    final userToken = context.read<UserTokenProvider>().userToken;
     // Fetch same fields as selected before and stored in provider
     // and put in blocEvent.
     final userSearchParameters =
         context.read<UserSearchParameters>().searchParameters;
+
+    // debugPrint('-----change page params : $userSearchParameters');
 
     if (userSearchParameters != null) {
       context.read<UserSearchBloc>().add(
@@ -77,7 +86,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
               accountStatus: userSearchParameters.accountStatus,
             ),
           );
-    }
+    } else {}
   }
 
   @override
@@ -92,7 +101,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
 
           showCustomToast(
             context,
-            'Could not fetch user details.',
+            state.message,
           );
         } else if (state is FetchedUserData) {
           totalPages =
@@ -151,27 +160,9 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                                     child: Text(accountStatus.value),
                                   );
                                 }).toList(),
-                                initialValue: accountStatuOption,
+                                initialValue: accountStatusOption,
                                 onChanged: (newValue) {
-                                  //add bloc event to search with only account
-                                  //   status
-
-                                  final userToken = context
-                                      .read<UserTokenProvider>()
-                                      .userToken;
-
-                                  // SearchBy Bloc event.
-                                  context.read<UserSearchBloc>().add(
-                                        SearchByEvent(
-                                          userToken: userToken ?? '',
-                                          pageNumber: '1',
-                                          limit: '10',
-                                          field: '',
-                                          query: '',
-                                          country: 'india',
-                                          accountStatus: newValue,
-                                        ),
-                                      );
+                                  accountStatusOption = newValue;
                                 },
                               ),
 
@@ -179,7 +170,45 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
 
                               // Search user text field.
                               SearchUserForm(
-                                textEditingController: textEditingController,
+                                onSubmitted: (queryValue) {
+                                  //save parameters for next page fetches.
+                                  context
+                                          .read<UserSearchParameters>()
+                                          .searchParameters =
+                                      UserSearchResultsParams(
+                                    userToken: '',
+                                    pageNumber: '1',
+                                    limit: '10',
+                                    field: searchByOptions,
+                                    query: queryTextEditingController.text,
+                                    country: 'india',
+                                    accountStatus: accountStatusOption,
+                                  );
+
+                                  //Add SearchByEvent.
+                                  // even though here no searchByOptions
+                                  //still saving adding it cause else
+                                  //on filter button dropdown, it won't be
+                                  // able to show saved dropdown parameters.
+                                  // cause '' isn't in the list of the dropdown.
+                                  context.read<UserSearchBloc>().add(
+                                        SearchByEvent(
+                                          userToken: userToken ?? '',
+                                          pageNumber: '1',
+                                          limit: '10',
+                                          field: searchByOptions ==
+                                                  SearchByDropDownMenu
+                                                      .none.value
+                                              ? ''
+                                              : searchByOptions,
+                                          query: queryValue,
+                                          country: 'india',
+                                          accountStatus: accountStatusOption,
+                                        ),
+                                      );
+                                },
+                                textEditingController:
+                                    queryTextEditingController,
                                 formKey: formKey,
                               ),
                             ],

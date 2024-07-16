@@ -4,14 +4,16 @@ import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:flutter/material.dart';
 
 class SearchUserForm extends StatefulWidget {
-  const SearchUserForm({
+  SearchUserForm({
     required this.textEditingController,
     required this.formKey,
+    this.onSubmitted,
     super.key,
   });
 
   final TextEditingController textEditingController;
   final GlobalKey<FormState> formKey;
+  final void Function(String)? onSubmitted;
 
   @override
   State<SearchUserForm> createState() => _SearchUserFormState();
@@ -20,12 +22,13 @@ class SearchUserForm extends StatefulWidget {
 class _SearchUserFormState extends State<SearchUserForm> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 300,
       height: 33,
       child: Form(
         key: widget.formKey,
         child: IField(
+          onSubmitted: widget.onSubmitted,
           controller: widget.textEditingController,
           hintText: 'Search by account, name, userID...',
           prefixIcon: const Icon(

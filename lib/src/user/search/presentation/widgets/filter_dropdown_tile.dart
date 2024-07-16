@@ -14,6 +14,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widg
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/search_by_dropdown_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class FilterDropdown extends StatefulWidget {
   const FilterDropdown({required this.closeOnSubmit, super.key});
@@ -55,41 +56,35 @@ class _FilterDropdownState extends State<FilterDropdown> {
     context.read<UserSearchParameters>().searchParameters = null;
   }
 
-  int count = 0;
-
   @override
   Widget build(BuildContext context) {
-    debugPrint('---rebuild : ${count++}');
-    return Container(
-      margin: const EdgeInsets.only(top: 8),
-      width: 400,
-      height: 330,
-      decoration: ShapeDecoration(
-        color: Colours.backgroundColourLightDark,
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(
-            color: Colours.grey,
-          ),
-          borderRadius: BorderRadius.circular(7),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 20,
+    return Consumer<UserSearchParameters>(
+      builder: (_, userSearchParameters, __) {
+        return Container(
+          margin: const EdgeInsets.only(top: 8),
+          width: 400,
+          height: 330,
+          decoration: ShapeDecoration(
+            color: Colours.backgroundColourLightDark,
+            shape: RoundedRectangleBorder(
+              side: const BorderSide(
+                color: Colours.grey,
               ),
+              borderRadius: BorderRadius.circular(7),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
 
-              //searchBy dropdown
-              Builder(
-                builder: (context) {
-                  debugPrint('-----rebuilt');
-                  debugPrint('-------$searchByOption');
-
-                  return DropDown(
+                  // searchBy dropdown
+                  DropDown(
                     dropdownWidth: double.infinity,
                     dropdownHeight: 35,
                     title: 'Search By',
@@ -109,127 +104,127 @@ class _FilterDropdownState extends State<FilterDropdown> {
                       searchByOption = newValue;
                     },
                     initialValue: searchByOption,
-                  );
-                },
-              ),
-
-              const SizedBox(
-                height: 20,
-              ),
-
-              //account Status dropdown.
-              // DropDown(
-              //   dropdownWidth: double.infinity,
-              //   dropdownHeight: 35,
-              //   title: 'Account Status',
-              //   // Converting items of AccountStatus
-              //   // enum to DropdownMenuItem<String>
-              //   // for dropdown options.
-              //   menuItemList: AccountStatusDropDownMenu.values
-              //       .map<DropdownMenuItem<String>>((
-              //     AccountStatusDropDownMenu accountStatus,
-              //   ) {
-              //     return DropdownMenuItem<String>(
-              //       value: accountStatus.value,
-              //       child: Text(accountStatus.value),
-              //     );
-              //   }).toList(),
-              //   onChanged: (newValue) {
-              //     accountStatusOption = newValue;
-              //   },
-              //   initialValue: accountStatusOption,
-              // ),
-
-              const SizedBox(
-                height: 20,
-              ),
-
-              const Text('Keyword Search'),
-              SizedBox(
-                width: double.infinity,
-                height: 33,
-                child: Form(
-                  key: formKey,
-                  child: IField(
-                    controller: queryTextEditingController,
-                    hintText: 'Search',
-                    prefixIcon: const Icon(
-                      Icons.search,
-                      color: Colours.lightWhiteIconColor,
-                    ),
                   ),
-                ),
-              ),
 
-              const SizedBox(
-                height: 30,
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ButtonWidget(
-                    onTap: resetFields,
-                    width: 60,
-                    height: 35,
-                    child: const Center(
-                      child: Text('Reset'),
-                    ),
+                  const SizedBox(
+                    height: 20,
                   ),
-                  ButtonWidget(
-                    //is text field is empty inactive button.
-                    // isButtonActive: ,
-                    onTap: () {
-                      final userToken =
-                          context.read<UserTokenProvider>().userToken;
 
-                      //Save search parameters in local provider.
-                      context.read<UserSearchParameters>().initSearchParams(
-                            UserSearchResultsParams(
-                              userToken: '',
-                              pageNumber: '1',
-                              limit: '10',
-                              field: searchByOption,
-                              query: queryTextEditingController.text,
-                              country: 'india',
-                              accountStatus: accountStatusOption,
-                            ),
-                          );
-
-                      // SearchBy Bloc event.
-                      context.read<UserSearchBloc>().add(
-                            SearchByEvent(
-                              userToken: userToken ?? '',
-                              pageNumber: '1',
-                              limit: '10',
-                              //  if field.isEmpty then field parameter
-                              // won't be used in server call.
-                              field: searchByOption ==
-                                      SearchByDropDownMenu.none.value
-                                  ? ''
-                                  : searchByOption,
-                              query: queryTextEditingController.text,
-                              country: 'india',
-                              accountStatus: accountStatusOption,
-                            ),
-                          );
-
-                      //close filter dropdown on submit button pressed.
-                      widget.closeOnSubmit();
+                  // account Status dropdown.
+                  DropDown(
+                    dropdownWidth: double.infinity,
+                    dropdownHeight: 35,
+                    title: 'Account Status',
+                    // Converting items of AccountStatus
+                    // enum to DropdownMenuItem<String>
+                    // for dropdown options.
+                    menuItemList: AccountStatusDropDownMenu.values
+                        .map<DropdownMenuItem<String>>((
+                      AccountStatusDropDownMenu accountStatus,
+                    ) {
+                      return DropdownMenuItem<String>(
+                        value: accountStatus.value,
+                        child: Text(accountStatus.value),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      accountStatusOption = newValue;
                     },
-                    width: 70,
-                    height: 35,
-                    buttonBackgroundColor: Colours.primaryColour,
-                    child: const Center(
-                      child: Text('Search'),
+                    initialValue: accountStatusOption,
+                  ),
+
+                  const SizedBox(
+                    height: 20,
+                  ),
+
+                  const Text('Keyword Search'),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 33,
+                    child: Form(
+                      key: formKey,
+                      child: IField(
+                        controller: queryTextEditingController,
+                        hintText: 'Search',
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          color: Colours.lightWhiteIconColor,
+                        ),
+                      ),
                     ),
+                  ),
+
+                  const SizedBox(
+                    height: 30,
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ButtonWidget(
+                        onTap: resetFields,
+                        width: 60,
+                        height: 35,
+                        child: const Center(
+                          child: Text('Reset'),
+                        ),
+                      ),
+                      ButtonWidget(
+                        //is text field is empty inactive button.
+                        // isButtonActive: ,
+                        onTap: () {
+                          final userToken =
+                              context.read<UserTokenProvider>().userToken;
+
+                          //Save search parameters in local provider.
+                          context.read<UserSearchParameters>().initSearchParams(
+                                UserSearchResultsParams(
+                                  userToken: '',
+                                  pageNumber: '1',
+                                  limit: '10',
+                                  field: searchByOption,
+                                  query: queryTextEditingController.text,
+                                  country: 'india',
+                                  accountStatus: accountStatusOption,
+                                ),
+                              );
+
+                          // SearchBy Bloc event.
+                          context.read<UserSearchBloc>().add(
+                                SearchByEvent(
+                                  userToken: userToken ?? '',
+                                  pageNumber: '1',
+                                  limit: '10',
+                                  //  if field.isEmpty then field parameter
+                                  // won't be used in server call.
+                                  field: searchByOption ==
+                                          SearchByDropDownMenu.none.value
+                                      ? ''
+                                      : searchByOption,
+                                  query: queryTextEditingController.text,
+                                  country: 'india',
+                                  accountStatus: accountStatusOption,
+                                ),
+                              );
+
+                          //close filter dropdown on submit button pressed.
+                          widget.closeOnSubmit();
+                        },
+                        width: 70,
+                        height: 35,
+                        buttonBackgroundColor: Colours.primaryColour,
+                        child: const Center(
+                          child: Text('Search'),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

@@ -89,7 +89,7 @@ class UserSearchDataSourceImpl implements UserSearchRemoteDataSources {
       if (response.statusCode != 200 && response.statusCode != 201) {
         debugPrint('------- ServerException has occurred.');
         throw ServerException(
-          message: response.body.toString(),
+          message: response.body,
           statusCode: response.statusCode.toString(),
         );
       }
@@ -98,8 +98,12 @@ class UserSearchDataSourceImpl implements UserSearchRemoteDataSources {
       final userData = receivedJson['data'] as List?;
 
       if (userData == null || userData.isEmpty) {
-        throw const ServerException(
-          message: 'No User Data Available',
+        throw ServerException(
+          message: (userData != null)
+              ? userData.isEmpty
+                  ? 'No User Data Available'
+                  : 'Could not fetch data.'
+              : 'Could not fetch data',
           statusCode: '505',
         );
       }

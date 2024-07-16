@@ -14,6 +14,7 @@ class IField extends StatelessWidget {
     this.keyboardType,
     this.overrideValidator = false,
     this.prefixIcon,
+    this.onSubmitted,
   });
 
   final String? Function(String?)? validator;
@@ -27,10 +28,12 @@ class IField extends StatelessWidget {
   final bool overrideValidator;
 
   final Icon? prefixIcon;
+  final void Function(String)? onSubmitted;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onFieldSubmitted: onSubmitted,
       cursorColor: Colours.white,
       cursorHeight: 15,
       style: context.theme.textTheme.bodySmall,
