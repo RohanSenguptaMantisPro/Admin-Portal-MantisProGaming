@@ -176,18 +176,18 @@ class _FilterDropdownState extends State<FilterDropdown> {
                           final userToken =
                               context.read<UserTokenProvider>().userToken;
 
-                          //Save search parameters in local provider.
-                          context.read<UserSearchParameters>().initSearchParams(
-                                UserSearchResultsParams(
-                                  userToken: '',
-                                  pageNumber: '1',
-                                  limit: '10',
-                                  field: searchByOption,
-                                  query: queryTextEditingController.text,
-                                  country: 'india',
-                                  accountStatus: accountStatusOption,
-                                ),
-                              );
+                          //Save search setter parameters in local provider.
+                          context
+                              .read<UserSearchParameters>()
+                              .searchParameters = UserSearchResultsParams(
+                            userToken: '',
+                            pageNumber: '1',
+                            limit: '10',
+                            field: searchByOption,
+                            query: queryTextEditingController.text,
+                            country: 'india',
+                            accountStatus: accountStatusOption,
+                          );
 
                           // SearchBy Bloc event.
                           context.read<UserSearchBloc>().add(

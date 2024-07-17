@@ -5,7 +5,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/common/widget/data_container
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_toast.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_notification.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/entities/admin_details.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +48,7 @@ class AdminProfileScreen extends StatelessWidget {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (buildContext, state) {
         if (state is AuthError) {
-          showCustomToast(context, 'Could not log you out!');
+          showErrorNotification(context, 'Could not log you out!');
         } else if (state is LoggedOut) {
           // delete any saved search parameters.
           context.read<UserSearchParameters>().searchParameters = null;

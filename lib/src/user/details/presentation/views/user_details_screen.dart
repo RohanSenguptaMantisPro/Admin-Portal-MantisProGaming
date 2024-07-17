@@ -1,14 +1,16 @@
+import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_search_parameters.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/enum/account_status_dropdown_menu.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/common/widget/breadcrumb.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/data_containers.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/drop_down.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_toast.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_notification.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/bloc/user_details_bloc.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/widgets/bread_crumb_navigation.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/bloc/user_search_bloc.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,6 +43,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         );
   }
 
+  //immutable data items in map.
   List<Map<String, String>> userData = [
     {
       'title': 'id',
@@ -124,15 +127,16 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
     return BlocConsumer<UserDetailsBloc, UserDetailsState>(
       listener: (context, state) {
         if (state is GetUserDetailsError || state is UpdateUserDetailsError) {
-          showCustomToast(
+          showErrorNotification(
             context,
             'Sorry! Something went wrong!',
           );
         } else if (state is GotUserDetails) {
-          debugPrint('------------- UserDetails :${state.userDetails}');
+          debugPrint('------------- UserDetails :${state.userDetails}\n');
 
           // Populating with fetched data.
-          displayPicture = state.userDetails.displayPicture ?? '';
+          accountStatus = state.userDetails.accountStatus ?? accountStatus;
+          displayPicture = state.userDetails.displayPicture ?? displayPicture;
           imageProvider = displayPicture.isNotEmpty
               ? NetworkImage(displayPicture)
               : imageProvider;
@@ -229,10 +233,37 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
           // also call userData of the previous page with the same parameters
           // and of the same page number.
           debugPrint('Updated User Details.');
-          showCustomToast(
+          showSuccessNotification(
             context,
             'Success! Updated User Details.',
           );
+
+          //get savedParameters.
+
+          final savedSearchParameters =
+              context.read<UserSearchParameters>().searchParameters;
+
+          if (savedSearchParameters != null) {
+            // debugPrint('UserDetails : savedSearchParameters : '
+            //     '$userToken'
+            //     '${savedSearchParameters.limit}\n'
+            //     '${savedSearchParameters.field}\n'
+            //     '${savedSearchParameters.query}\n'
+            //     '${savedSearchParameters.accountStatus}\n'
+            //     '${savedSearchParameters.userToken}\n');
+
+            context.read<UserSearchBloc>().add(
+              SearchByEvent(
+                userToken: userToken ?? '',
+                pageNumber: savedSearchParameters.pageNumber,
+                limit: savedSearchParameters.limit,
+                field: savedSearchParameters.field,
+                query: savedSearchParameters.query,
+                country: savedSearchParameters.country,
+                accountStatus: savedSearchParameters.accountStatus,
+              ),
+            );
+          }
         }
       },
       builder: (context, state) {
@@ -263,7 +294,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 //route navigation path here.
-                                BreadcrumbNavigation(),
+                                Breadcrumb(),
 
                                 Text(
                                   'User Details',
@@ -404,7 +435,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                     height: 15,
                     color: Colours.backgroundColorDark,
                   ),
-                  Container(
+                  const SizedBox(
                     height: 130,
                     child: Center(
                       child: Text('Advanced Details'),

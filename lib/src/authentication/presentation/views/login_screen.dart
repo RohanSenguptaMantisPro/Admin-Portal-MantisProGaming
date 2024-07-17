@@ -6,7 +6,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extension
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/services/injection_container.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_toast.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_notification.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/widgets/center_text_box.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/views/user_search_screen.dart';
@@ -100,13 +100,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               );
         } else if (state is LoggedInCheckFailed) {
-          showCustomToast(context, 'Auto login failed, please login');
+          showErrorNotification(context, 'Auto login failed, please login');
         } //
         else if (state is AuthError) {
           debugPrint('----- listener state : $state');
           debugPrint('----- Something went wrong : ${state.message}');
 
-          showCustomToast(
+          showErrorNotification(
               context,
               'Something Went Wrong!! Please try again '
               'later!');
@@ -130,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 CacheUserTokenEvent(userToken!),
               );
         } else if (state is AdminCheckStatus && state.isAdmin == false) {
-          showCustomToast(context, 'You do not have Admin Permission');
+          showErrorNotification(context, 'You do not have Admin Permission');
         } //if all ok and cachedUserToken go to dashboard page.
         else if (state is CachedUserToken) {
           // fetch admin profile data bloc event add here. and then setter to
@@ -145,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               );
         } else if (state is FetchAdminDataError) {
-          showCustomToast(context, 'Unable to access Admin Data');
+          showErrorNotification(context, 'Unable to access Admin Data');
           // Navigator.of(context)
           //     .pushReplacementNamed(Dashboard.routeName, arguments: 0);
           context.go(UserSearchScreen.routeName);

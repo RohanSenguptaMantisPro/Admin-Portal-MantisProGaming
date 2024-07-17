@@ -1,5 +1,7 @@
 
+import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/bread_crumb_notifier.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/services/injection_container.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/go_router_observer.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/views/login_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/dashboard/home/presentation/views/dashboard.dart';
@@ -15,6 +17,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/view
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 part 'router.main.dart';
 

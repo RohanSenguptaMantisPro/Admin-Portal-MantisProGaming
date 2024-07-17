@@ -8,7 +8,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/common/widget/drop_down.dart
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_toast.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_notification.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/domain/usecases/user_search_results.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/bloc/user_search_bloc.dart';
 
@@ -75,6 +75,11 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
     // debugPrint('-----change page params : $userSearchParameters');
 
     if (userSearchParameters != null) {
+      // saving the newPageNumber too.
+      context.read<UserSearchParameters>().updateSearchParam(
+            pageNumber: newPageNumber.toString(),
+          );
+
       context.read<UserSearchBloc>().add(
             SearchByEvent(
               userToken: userToken ?? '',
@@ -86,7 +91,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
               accountStatus: userSearchParameters.accountStatus,
             ),
           );
-    } else {}
+    }
   }
 
   @override
@@ -99,11 +104,13 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
           debugPrint('----- listener state : $state');
           debugPrint('----- Something went wrong : ${state.message}');
 
-          showCustomToast(
+          showSuccessNotification(
             context,
             state.message,
           );
         } else if (state is FetchedUserData) {
+          debugPrint('--------UserSearch Screen :state is fetchedUserData');
+
           totalPages =
               (state.userSearchResponse.totalResults / resultsPerPage).ceil();
           totalResults = state.userSearchResponse.totalResults;
@@ -171,7 +178,8 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                               // Search user text field.
                               SearchUserForm(
                                 onSubmitted: (queryValue) {
-                                  //save parameters for next page fetches.
+                                  //save parameters setter for next page
+                                  // fetches.
                                   context
                                           .read<UserSearchParameters>()
                                           .searchParameters =

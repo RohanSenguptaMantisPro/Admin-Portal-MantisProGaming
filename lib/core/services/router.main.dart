@@ -3,12 +3,15 @@ part of 'router.dart';
 final GlobalKey<NavigatorState> _shellNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'shell');
 
+late BreadcrumbNotifier breadcrumbNotifier;
+
 CustomTransitionPage<void> customTransitionBuilder(
   BuildContext context,
   GoRouterState state,
   Widget child,
 ) {
   return CustomTransitionPage<void>(
+    name: state.name,
     transitionDuration: Duration.zero,
     reverseTransitionDuration: Duration.zero,
     key: state.pageKey,
@@ -19,8 +22,10 @@ CustomTransitionPage<void> customTransitionBuilder(
   );
 }
 
-RouterConfig<Object> generateRoute() {
+RouterConfig<Object> generateRoute(BuildContext context) {
+  breadcrumbNotifier = Provider.of<BreadcrumbNotifier>(context, listen: false);
   return GoRouter(
+    debugLogDiagnostics: true,
     initialLocation: '/',
     routes: appRoutes,
     errorBuilder: (context, state) => BlocProvider(
@@ -31,9 +36,8 @@ RouterConfig<Object> generateRoute() {
 }
 
 final appRoutes = [
-  //
-
   GoRoute(
+    name: 'login',
     path: '/',
     builder: (context, state) => BlocProvider(
       create: (_) => sl<AuthBloc>(),
@@ -43,6 +47,9 @@ final appRoutes = [
   //
 
   ShellRoute(
+    observers: [
+      GoRouterObserver(breadcrumbNotifier: breadcrumbNotifier),
+    ],
     navigatorKey: _shellNavigatorKey,
     pageBuilder: (BuildContext context, GoRouterState state, Widget child) {
       return customTransitionBuilder(
@@ -58,6 +65,7 @@ final appRoutes = [
     },
     routes: <RouteBase>[
       GoRoute(
+        name: 'Global Dashboard',
         path: GlobalDashboardScreen.routeName,
         pageBuilder: (BuildContext context, GoRouterState state) {
           return customTransitionBuilder(
@@ -68,6 +76,7 @@ final appRoutes = [
         },
       ),
       GoRoute(
+        name: 'User Search',
         path: UserSearchScreen.routeName,
         pageBuilder: (BuildContext context, GoRouterState state) {
           return customTransitionBuilder(
@@ -81,15 +90,23 @@ final appRoutes = [
         },
         routes: [
           GoRoute(
+            //have to use full path in name else in goRouter observer we
+            // are unable to
+            // send the full path of the route.
+            // as it takes only the name of the path.
+            name: 'User Search/User Details',
             path: '${UserDetailsScreen.routeName}/:uID',
             pageBuilder: (BuildContext context, GoRouterState state) {
               return customTransitionBuilder(
                 context,
                 state,
                 BlocProvider(
-                  create: (_) => sl<UserDetailsBloc>(),
-                  child: UserDetailsScreen(
-                    uID: state.pathParameters['uID']!,
+                  create: (context) => sl<UserSearchBloc>(),
+                  child: BlocProvider(
+                    create: (_) => sl<UserDetailsBloc>(),
+                    child: UserDetailsScreen(
+                      uID: state.pathParameters['uID']!,
+                    ),
                   ),
                 ),
               );
@@ -98,6 +115,7 @@ final appRoutes = [
         ],
       ),
       GoRoute(
+        name: 'Time Tracking',
         path: TimeTrackingScreen.routeName,
         pageBuilder: (BuildContext context, GoRouterState state) {
           return customTransitionBuilder(
@@ -108,6 +126,7 @@ final appRoutes = [
         },
       ),
       GoRoute(
+        name: 'Incentives',
         path: IncentivesScreen.routeName,
         pageBuilder: (BuildContext context, GoRouterState state) {
           return customTransitionBuilder(
@@ -118,6 +137,7 @@ final appRoutes = [
         },
       ),
       GoRoute(
+        name: 'Feedback',
         path: FeedbackScreen.routeName,
         pageBuilder: (BuildContext context, GoRouterState state) {
           return customTransitionBuilder(
@@ -128,6 +148,7 @@ final appRoutes = [
         },
       ),
       GoRoute(
+        name: 'Admin Profile',
         path: AdminProfileScreen.routeName,
         pageBuilder: (BuildContext context, GoRouterState state) {
           return customTransitionBuilder(

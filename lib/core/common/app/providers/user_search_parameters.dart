@@ -16,4 +16,28 @@ class UserSearchParameters extends ChangeNotifier {
       Future.delayed(Duration.zero, notifyListeners);
     }
   }
+
+  void updateSearchParam({
+    String? userToken,
+    String? pageNumber,
+    String? limit,
+    String? field,
+    String? query,
+    String? country,
+    String? accountStatus,
+  }) {
+    if (_searchParameters == null) return;
+
+    _searchParameters = UserSearchResultsParams(
+      userToken: userToken ?? _searchParameters!.userToken,
+      pageNumber: pageNumber ?? _searchParameters!.pageNumber,
+      limit: limit ?? _searchParameters!.limit,
+      field: field ?? _searchParameters!.field,
+      query: query ?? _searchParameters!.query,
+      country: country ?? _searchParameters!.country,
+      accountStatus: accountStatus ?? _searchParameters!.accountStatus,
+    );
+
+    Future.delayed(Duration.zero, notifyListeners);
+  }
 }
