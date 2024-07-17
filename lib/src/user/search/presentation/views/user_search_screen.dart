@@ -54,7 +54,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
   @override
   void initState() {
     super.initState();
-
+    count++;
     userToken = context.read<UserTokenProvider>().userToken;
   }
 
@@ -84,6 +84,25 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
             SearchByEvent(
               userToken: userToken ?? '',
               pageNumber: newPageNumber.toString(),
+              limit: userSearchParameters.limit,
+              field: userSearchParameters.field,
+              query: userSearchParameters.query,
+              country: userSearchParameters.country,
+              accountStatus: userSearchParameters.accountStatus,
+            ),
+          );
+    }
+  }
+
+  void refreshData() {
+    final userSearchParameters =
+        context.read<UserSearchParameters>().searchParameters;
+
+    if (userSearchParameters != null) {
+      context.read<UserSearchBloc>().add(
+            SearchByEvent(
+              userToken: userToken ?? '',
+              pageNumber: userSearchParameters.pageNumber,
               limit: userSearchParameters.limit,
               field: userSearchParameters.field,
               query: userSearchParameters.query,
