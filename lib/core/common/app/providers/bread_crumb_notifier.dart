@@ -6,7 +6,8 @@ class BreadcrumbNotifier extends ChangeNotifier {
   List<BreadcrumbItem> get items => List.unmodifiable(_items);
 
   void updateBreadcrumbs(String location) {
-    debugPrint('---path location : $location');
+    debugPrint('---path name : $location');
+
     _items.clear();
     final pathSegments =
         location.split('/').where((segment) => segment.isNotEmpty).toList();

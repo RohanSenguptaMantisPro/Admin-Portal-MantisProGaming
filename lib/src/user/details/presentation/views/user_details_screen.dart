@@ -1,4 +1,3 @@
-import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_search_parameters.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/enum/account_status_dropdown_menu.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/breadcrumb.dart';
@@ -9,8 +8,8 @@ import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extension
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_notification.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/rebuild_check.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/bloc/user_details_bloc.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/bloc/user_search_bloc.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +20,8 @@ class UserDetailsScreen extends StatefulWidget {
   const UserDetailsScreen({required this.uID, super.key});
 
   static const routeName = 'user-details';
+  static const pageName = 'User Details';
+
   final String uID;
 
   @override
@@ -237,33 +238,8 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             context,
             'Success! Updated User Details.',
           );
-
-          //get savedParameters.
-
-          final savedSearchParameters =
-              context.read<UserSearchParameters>().searchParameters;
-
-          if (savedSearchParameters != null) {
-            // debugPrint('UserDetails : savedSearchParameters : '
-            //     '$userToken'
-            //     '${savedSearchParameters.limit}\n'
-            //     '${savedSearchParameters.field}\n'
-            //     '${savedSearchParameters.query}\n'
-            //     '${savedSearchParameters.accountStatus}\n'
-            //     '${savedSearchParameters.userToken}\n');
-
-            context.read<UserSearchBloc>().add(
-              SearchByEvent(
-                userToken: userToken ?? '',
-                pageNumber: savedSearchParameters.pageNumber,
-                limit: savedSearchParameters.limit,
-                field: savedSearchParameters.field,
-                query: savedSearchParameters.query,
-                country: savedSearchParameters.country,
-                accountStatus: savedSearchParameters.accountStatus,
-              ),
-            );
-          }
+          //check to refetch userSearch screen data or not.
+          isUserDetailsEdited = true;
         }
       },
       builder: (context, state) {

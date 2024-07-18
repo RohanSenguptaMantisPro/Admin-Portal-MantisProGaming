@@ -10,7 +10,7 @@ class GoRouterObserver extends NavigatorObserver {
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     debugPrint('---------GoRouter ShellRoute : Pushed new page :'
-        ' ${route.settings}');
+        ' ${route.settings.name}/${route.settings.arguments}');
 
     if (route.settings.name != null) {
       breadcrumbNotifier.updateBreadcrumbs(route.settings.name!);

@@ -9,6 +9,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extension
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_notification.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/rebuild_check.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/domain/usecases/user_search_results.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/bloc/user_search_bloc.dart';
 
@@ -19,6 +20,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widg
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class UserSearchScreen extends StatefulWidget {
   const UserSearchScreen({super.key});
@@ -54,7 +56,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
   @override
   void initState() {
     super.initState();
-    count++;
+
     userToken = context.read<UserTokenProvider>().userToken;
   }
 
@@ -115,6 +117,13 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //if rebuildNotifier is true refetch. and make it false again. so no
+    // multiple refetch.
+    if (isUserDetailsEdited) {
+      refreshData();
+      isUserDetailsEdited = false;
+    }
+
     return BlocConsumer<UserSearchBloc, UserSearchState>(
       listener: (context, state) {
         debugPrint('-------UserSearchScreen Current State : $state');
