@@ -51,7 +51,7 @@ void main() {
         'emailVerified': false,
         'displayPicture': '',
         'role': 0,
-        'locale': 'en_US',
+        'locale': '',
         'country': '',
         'pairedDevices': <List<String>>[],
         'creditsAvailable': 0,

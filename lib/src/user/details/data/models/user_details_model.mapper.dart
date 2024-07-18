@@ -48,6 +48,9 @@ class UserDetailsModelMapper extends SubClassMapperBase<UserDetailsModel> {
   static int? _$role(UserDetailsModel v) => v.role;
   static const Field<UserDetailsModel, int> _f$role =
       Field('role', _$role, opt: true);
+  static String? _$locale(UserDetailsModel v) => v.locale;
+  static const Field<UserDetailsModel, String> _f$locale =
+      Field('locale', _$locale, opt: true);
   static String? _$country(UserDetailsModel v) => v.country;
   static const Field<UserDetailsModel, String> _f$country =
       Field('country', _$country, opt: true);
@@ -78,6 +81,7 @@ class UserDetailsModelMapper extends SubClassMapperBase<UserDetailsModel> {
     #emailVerified: _f$emailVerified,
     #displayPicture: _f$displayPicture,
     #role: _f$role,
+    #locale: _f$locale,
     #country: _f$country,
     #creditsAvailable: _f$creditsAvailable,
     #accountActive: _f$accountActive,
@@ -105,6 +109,7 @@ class UserDetailsModelMapper extends SubClassMapperBase<UserDetailsModel> {
         emailVerified: data.dec(_f$emailVerified),
         displayPicture: data.dec(_f$displayPicture),
         role: data.dec(_f$role),
+        locale: data.dec(_f$locale),
         country: data.dec(_f$country),
         creditsAvailable: data.dec(_f$creditsAvailable),
         accountActive: data.dec(_f$accountActive),
@@ -178,6 +183,7 @@ abstract class UserDetailsModelCopyWith<$R, $In extends UserDetailsModel, $Out>
       bool? emailVerified,
       String? displayPicture,
       int? role,
+      String? locale,
       String? country,
       int? creditsAvailable,
       bool? accountActive,
@@ -207,6 +213,7 @@ class _UserDetailsModelCopyWithImpl<$R, $Out>
           Object? emailVerified = $none,
           Object? displayPicture = $none,
           Object? role = $none,
+          Object? locale = $none,
           Object? country = $none,
           Object? creditsAvailable = $none,
           Object? accountActive = $none,
@@ -223,6 +230,7 @@ class _UserDetailsModelCopyWithImpl<$R, $Out>
         if (emailVerified != $none) #emailVerified: emailVerified,
         if (displayPicture != $none) #displayPicture: displayPicture,
         if (role != $none) #role: role,
+        if (locale != $none) #locale: locale,
         if (country != $none) #country: country,
         if (creditsAvailable != $none) #creditsAvailable: creditsAvailable,
         if (accountActive != $none) #accountActive: accountActive,
@@ -241,6 +249,7 @@ class _UserDetailsModelCopyWithImpl<$R, $Out>
       emailVerified: data.get(#emailVerified, or: $value.emailVerified),
       displayPicture: data.get(#displayPicture, or: $value.displayPicture),
       role: data.get(#role, or: $value.role),
+      locale: data.get(#locale, or: $value.locale),
       country: data.get(#country, or: $value.country),
       creditsAvailable:
           data.get(#creditsAvailable, or: $value.creditsAvailable),

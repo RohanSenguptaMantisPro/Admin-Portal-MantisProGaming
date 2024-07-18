@@ -14,6 +14,7 @@ class UserDetails with UserDetailsMappable {
     this.emailVerified,
     this.displayPicture,
     this.role,
+    this.locale,
     this.country,
     this.creditsAvailable,
     this.accountActive,
@@ -33,6 +34,7 @@ class UserDetails with UserDetailsMappable {
           emailVerified: false,
           displayPicture: '',
           role: 0,
+          locale: '',
           country: '',
           creditsAvailable: 0,
           accountActive: false,
@@ -53,6 +55,7 @@ class UserDetails with UserDetailsMappable {
   final bool? emailVerified;
   final String? displayPicture;
   final int? role;
+  final String? locale;
   final String? country;
   final int? creditsAvailable;
   final bool? accountActive;

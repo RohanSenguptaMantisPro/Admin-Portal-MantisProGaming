@@ -187,11 +187,11 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                   : '',
               'width': '200',
             },
-            // {
-            //   'title': 'locale',
-            //   'data': state.userDetails.loca,
-            //   'width': '200',
-            // },
+            {
+              'title': 'locale',
+              'data': state.userDetails.locale ?? '',
+              'width': '200',
+            },
             {
               'title': 'country',
               'data': state.userDetails.country ?? '',
@@ -320,48 +320,48 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                           child: Wrap(
                                             spacing: 20,
                                             runSpacing: 30,
-                                            children: userData
-                                                .map(
-                                                  (data) => DataContainers(
-                                                    height: 35,
-                                                    width: double.parse(
-                                                      data['width']!,
-                                                    ),
-                                                    dataText:
-                                                        (data['data']!).isEmpty
-                                                            ? '--'
-                                                            : data['data']!,
-                                                    title: data['title']!,
+                                            children: [
+                                              ...userData.map(
+                                                (data) => DataContainers(
+                                                  height: 35,
+                                                  width: double.parse(
+                                                    data['width']!,
                                                   ),
-                                                )
-                                                .toList(),
+                                                  dataText:
+                                                      (data['data']!).isEmpty
+                                                          ? '--'
+                                                          : data['data']!,
+                                                  title: data['title']!,
+                                                ),
+                                              ),
+                                              DropDown(
+                                                title: 'Account Status',
+                                                // Converting items of AccountStatus
+                                                // enum to DropdownMenuItem<String>
+                                                // for dropdown options.
+                                                menuItemList:
+                                                    AccountStatusDropDownMenu
+                                                        .values
+                                                        .map<
+                                                            DropdownMenuItem<
+                                                                String>>((
+                                                  AccountStatusDropDownMenu
+                                                      accountStatus,
+                                                ) {
+                                                  return DropdownMenuItem<
+                                                      String>(
+                                                    value: accountStatus.value,
+                                                    child: Text(
+                                                        accountStatus.value),
+                                                  );
+                                                }).toList(),
+                                                onChanged: (newValue) {
+                                                  accountStatus = newValue;
+                                                },
+                                                initialValue: accountStatus,
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          height: 30,
-                                        ),
-                                        DropDown(
-                                          title: 'Account Status',
-                                          // Converting items of AccountStatus
-                                          // enum to DropdownMenuItem<String>
-                                          // for dropdown options.
-                                          menuItemList:
-                                              AccountStatusDropDownMenu.values
-                                                  .map<
-                                                      DropdownMenuItem<
-                                                          String>>((
-                                            AccountStatusDropDownMenu
-                                                accountStatus,
-                                          ) {
-                                            return DropdownMenuItem<String>(
-                                              value: accountStatus.value,
-                                              child: Text(accountStatus.value),
-                                            );
-                                          }).toList(),
-                                          onChanged: (newValue) {
-                                            accountStatus = newValue;
-                                          },
-                                          initialValue: accountStatus,
                                         ),
                                         const SizedBox(
                                           height: 20,
