@@ -31,6 +31,30 @@ class UserDetailsScreen extends StatefulWidget {
 class _UserDetailsScreenState extends State<UserDetailsScreen> {
   late String? userToken;
 
+  String accountStatus = AccountStatusDropDownMenu.unrestricted.value;
+  String displayPicture = '';
+  ImageProvider imageProvider = const AssetImage(MediaRes.defaultUserImage);
+
+  void _loadProfilePicture(String url) {
+    imageProvider = NetworkImage(url);
+    (imageProvider as NetworkImage)
+        .resolve(ImageConfiguration.empty)
+        .addListener(
+          ImageStreamListener(
+            (ImageInfo image, bool synchronousCall) {
+              // Image loaded successfully
+            },
+            onError: (dynamic exception, StackTrace? stackTrace) {
+              debugPrint('Error loading profile picture: $exception');
+              debugPrint('Stack trace: $stackTrace');
+              setState(() {
+                imageProvider = const AssetImage(MediaRes.defaultUserImage);
+              });
+            },
+          ),
+        );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -119,10 +143,6 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
     // Add more data fields as needed{'title': 'name', 'data': '', 'width' : },
   ];
 
-  String accountStatus = AccountStatusDropDownMenu.unrestricted.value;
-  String displayPicture = '';
-  ImageProvider imageProvider = const AssetImage(MediaRes.defaultUserImage);
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserDetailsBloc, UserDetailsState>(
@@ -138,9 +158,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
           // Populating with fetched data.
           accountStatus = state.userDetails.accountStatus ?? accountStatus;
           displayPicture = state.userDetails.displayPicture ?? displayPicture;
-          imageProvider = displayPicture.isNotEmpty
-              ? NetworkImage(displayPicture)
-              : imageProvider;
+          if (state.userDetails.displayPicture != null) {
+            _loadProfilePicture(state.userDetails.displayPicture!);
+          }
 
           userData = [
             {

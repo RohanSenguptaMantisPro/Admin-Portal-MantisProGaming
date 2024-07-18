@@ -12,39 +12,75 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class AdminProfileScreen extends StatelessWidget {
+class AdminProfileScreen extends StatefulWidget {
   const AdminProfileScreen({super.key});
 
   static const routeName = '/admin-profile';
 
   @override
-  Widget build(BuildContext context) {
+  State<AdminProfileScreen> createState() => _AdminProfileScreenState();
+}
+
+class _AdminProfileScreenState extends State<AdminProfileScreen> {
+  String accountType = '';
+
+  String name = '';
+
+  String email = '';
+  late List<Map<String, String>> userData;
+
+  ImageProvider<Object> adminDisplayPicture = const AssetImage(
+    MediaRes.defaultUserImage,
+  );
+
+  void _loadProfilePicture(String url) {
+    adminDisplayPicture = NetworkImage(url);
+    (adminDisplayPicture as NetworkImage)
+        .resolve(ImageConfiguration.empty)
+        .addListener(
+          ImageStreamListener(
+            (ImageInfo image, bool synchronousCall) {
+              // Image loaded successfully
+            },
+            onError: (dynamic exception, StackTrace? stackTrace) {
+              debugPrint('Error loading profile picture: $exception');
+              debugPrint('Stack trace: $stackTrace');
+              setState(() {
+                adminDisplayPicture =
+                    const AssetImage(MediaRes.defaultUserImage);
+              });
+            },
+          ),
+        );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
     final AdminDetails? adminProfileData =
         context.read<AdminUserData>().userData;
 
-    String accountType = '';
-    String name = '';
-    String email = '';
-    ImageProvider<Object> adminDisplayPicture = const AssetImage(
-      MediaRes.defaultUserImage,
-    );
+    // debugPrint('-------Admin Profile data: $adminProfileData');
 
     if (adminProfileData != null) {
-      adminDisplayPicture = NetworkImage(
-        adminProfileData.displayPicture,
-      );
+      // debugPrint('----profile pic : ${adminProfileData.displayPicture}');
       accountType = adminProfileData.accountType;
       name = adminProfileData.name;
       email = adminProfileData.email;
+      _loadProfilePicture(adminProfileData.displayPicture);
     }
 
-    final List<Map<String, String>> userData = [
+    userData = [
       {'title': 'Name', 'data': name},
       {'title': 'Account Type', 'data': accountType},
       {'title': 'Email', 'data': email},
       // Add more data fields as needed
     ];
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (buildContext, state) {
         if (state is AuthError) {
@@ -104,6 +140,9 @@ class AdminProfileScreen extends StatelessWidget {
                       CircleAvatar(
                         radius: 45,
                         backgroundImage: adminDisplayPicture,
+                        onBackgroundImageError: (er, s) {
+                          debugPrint(s.toString());
+                        },
                       ),
                       const SizedBox(
                         height: 20,
@@ -124,34 +163,6 @@ class AdminProfileScreen extends StatelessWidget {
                             )
                             .toList(),
                       ),
-                      // Row(
-                      //   children: [
-                      //     DataContainers(
-                      //       height: 30,
-                      //       width: 250,
-                      //       dataText: name.isEmpty ? '--' : name,
-                      //       title: 'Name',
-                      //     ),
-                      //     const SizedBox(
-                      //       width: 10,
-                      //     ),
-                      //     DataContainers(
-                      //       height: 30,
-                      //       width: 250,
-                      //       dataText: accountType.isEmpty ? '--' : accountType,
-                      //       title: 'Account Type',
-                      //     ),
-                      //   ],
-                      // ),
-                      // const SizedBox(
-                      //   height: 20,
-                      // ),
-                      // DataContainers(
-                      //   height: 30,
-                      //   width: 270,
-                      //   dataText: email.isEmpty ? '--' : email,
-                      //   title: 'Email',
-                      // ),
                       const SizedBox(
                         height: 20,
                       ),

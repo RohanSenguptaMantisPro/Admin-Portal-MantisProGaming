@@ -14,6 +14,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/dashboard/profile/presentatio
 import 'package:admin_portal_mantis_pro_gaming/src/feedback/presentation/views/feedback_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/global_dashboard/presentation/views/global_dashboard_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/incentives/presentation/views/incentives_screen.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/presentation/views/push_notifications_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/time_tracking/presentation/views/time_tracking_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/views/user_search_screen.dart';
 
@@ -32,12 +33,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   String _activeRoute = UserSearchScreen.routeName;
 
   void setActiveRoute(String routePath) {
@@ -47,7 +42,6 @@ class _DashboardState extends State<Dashboard> {
     context.go(routePath);
   }
 
-  // TODO(RohanSengupta): Later add on the mediaQuery screen responsiveness.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -158,6 +152,21 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           isCurrentPageActive:
                               _activeRoute == IncentivesScreen.routeName,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        DashboardContainer(
+                          iconAsset:
+                          (_activeRoute == PushNotificationsScreen.routeName)
+                              ? MediaRes.bellFilled
+                              : MediaRes.bell,
+                          title: 'Push Notifications',
+                          goRouter: () => setActiveRoute(
+                            PushNotificationsScreen.routeName,
+                          ),
+                          isCurrentPageActive:
+                          _activeRoute == PushNotificationsScreen.routeName,
                         ),
                         const SizedBox(
                           height: 8,

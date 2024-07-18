@@ -25,7 +25,6 @@ CustomTransitionPage<void> customTransitionBuilder(
 RouterConfig<Object> generateRoute(BuildContext context) {
   breadcrumbNotifier = Provider.of<BreadcrumbNotifier>(context, listen: false);
   return GoRouter(
-    debugLogDiagnostics: true,
     initialLocation: '/',
     routes: appRoutes,
     errorBuilder: (context, state) => BlocProvider(
@@ -133,6 +132,17 @@ final appRoutes = [
             context,
             state,
             const IncentivesScreen(),
+          );
+        },
+      ),
+      GoRoute(
+        name: 'Push Notifications',
+        path: PushNotificationsScreen.routeName,
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return customTransitionBuilder(
+            context,
+            state,
+            const PushNotificationsScreen(),
           );
         },
       ),

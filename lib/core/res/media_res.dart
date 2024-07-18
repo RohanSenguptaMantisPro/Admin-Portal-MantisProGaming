@@ -8,7 +8,8 @@ class MediaRes {
   // images
   static const mantisProGamingLogo =
       '$_baseImage/dark_mantis_pro_gaming_logo.png';
-  static const darkVersionMantisProGamingLogo = '$_baseImage/dark-version-logo.png';
+  static const darkVersionMantisProGamingLogo =
+      '$_baseImage/dark-version-logo.png';
   static const dashboardIconImage = '$_baseImage/dashboard_icon.png';
   static const defaultUserImage = '$_baseImage/default_user.png';
   static const loginScreenBottomDesign =
@@ -27,6 +28,7 @@ class MediaRes {
   static const userOutlined = '$_baseIcon/user-outlined.png';
   static const localActivity = '$_baseIcon/local-activity.png';
   static const console = '$_baseIcon/console.png';
+  static const bell = '$_baseIcon/bell-outlined.png';
 
   //filled
   static const filterFunnelfilled = '$_baseIcon/filter-funnel-filled.png';
@@ -35,4 +37,5 @@ class MediaRes {
   static const userFilled = '$_baseIcon/users-filled.png';
   static const localActivityFilled = '$_baseIcon/local-activity-filled.png';
   static const consoleFilled = '$_baseIcon/console-filled.png';
+  static const bellFilled = '$_baseIcon/bell-filled.png';
 }
