@@ -181,15 +181,10 @@ void main() {
           ),
         );
 
-        final methodCall = userDetailsRemoteDataSources.updateUserDetails(
+        await userDetailsRemoteDataSources.updateUserDetails(
           userToken: tUserToken,
           userID: tUserID,
           accountStatus: tAccountStatus,
-        );
-
-        expect(
-          methodCall,
-          completes,
         );
 
         verify(

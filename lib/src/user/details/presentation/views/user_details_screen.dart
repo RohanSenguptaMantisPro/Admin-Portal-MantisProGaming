@@ -35,6 +35,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   String displayPicture = '';
   ImageProvider imageProvider = const AssetImage(MediaRes.defaultUserImage);
 
+  //to handle not loading images error.
   void _loadProfilePicture(String url) {
     imageProvider = NetworkImage(url);
     (imageProvider as NetworkImage)
