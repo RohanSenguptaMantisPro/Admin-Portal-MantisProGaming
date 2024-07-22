@@ -14,8 +14,9 @@ const kGetUserDetailsEndpoint = '/api/v1/users/getUser';
 const kUpdateUserDetailsEndpont = '/api/v1/users/updateuserap';
 
 const kNotificationImageUploadEndpoint = '/api/v1/notificationassets/upload';
-const kNotificationImageVerificaitonEndpoint = '';
-const kNotificationSendEndpoint = '';
+const kNotificationImageDownloadEndpoint =
+    '/api/v1/notificationassets/download';
+const kNotificationSendEndpoint = '/api/v1/notifications/send';
 
 const kPublicKey =
     'MIIBCgKCAQEA4kB4sTqHMSI7BmfYe1e4ag7gwEpIxxAFi/w6lxFSdxwV90iKkay8Pe6jlv6Z9ziTqfMm3uvF8gF2ytAQn5JPQ9eUGlbdYaaKudy4p7nHdIcEcoARLA16zWyBNXiK3xYonVAW/zJNGA6i6F1Y1+QiUbklpoHVbhIYFs3t/uEqDyfw2W/S4tS5Zekhdw3MYHyJHd+Bf8cdfmcPl5Wj/S4kXbX7NyaRYvMURcYTnH4IiLIHr22dLjfXDrDD0Eptv5+cbdA20YVmsH9bkm0RjLkPtfpwyaoxAfGq1ajNd1BE53IAMv+WZ7ZECEcjUKjKxapPqh0eRdRfUOtLiewv3fkgpQIDAQAB';
