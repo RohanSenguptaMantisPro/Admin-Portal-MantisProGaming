@@ -24,8 +24,7 @@ class UpdatingUserDetails extends UserDetailsState
 }
 
 @MappableClass()
-class GotUserDetails extends UserDetailsState
-    with GotUserDetailsMappable {
+class GotUserDetails extends UserDetailsState with GotUserDetailsMappable {
   const GotUserDetails({required this.userDetails});
 
   final UserDetails userDetails;

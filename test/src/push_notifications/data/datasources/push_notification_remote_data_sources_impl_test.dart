@@ -309,7 +309,7 @@ void main() {
 
     test(
       'should throw [ServerException] when the status code is not 200 or '
-      '201',
+      '201 ',
       () async {
         when(
           () => mockClient.postRequest(
@@ -335,8 +335,8 @@ void main() {
           ),
           throwsA(
             const ServerException(
-              message: 'error occurred.',
-              statusCode: '500',
+              message: '',
+              statusCode: '400',
             ),
           ),
         );

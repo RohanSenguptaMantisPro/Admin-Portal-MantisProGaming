@@ -19,6 +19,4 @@ class ServerImage with ServerImageMappable {
 
   final Uint8List? imageData;
   final String? imageType;
-
-
 }

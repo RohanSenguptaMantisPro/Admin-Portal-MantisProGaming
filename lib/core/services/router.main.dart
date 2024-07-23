@@ -142,7 +142,10 @@ final appRoutes = [
           return customTransitionBuilder(
             context,
             state,
-            const PushNotificationsScreen(),
+            BlocProvider(
+              create: (_) => sl<PushNotificationBloc>(),
+              child: const PushNotificationsScreen(),
+            ),
           );
         },
       ),

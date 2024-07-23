@@ -9,6 +9,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/dashboard/profile/presentatio
 import 'package:admin_portal_mantis_pro_gaming/src/feedback/presentation/views/feedback_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/global_dashboard/presentation/views/global_dashboard_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/incentives/presentation/views/incentives_screen.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/presentation/bloc/push_notifications_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/presentation/views/push_notifications_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/time_tracking/presentation/views/time_tracking_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/bloc/user_details_bloc.dart';

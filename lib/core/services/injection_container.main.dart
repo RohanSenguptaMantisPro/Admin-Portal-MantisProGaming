@@ -8,6 +8,7 @@ Future<void> init() async {
   await _initAuth();
   await _initUserSearch();
   await _initUserDetails();
+  await _initPushNotifications();
 }
 
 // Authentication.
@@ -104,4 +105,32 @@ Future<void> _initUserDetails() async {
         httpClient: sl(),
       ),
     );
+}
+
+// push notifications
+Future<void> _initPushNotifications() async {
+  final uploadFileToServer = UploadFileToServer();
+
+  sl
+    ..registerFactory(
+      () => PushNotificationBloc(
+        imageUpload: sl(),
+        imageDownload: sl(),
+        sendNotifications: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => ImageUpload(sl()))
+    ..registerLazySingleton(() => ImageDownload(sl()))
+    ..registerLazySingleton(() => SendNotifications(sl()))
+    ..registerLazySingleton<PushNotificationRepo>(
+      () => PushNotificationRepoImpl(
+        sl(),
+      ),
+    )
+    ..registerLazySingleton<PushNotificationRemoteDataSources>(
+      () => PushNotificationRemoteDataSourcesImpl(
+        uploadFileToServer: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => uploadFileToServer);
 }
