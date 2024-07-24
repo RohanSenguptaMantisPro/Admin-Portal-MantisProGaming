@@ -15,6 +15,8 @@ class IField extends StatelessWidget {
     this.overrideValidator = false,
     this.prefixIcon,
     this.onSubmitted,
+    this.onChanged,
+    this.maxLines,
   });
 
   final String? Function(String?)? validator;
@@ -29,10 +31,14 @@ class IField extends StatelessWidget {
 
   final Icon? prefixIcon;
   final void Function(String)? onSubmitted;
+  final void Function(String)? onChanged;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLines: maxLines,
+      onChanged: onChanged,
       onFieldSubmitted: onSubmitted,
       cursorColor: Colours.white,
       cursorHeight: 15,

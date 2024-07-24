@@ -14,6 +14,7 @@ class MediaRes {
   static const defaultUserImage = '$_baseImage/default_user.png';
   static const loginScreenBottomDesign =
       '$_baseSvgImage/login_screen_bottom_design.svg';
+  static const defaultPickedImage = '$_baseImage/default_picked_image.png';
 
   static const loginScreenTopCover = '$_baseImage/bg_mantisdashboard-min.png';
 
