@@ -6,6 +6,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/use
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/usecases/send_notifications.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'push_notifications_bloc.mapper.dart';
 

@@ -8,6 +8,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/ent
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/repositories/push_notification_repo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockPushNotificationRemoteDataSources extends Mock
@@ -21,7 +22,7 @@ void main() {
     remoteDataSource = MockPushNotificationRemoteDataSources();
     repoImpl = PushNotificationRepoImpl(remoteDataSource);
 
-    registerFallbackValue(File(''));
+    registerFallbackValue(XFile(''));
   });
 
   const tImageUploadException = ServerException(
@@ -34,7 +35,7 @@ void main() {
   const tTitle = '';
   const tBody = '';
 
-  final tImageFile = File('tImage.jpg');
+  final tImageFile = XFile('');
 
   final tServerImage = ServerImage.empty();
 

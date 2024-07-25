@@ -4,6 +4,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/rep
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/usecases/image_upload.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockPushNotificationRepo extends Mock implements PushNotificationRepo {}
@@ -17,12 +18,12 @@ void main() {
     imageUpload = ImageUpload(pushNotificationRepo);
 
     registerFallbackValue(
-      File(''),
+      XFile(''),
     );
   });
 
   const tUserToken = '';
-  final tImageFile = File('tImage.jpg');
+  final tImageFile = XFile('');
 
   test(
     'should call the [PushNotificationRepos.imageUpload]',

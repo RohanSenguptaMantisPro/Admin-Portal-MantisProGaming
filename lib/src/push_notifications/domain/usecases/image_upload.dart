@@ -4,6 +4,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/usecases/usecases.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/repositories/push_notification_repo.dart';
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'image_upload.mapper.dart';
 
@@ -29,9 +30,9 @@ class ImageUploadParams with ImageUploadParamsMappable {
   ImageUploadParams.empty()
       : this(
           userToken: '',
-          imageFile: File(''),
+          imageFile: XFile(''),
         );
 
   final String userToken;
-  final File imageFile;
+  final XFile imageFile;
 }

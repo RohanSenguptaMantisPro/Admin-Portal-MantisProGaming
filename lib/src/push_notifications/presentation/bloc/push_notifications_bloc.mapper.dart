@@ -79,8 +79,8 @@ class UploadNotificationImageEventMapper
   static String _$userToken(UploadNotificationImageEvent v) => v.userToken;
   static const Field<UploadNotificationImageEvent, String> _f$userToken =
       Field('userToken', _$userToken);
-  static File _$imageFile(UploadNotificationImageEvent v) => v.imageFile;
-  static const Field<UploadNotificationImageEvent, File> _f$imageFile =
+  static XFile _$imageFile(UploadNotificationImageEvent v) => v.imageFile;
+  static const Field<UploadNotificationImageEvent, XFile> _f$imageFile =
       Field('imageFile', _$imageFile);
 
   @override
@@ -154,7 +154,7 @@ abstract class UploadNotificationImageEventCopyWith<
     $In extends UploadNotificationImageEvent,
     $Out> implements PushNotificationEventCopyWith<$R, $In, $Out> {
   @override
-  $R call({String? userToken, File? imageFile});
+  $R call({String? userToken, XFile? imageFile});
   UploadNotificationImageEventCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -171,7 +171,7 @@ class _UploadNotificationImageEventCopyWithImpl<$R, $Out>
   late final ClassMapperBase<UploadNotificationImageEvent> $mapper =
       UploadNotificationImageEventMapper.ensureInitialized();
   @override
-  $R call({String? userToken, File? imageFile}) => $apply(FieldCopyWithData({
+  $R call({String? userToken, XFile? imageFile}) => $apply(FieldCopyWithData({
         if (userToken != null) #userToken: userToken,
         if (imageFile != null) #imageFile: imageFile
       }));

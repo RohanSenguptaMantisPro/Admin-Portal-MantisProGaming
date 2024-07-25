@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
@@ -8,6 +7,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/datas
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/models/server_image_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockUploadToServer extends Mock implements UploadFileToServer {}
@@ -27,12 +27,12 @@ void main() {
     );
 
     registerFallbackValue(
-      File(''),
+      XFile(''),
     );
   });
 
   const tUserToken = '';
-  final tImageFile = File('');
+  final tImageFile = XFile('');
   const tFileName = '';
 
   const tTitle = '';
@@ -56,7 +56,7 @@ void main() {
 
   final tDownloadImageFailureResponse = {
     "status": "failure",
-    "message": "error occurred."
+    "message": "error occurred.",
   };
 
   group('imageUpload.', () {
@@ -75,8 +75,8 @@ void main() {
         when(
           () => mockClient.sendRequest(),
         ).thenAnswer(
-          (_) async => http.StreamedResponse(
-            Stream.value(utf8.encode(jsonEncode(tUploadImageJsonResponse))),
+          (_) async => http.Response(
+            jsonEncode(tUploadImageJsonResponse),
             200,
           ),
         );
@@ -121,10 +121,8 @@ void main() {
         when(
           () => mockClient.sendRequest(),
         ).thenAnswer(
-          (_) async => http.StreamedResponse(
-            Stream.value(
-              utf8.encode(jsonEncode(tUploadImageJsonfailureResponse)),
-            ),
+          (_) async => http.Response(
+            jsonEncode(tUploadImageJsonfailureResponse),
             400,
           ),
         );
@@ -199,7 +197,7 @@ void main() {
         verify(
           () => mockClient.getRequest(
             Uri.https(
-              '$baseUrl:$port',
+              '$baseFileServerUrl:$port',
               '$kNotificationImageDownloadEndpoint/$tFileName',
             ),
             header: {
@@ -246,7 +244,7 @@ void main() {
         verify(
           () => mockClient.getRequest(
             Uri.https(
-              '$baseUrl:$port',
+              '$baseFileServerUrl:$port',
               '$kNotificationImageDownloadEndpoint/$tFileName',
             ),
             header: {

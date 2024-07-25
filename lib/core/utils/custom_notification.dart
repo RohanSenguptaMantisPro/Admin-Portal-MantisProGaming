@@ -86,8 +86,8 @@ class NotificationOverlay {
 
     Overlay.of(context).insert(_overlayEntry!);
 
-    // Auto-dismiss after 4 seconds
-    Future.delayed(const Duration(seconds: 5), dismiss);
+    // Auto-dismiss after 8 seconds
+    Future.delayed(const Duration(seconds: 8), dismiss);
   }
 
   static void dismiss() {

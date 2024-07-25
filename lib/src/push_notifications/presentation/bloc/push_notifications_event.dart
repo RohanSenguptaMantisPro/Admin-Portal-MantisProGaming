@@ -14,7 +14,7 @@ class UploadNotificationImageEvent extends PushNotificationEvent
   });
 
   final String userToken;
-  final File imageFile;
+  final XFile imageFile;
 }
 
 @MappableClass()

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:admin_portal_mantis_pro_gaming/core/errors/failures.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/entities/server_image.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/usecases/image_download.dart';
@@ -9,6 +7,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/presentati
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockImageUpload extends Mock implements ImageUpload {}
@@ -37,7 +36,7 @@ void main() {
   });
 
   const tUserToken = '';
-  final tImageFile = File('');
+  final tImageFile = XFile('');
   const tFileName = '';
   const tTitle = '';
   const tBody = '';

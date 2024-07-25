@@ -1,7 +1,9 @@
+import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_notification.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/presentation/bloc/push_notifications_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/presentation/widgets/notification_text_edit.dart';
 import 'package:flutter/foundation.dart';
@@ -20,6 +22,9 @@ class PushNotificationsScreen extends StatefulWidget {
 }
 
 class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
+  Uint8List? previewImageDataBytes;
+  bool previewImageDimensionFlexible = false;
+
   final notificationTitleController = TextEditingController();
   final notificationBodyController = TextEditingController();
 
@@ -27,23 +32,25 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
   String _validationMessage = '';
   bool _isValidImage = false;
 
-  int _titleWordCount = 0;
-  int _bodyWordCount = 0;
-  int titleWordLimit = 50;
-  int bodyWordLimit = 200;
-  bool isExceededWordLimit = false;
+  int _titleLetterCount = 0;
+  int _bodyLetterCount = 0;
+  int titleLetterLimit = 50;
+  int bodyLetterLimit = 200;
+  bool isExceededLetterLimit = false;
 
-  void _updateWordCount(String text, {required bool isTitle}) {
-    final wordCount =
-        text.split(RegExp(r'\s+')).where((word) => word.isNotEmpty).length;
+  void _updateLetterCount(String text, {required bool isTitle}) {
+    final letterCount = text.length;
     setState(() {
       if (isTitle) {
-        _titleWordCount = wordCount;
+        _titleLetterCount = letterCount;
       } else {
-        _bodyWordCount = wordCount;
+        _bodyLetterCount = letterCount;
       }
-      if (_titleWordCount > titleWordLimit || _bodyWordCount > bodyWordLimit) {
-        isExceededWordLimit = true;
+      if (_titleLetterCount > titleLetterLimit ||
+          _bodyLetterCount > bodyLetterLimit) {
+        isExceededLetterLimit = true;
+      } else {
+        isExceededLetterLimit = false;
       }
     });
   }
@@ -60,8 +67,13 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
       setState(() {
         _validationMessage = 'No image selected';
         _isValidImage = false;
+        pickedImage = null;
       });
     }
+  }
+
+  String imageFileName() {
+    return pickedImage!.name.split('.').first;
   }
 
   Future<bool> _validateImage(XFile file) async {
@@ -81,9 +93,9 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
 
     // Check file size
     int fileSize = await file.length();
-    if (fileSize > 2 * 1024 * 1024) {
+    if (fileSize > 1 * 1024 * 1024) {
       // 2MB in bytes
-      setState(() => _validationMessage = 'File size exceeds 2MB limit.');
+      setState(() => _validationMessage = 'File size exceeds 1MB limit.');
       return false;
     }
 
@@ -91,15 +103,24 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
     if (!kIsWeb) {
       final bytes = await file.readAsBytes();
       final decodedImage = await decodeImageFromList(bytes);
-      if (decodedImage.width != 720 || decodedImage.height != 240) {
+      if (decodedImage.width != 1024 || decodedImage.height != 512) {
         setState(
-          () => _validationMessage = 'Image dimensions should be 720x240.',
+          () => _validationMessage =
+              'Image dimensions should not exceed  1024x512.',
         );
         return false;
       }
     }
     return true;
   }
+
+  bool get titleInserted => notificationTitleController.text.isNotEmpty;
+
+  bool get bodyInserted => notificationBodyController.text.isNotEmpty;
+
+  bool get imageInserted => pickedImage != null;
+
+  bool get dataNotInserted => !titleInserted || !bodyInserted || !imageInserted;
 
   @override
   void dispose() {
@@ -112,7 +133,38 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PushNotificationBloc, PushNotificationState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        debugPrint('-------push notification state: $state');
+        //
+        if (state is PushNotificationError) {
+          showErrorNotification(
+            context,
+            'Sorry! Something went wrong! \n\n'
+            'Details : \n ${state.errorMessage}',
+          );
+        } else if (state is UploadedNotificationImage) {
+          debugPrint(
+              '-----UPLOADED NOTIFICATION STATE : filename : ${pickedImage!.name.split('.').first}');
+          context.read<PushNotificationBloc>().add(
+                DownloadNotificationImageEvent(
+                  userToken: context.read<UserTokenProvider>().userToken ?? '',
+                  fileName: imageFileName(),
+                ),
+              );
+        } else if (state is DownloadedNotificationImage) {
+          previewImageDimensionFlexible = true;
+
+          showSuccessNotification(
+            context,
+            'Image Uploaded to the server successfully!',
+          );
+        } else if (state is SentNotification) {
+          showSuccessNotification(
+            context,
+            'Notification is sent to the users successfully!',
+          );
+        }
+      },
       builder: (context, state) {
         return LayoutBuilder(
           builder: (_, boxConstraints) {
@@ -129,9 +181,7 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
                   Container(
                     width: double.infinity,
                     decoration: const BoxDecoration(
-                        // border: Border.all(
-                        //   color: Colours.primaryColour,
-                        // ),
+                        //
                         ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,11 +207,6 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
                       children: [
                         Container(
                           width: 700,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colours.primaryColour,
-                            ),
-                          ),
                           child: SingleChildScrollView(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,11 +226,11 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
                                           child: _isValidImage
                                               ? Image.network(
                                                   pickedImage!.path,
-                                                  fit: BoxFit.cover,
+                                                  fit: BoxFit.contain,
                                                 )
                                               : Image.asset(
                                                   MediaRes.defaultPickedImage,
-                                                  fit: BoxFit.cover,
+                                                  fit: BoxFit.contain,
                                                 ),
                                         );
                                       },
@@ -200,25 +245,100 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
                                           style:
                                               context.theme.textTheme.bodySmall,
                                         ),
-                                        SizedBox(
-                                          height: 40,
-                                          child: ElevatedButton.icon(
-                                            icon: const Icon(
-                                              Icons.file_upload_outlined,
-                                            ),
-                                            onPressed: pickImage,
-                                            style: ElevatedButton.styleFrom(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                  12,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              height: 40,
+                                              child: ElevatedButton.icon(
+                                                icon: const Icon(
+                                                  Icons.file_upload_outlined,
                                                 ),
+                                                onPressed: pickImage,
+                                                style: ElevatedButton.styleFrom(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                      12,
+                                                    ),
+                                                  ),
+                                                  foregroundColor: Colors.white,
+                                                  backgroundColor:
+                                                      Colors.grey[800],
+                                                ),
+                                                label: const Text('Browse'),
                                               ),
-                                              foregroundColor: Colors.white,
-                                              backgroundColor: Colors.grey[800],
                                             ),
-                                            label: const Text('Browse'),
-                                          ),
+                                            const SizedBox(
+                                              width: 16,
+                                            ),
+                                            StatefulBuilder(
+                                              builder: (_, setState) {
+                                                return (state
+                                                            is UploadingNotificationImage) ||
+                                                        (state
+                                                            is UploadedNotificationImage) ||
+                                                        (state
+                                                            is DownloadingNotificationImage)
+                                                    ? const SizedBox(
+                                                        height: 20,
+                                                        width: 20,
+                                                        child: Center(
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            color: Colours
+                                                                .primaryColour,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : ButtonWidget(
+                                                        onTap: () {
+                                                          if (!imageInserted) {
+                                                            return;
+                                                          }
+
+                                                          final userToken = context
+                                                              .read<
+                                                                  UserTokenProvider>()
+                                                              .userToken;
+
+                                                          context
+                                                              .read<
+                                                                  PushNotificationBloc>()
+                                                              .add(
+                                                                UploadNotificationImageEvent(
+                                                                  userToken:
+                                                                      userToken ??
+                                                                          '',
+                                                                  imageFile:
+                                                                      pickedImage!,
+                                                                ),
+                                                              );
+                                                        },
+                                                        width: 100,
+                                                        height: 33,
+                                                        buttonBackgroundColor:
+                                                            !imageInserted
+                                                                ? Colours
+                                                                    .greyBackground
+                                                                : Colours
+                                                                    .primaryColour,
+                                                        child: Center(
+                                                          child: Text(
+                                                            'Upload',
+                                                            style: TextStyle(
+                                                              color: !imageInserted
+                                                                  ? Colours
+                                                                      .greyTextColour
+                                                                  : null,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                              },
+                                            ),
+                                          ],
                                         ),
                                         StatefulBuilder(
                                           builder: (_, refresh) {
@@ -242,7 +362,7 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
                                                   ),
                                                 Text(
                                                   '*.png, *.jpeg files, Max: '
-                                                  '2MB,'
+                                                  '1MB,'
                                                   ' Recommended'
                                                   ' Size: 720x240',
                                                   style: context.theme.textTheme
@@ -264,11 +384,11 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
                                           notificationTitleController,
                                       bodyController:
                                           notificationBodyController,
-                                      updateWordCount: _updateWordCount,
-                                      titleWordCount: _titleWordCount,
-                                      bodyWordCount: _bodyWordCount,
-                                      titleWordLimit: titleWordLimit,
-                                      bodyWordLimit: bodyWordLimit,
+                                      updateLetterCount: _updateLetterCount,
+                                      titleLetterCount: _titleLetterCount,
+                                      bodyLetterCount: _bodyLetterCount,
+                                      titleLetterLimit: titleLetterLimit,
+                                      bodyLetterLimit: bodyLetterLimit,
                                     );
                                   },
                                 ),
@@ -279,18 +399,69 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
                                   alignment: Alignment.bottomRight,
                                   child: StatefulBuilder(
                                     builder: (_, setState) {
-                                      return ButtonWidget(
-                                        onTap: () => (),
-                                        width: 100,
-                                        height: 30,
-                                        buttonBackgroundColor:
-                                            isExceededWordLimit
-                                                ? Colours.greyBackground
-                                                : Colours.primaryColour,
-                                        child: const Center(
-                                          child: Text('Send'),
-                                        ),
-                                      );
+                                      return (state is SendingNotification)
+                                          ? const SizedBox(
+                                              height: 30,
+                                              width: 30,
+                                              child: Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Colours.primaryColour,
+                                                ),
+                                              ),
+                                            )
+                                          : ButtonWidget(
+                                              onTap: () {
+                                                if (dataNotInserted) {
+                                                  return;
+                                                } else if (state
+                                                    is! DownloadedNotificationImage) {
+                                                  return;
+                                                }
+
+                                                context
+                                                    .read<
+                                                        PushNotificationBloc>()
+                                                    .add(
+                                                      SendNotificationEvent(
+                                                        userToken: context
+                                                                .read<
+                                                                    UserTokenProvider>()
+                                                                .userToken ??
+                                                            '',
+                                                        title:
+                                                            notificationTitleController
+                                                                .text,
+                                                        body:
+                                                            notificationBodyController
+                                                                .text,
+                                                        fileName:
+                                                            imageFileName(),
+                                                      ),
+                                                    );
+                                              },
+                                              width: 100,
+                                              height: 33,
+                                              buttonBackgroundColor:
+                                                  isExceededLetterLimit ||
+                                                          dataNotInserted ||
+                                                          (state
+                                                              is! DownloadedNotificationImage)
+                                                      ? Colours.greyBackground
+                                                      : Colours.primaryColour,
+                                              child: Center(
+                                                child: Text(
+                                                  'Send',
+                                                  style: TextStyle(
+                                                    color: dataNotInserted ||
+                                                            (state
+                                                                is! DownloadedNotificationImage)
+                                                        ? Colours.greyTextColour
+                                                        : null,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
                                     },
                                   ),
                                 ),
@@ -302,14 +473,34 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
                           width: 30,
                         ),
                         //to preview downloaded image.
-                        Container(
-                          width: 500,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colours.redColour,
-                            ),
+                        SizedBox(
+                          height: previewImageDimensionFlexible ? null : 400,
+                          width: previewImageDimensionFlexible ? null : 500,
+                          child: Builder(
+                            builder: (context) {
+                              if (state is DownloadedNotificationImage &&
+                                  state.serverImage.imageData != null) {
+                                previewImageDataBytes =
+                                    state.serverImage.imageData;
+                                return Image.memory(
+                                  state.serverImage.imageData!,
+                                  fit: BoxFit.contain,
+                                );
+                              }
+
+                              if (previewImageDataBytes != null) {
+                                return Image.memory(
+                                  previewImageDataBytes!,
+                                  fit: BoxFit.contain,
+                                );
+                              } else {
+                                return const Center(
+                                  child: Text('Preview'),
+                                );
+                              }
+                              // Default case
+                            },
                           ),
-                          child: Center(),
                         ),
                       ],
                     ),

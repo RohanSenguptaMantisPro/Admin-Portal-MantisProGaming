@@ -42,13 +42,13 @@ class IField extends StatelessWidget {
       onFieldSubmitted: onSubmitted,
       cursorColor: Colours.white,
       cursorHeight: 15,
-      style: context.theme.textTheme.bodySmall,
+      style: context.theme.textTheme.bodyMedium,
       controller: controller,
       validator: overrideValidator
           ? validator
           : (value) {
               if (value == null || value.isEmpty) {
-                return 'This field is required';
+                return 'This field is required ';
               }
               return validator?.call(value);
             },
@@ -83,9 +83,11 @@ class IField extends StatelessWidget {
           ),
         ),
         // overwriting the default padding helps with that puffy look
-        contentPadding: const EdgeInsets.symmetric(
+        contentPadding: EdgeInsets.symmetric(
           horizontal: 10,
-          vertical: 0,
+          // if maxLines is defined, padding is required else no space between
+          // text and borders.
+          vertical: maxLines != null ? 12 : 0,
         ),
         filled: true,
         fillColor: Colours.backgroundColorDark,

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:math';
 
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
@@ -7,13 +7,14 @@ import 'package:admin_portal_mantis_pro_gaming/core/utils/upload_file_to_server.
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/models/server_image_model.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/entities/server_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 
 abstract class PushNotificationRemoteDataSources {
   const PushNotificationRemoteDataSources();
 
   Future<void> imageUpload({
     required String userToken,
-    required File imageFile,
+    required XFile imageFile,
   });
 
   Future<ServerImage> imageDownload({
@@ -37,10 +38,11 @@ class PushNotificationRemoteDataSourcesImpl
 
   final UploadFileToServer _uploadFileToServer;
 
+  //image upload.
   @override
   Future<void> imageUpload({
     required String userToken,
-    required File imageFile,
+    required XFile imageFile,
   }) async {
     try {
       //setting up file & uri to send to server as form-data.
@@ -57,16 +59,31 @@ class PushNotificationRemoteDataSourcesImpl
       final response = await _uploadFileToServer.sendRequest();
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        debugPrint('------- ServerException has occurred.');
+        String errorMessage;
+        try {
+          // Attempt to parse as JSON
+          final responseBody =
+              response.body.isNotEmpty ? jsonDecode(response.body) : null;
+          errorMessage = (responseBody?['message'] as String?) ??
+              'Could not download & preview image';
+        } catch (e) {
+          // If JSON parsing fails, use some part of
+          // the raw response body or a default message
+          errorMessage = response.body.isNotEmpty
+              ? 'Server error: ${response.body.substring(0, min(100, response.body.length))}...'
+              : 'Could not upload image';
+        }
+
         throw ServerException(
-          message: 'Could not upload image.',
+          message: errorMessage,
           statusCode: response.statusCode.toString(),
         );
       }
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      debugPrintStack(stackTrace: s);
+      debugPrint(
+          '---PUSH NOTIFICATION DATA SOURCE : [imageUpload] :ERROR: $e ');
       throw ServerException(
         message: e.toString(),
         statusCode: '505',
@@ -84,7 +101,7 @@ class PushNotificationRemoteDataSourcesImpl
       //sending that file to server.
       final response = await _uploadFileToServer.getRequest(
         Uri.https(
-          '$baseUrl:$port',
+          '$baseFileServerUrl:$port',
           '$kNotificationImageDownloadEndpoint/$fileName',
         ),
         header: {
@@ -93,13 +110,25 @@ class PushNotificationRemoteDataSourcesImpl
       );
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        final responseBody =
-            response.body.isNotEmpty ? jsonDecode(response.body) : null;
-        debugPrint('------- ServerException has occurred.');
+        debugPrint(
+            '------- PUSH NOTIFICATION DATA SOURCE : [imageDownload] ERROR : ${response.body}');
+        String errorMessage;
+        try {
+          // Attempt to parse as JSON
+          final responseBody =
+              response.body.isNotEmpty ? jsonDecode(response.body) : null;
+          errorMessage = (responseBody?['message'] as String?) ??
+              'Could not download & preview image';
+        } catch (e) {
+          // If JSON parsing fails, use some part of
+          // the raw response body or a default message
+          errorMessage = response.body.isNotEmpty
+              ? 'Server error: ${response.body.substring(0, min(100, response.body.length))}...'
+              : 'Could not download & preview image';
+        }
+
         throw ServerException(
-          message:
-              (responseBody['message'] ?? 'Could not download & preview image')
-                  .toString(),
+          message: errorMessage,
           statusCode: response.statusCode.toString(),
         );
       }
@@ -149,13 +178,26 @@ class PushNotificationRemoteDataSourcesImpl
       );
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        final responseBody =
-            response.body.isNotEmpty ? jsonDecode(response.body) : null;
-        debugPrint('------- ServerException has occurred.');
+        debugPrint(
+            '------- PUSH NOTIFICATION DATA SOURCE : [sendNotifications] ERROR : ${response.body}');
+
+        String errorMessage;
+        try {
+          // Attempt to parse as JSON
+          final responseBody =
+              response.body.isNotEmpty ? jsonDecode(response.body) : null;
+          errorMessage = (responseBody?['message'] as String?) ??
+              'Could not download & preview image';
+        } catch (e) {
+          // If JSON parsing fails, use some part of
+          // the raw response body or a default message
+          errorMessage = response.body.isNotEmpty
+              ? 'Server error: ${response.body.substring(0, min(100, response.body.length))}...'
+              : 'Could not send notification';
+        }
+
         throw ServerException(
-          message:
-              (responseBody['message'] ?? 'Could not download & preview image')
-                  .toString(),
+          message: errorMessage,
           statusCode: response.statusCode.toString(),
         );
       }

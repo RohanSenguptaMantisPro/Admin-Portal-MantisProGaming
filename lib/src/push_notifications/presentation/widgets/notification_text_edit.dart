@@ -5,22 +5,22 @@ class NotificationTextEdit extends StatelessWidget {
   const NotificationTextEdit({
     required this.titleController,
     required this.bodyController,
-    required this.updateWordCount,
-    required this.titleWordCount,
-    required this.bodyWordCount,
-    required this.titleWordLimit,
-    required this.bodyWordLimit,
+    required this.updateLetterCount,
+    required this.titleLetterCount,
+    required this.bodyLetterCount,
+    required this.titleLetterLimit,
+    required this.bodyLetterLimit,
     super.key,
   });
 
   final TextEditingController titleController;
   final TextEditingController bodyController;
-  final void Function(String, {required bool isTitle}) updateWordCount;
-  final int titleWordCount;
-  final int bodyWordCount;
-  final int titleWordLimit;
+  final void Function(String, {required bool isTitle}) updateLetterCount;
+  final int titleLetterCount;
+  final int bodyLetterCount;
+  final int titleLetterLimit;
 
-  final int bodyWordLimit;
+  final int bodyLetterLimit;
 
   @override
   Widget build(BuildContext context) {
@@ -31,18 +31,18 @@ class NotificationTextEdit extends StatelessWidget {
           fieldTitle: 'Title',
           controller: titleController,
           hintText: 'Title of the notification',
-          onChanged: (String text) => updateWordCount(text, isTitle: true),
-          wordCount: titleWordCount,
-          wordLimit: titleWordLimit,
+          onChanged: (String text) => updateLetterCount(text, isTitle: true),
+          letterCount: titleLetterCount,
+          letterLimit: titleLetterLimit,
           fieldHeight: 33,
         ),
         NotificationTextEditField(
           fieldTitle: 'Body Text',
           controller: bodyController,
           hintText: 'Body of the notification',
-          onChanged: (String text) => updateWordCount(text, isTitle: false),
-          wordCount: bodyWordCount,
-          wordLimit: bodyWordLimit,
+          onChanged: (String text) => updateLetterCount(text, isTitle: false),
+          letterCount: bodyLetterCount,
+          letterLimit: bodyLetterLimit,
           maxLines: 8,
         ),
       ],

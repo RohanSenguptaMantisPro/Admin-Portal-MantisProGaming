@@ -7,6 +7,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/datas
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/entities/server_image.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/repositories/push_notification_repo.dart';
 import 'package:dartz/dartz.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PushNotificationRepoImpl implements PushNotificationRepo {
   const PushNotificationRepoImpl(this._remoteDataSource);
@@ -16,7 +17,7 @@ class PushNotificationRepoImpl implements PushNotificationRepo {
   @override
   ResultFuture<void> imageUpload({
     required String userToken,
-    required File imageFile,
+    required XFile imageFile,
   }) async {
     try {
       await _remoteDataSource.imageUpload(

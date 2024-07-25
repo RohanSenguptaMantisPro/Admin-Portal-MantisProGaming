@@ -23,8 +23,8 @@ class ImageUploadParamsMapper extends ClassMapperBase<ImageUploadParams> {
   static String _$userToken(ImageUploadParams v) => v.userToken;
   static const Field<ImageUploadParams, String> _f$userToken =
       Field('userToken', _$userToken);
-  static File _$imageFile(ImageUploadParams v) => v.imageFile;
-  static const Field<ImageUploadParams, File> _f$imageFile =
+  static XFile _$imageFile(ImageUploadParams v) => v.imageFile;
+  static const Field<ImageUploadParams, XFile> _f$imageFile =
       Field('imageFile', _$imageFile);
 
   @override
@@ -93,7 +93,7 @@ extension ImageUploadParamsValueCopy<$R, $Out>
 
 abstract class ImageUploadParamsCopyWith<$R, $In extends ImageUploadParams,
     $Out> implements ClassCopyWith<$R, $In, $Out> {
-  $R call({String? userToken, File? imageFile});
+  $R call({String? userToken, XFile? imageFile});
   ImageUploadParamsCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -107,7 +107,7 @@ class _ImageUploadParamsCopyWithImpl<$R, $Out>
   late final ClassMapperBase<ImageUploadParams> $mapper =
       ImageUploadParamsMapper.ensureInitialized();
   @override
-  $R call({String? userToken, File? imageFile}) => $apply(FieldCopyWithData({
+  $R call({String? userToken, XFile? imageFile}) => $apply(FieldCopyWithData({
         if (userToken != null) #userToken: userToken,
         if (imageFile != null) #imageFile: imageFile
       }));
