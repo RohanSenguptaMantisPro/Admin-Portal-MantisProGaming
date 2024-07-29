@@ -1,5 +1,6 @@
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/common/widget/confirmation_dialog.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
@@ -114,6 +115,17 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
     return true;
   }
 
+  void _sendNotification() {
+    context.read<PushNotificationBloc>().add(
+          SendNotificationEvent(
+            userToken: context.read<UserTokenProvider>().userToken ?? '',
+            title: notificationTitleController.text,
+            body: notificationBodyController.text,
+            fileName: imageFileName(),
+          ),
+        );
+  }
+
   bool get titleInserted => notificationTitleController.text.isNotEmpty;
 
   bool get bodyInserted => notificationBodyController.text.isNotEmpty;
@@ -158,10 +170,20 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
             context,
             'Image Uploaded to the server successfully!',
           );
-        } else if (state is SentNotification) {
+        } else if (state is NotificationResponseState) {
           showSuccessNotification(
             context,
             'Notification is sent to the users successfully!',
+          );
+
+          ConfirmationDialog.show(
+            context: context,
+            title: 'Details of the sent notifications',
+            content: 'Successful delivery of notifications : '
+                '${state.notificationResponse.success}'
+                '\nFailed delivery of notifications: '
+                '${state.notificationResponse.failure}',
+            confirmText: 'Okay!',
           );
         }
       },
@@ -411,7 +433,7 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
                                               ),
                                             )
                                           : ButtonWidget(
-                                              onTap: () {
+                                              onTap: () async {
                                                 if (dataNotInserted) {
                                                   return;
                                                 } else if (state
@@ -419,26 +441,20 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
                                                   return;
                                                 }
 
-                                                context
-                                                    .read<
-                                                        PushNotificationBloc>()
-                                                    .add(
-                                                      SendNotificationEvent(
-                                                        userToken: context
-                                                                .read<
-                                                                    UserTokenProvider>()
-                                                                .userToken ??
-                                                            '',
-                                                        title:
-                                                            notificationTitleController
-                                                                .text,
-                                                        body:
-                                                            notificationBodyController
-                                                                .text,
-                                                        fileName:
-                                                            imageFileName(),
-                                                      ),
-                                                    );
+                                                bool confirmed =
+                                                    await ConfirmationDialog
+                                                        .show(
+                                                  context: context,
+                                                  title: 'Confirmation',
+                                                  content:
+                                                      'Are you sure you want to send this notification?',
+                                                  confirmText: 'Sure',
+                                                  cancelText: 'Cancel',
+                                                );
+
+                                                if (confirmed) {
+                                                  _sendNotification();
+                                                }
                                               },
                                               width: 100,
                                               height: 33,

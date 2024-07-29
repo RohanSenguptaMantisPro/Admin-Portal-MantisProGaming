@@ -1,4 +1,5 @@
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/entities/notification_response.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/repositories/push_notification_repo.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/usecases/send_notifications.dart';
 import 'package:dartz/dartz.dart';
@@ -22,6 +23,7 @@ void main() {
   const tBody = '';
   const tImageUrl =
       'https://$baseFileServerUrl:$port$kNotificationImageDownloadEndpoint/$tFileName';
+  final tNotificationResponse = NotificationResponse.empty();
 
   test(
     'should call the [PushNotificationRepo.sendNotifications]',
@@ -34,7 +36,7 @@ void main() {
           fileName: any(named: 'fileName'),
         ),
       ).thenAnswer(
-        (_) async => const Right(null),
+        (_) async => Right(tNotificationResponse),
       );
 
       final result = await sendNotifications(
@@ -49,7 +51,7 @@ void main() {
       expect(
         result,
         equals(
-          const Right<dynamic, void>(null),
+          Right<dynamic, NotificationResponse>(tNotificationResponse),
         ),
       );
 

@@ -52,7 +52,9 @@ class SendingNotification extends PushNotificationState
 }
 
 @MappableClass()
-class SentNotification extends PushNotificationState
-    with SentNotificationMappable {
-  const SentNotification();
+class NotificationResponseState extends PushNotificationState
+    with NotificationResponseStateMappable {
+  const NotificationResponseState({required this.notificationResponse});
+
+  final NotificationResponse notificationResponse;
 }

@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/errors/failures.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/datasources/push_notification_remote_data_sources.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/models/notification_response_model.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/repositories/push_notification_repo_impl.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/entities/notification_response.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/entities/server_image.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/repositories/push_notification_repo.dart';
 import 'package:dartz/dartz.dart';
@@ -40,6 +42,8 @@ void main() {
   final tServerImage = ServerImage.empty();
 
   const tException = ServerException(message: '', statusCode: '');
+
+  final tNotificationResponseModel = NotificationResponseModel.empty();
 
   // update user.
   group('imageUpload', () {
@@ -217,7 +221,7 @@ void main() {
             fileName: any(named: 'fileName'),
           ),
         ).thenAnswer(
-          (_) async => Future.value(),
+          (_) async => tNotificationResponseModel,
         );
 
         final result = await repoImpl.sendNotifications(
@@ -230,7 +234,7 @@ void main() {
         expect(
           result,
           equals(
-            const Right<dynamic, void>(null),
+            Right<dynamic, NotificationResponse>(tNotificationResponseModel),
           ),
         );
 

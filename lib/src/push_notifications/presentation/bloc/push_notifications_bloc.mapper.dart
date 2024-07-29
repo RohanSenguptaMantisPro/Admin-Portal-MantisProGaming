@@ -469,7 +469,7 @@ class PushNotificationStateMapper
       DownloadingNotificationImageMapper.ensureInitialized();
       DownloadedNotificationImageMapper.ensureInitialized();
       SendingNotificationMapper.ensureInitialized();
-      SentNotificationMapper.ensureInitialized();
+      NotificationResponseStateMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -1293,103 +1293,135 @@ class _SendingNotificationCopyWithImpl<$R, $Out>
           _SendingNotificationCopyWithImpl($value, $cast, t);
 }
 
-class SentNotificationMapper extends ClassMapperBase<SentNotification> {
-  SentNotificationMapper._();
+class NotificationResponseStateMapper
+    extends ClassMapperBase<NotificationResponseState> {
+  NotificationResponseStateMapper._();
 
-  static SentNotificationMapper? _instance;
-  static SentNotificationMapper ensureInitialized() {
+  static NotificationResponseStateMapper? _instance;
+  static NotificationResponseStateMapper ensureInitialized() {
     if (_instance == null) {
-      MapperContainer.globals.use(_instance = SentNotificationMapper._());
+      MapperContainer.globals
+          .use(_instance = NotificationResponseStateMapper._());
       PushNotificationStateMapper.ensureInitialized();
+      NotificationResponseMapper.ensureInitialized();
     }
     return _instance!;
   }
 
   @override
-  final String id = 'SentNotification';
+  final String id = 'NotificationResponseState';
+
+  static NotificationResponse _$notificationResponse(
+          NotificationResponseState v) =>
+      v.notificationResponse;
+  static const Field<NotificationResponseState, NotificationResponse>
+      _f$notificationResponse =
+      Field('notificationResponse', _$notificationResponse);
 
   @override
-  final MappableFields<SentNotification> fields = const {};
+  final MappableFields<NotificationResponseState> fields = const {
+    #notificationResponse: _f$notificationResponse,
+  };
 
-  static SentNotification _instantiate(DecodingData data) {
-    return SentNotification();
+  static NotificationResponseState _instantiate(DecodingData data) {
+    return NotificationResponseState(
+        notificationResponse: data.dec(_f$notificationResponse));
   }
 
   @override
   final Function instantiate = _instantiate;
 
-  static SentNotification fromMap(Map<String, dynamic> map) {
-    return ensureInitialized().decodeMap<SentNotification>(map);
+  static NotificationResponseState fromMap(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<NotificationResponseState>(map);
   }
 
-  static SentNotification fromJson(String json) {
-    return ensureInitialized().decodeJson<SentNotification>(json);
+  static NotificationResponseState fromJson(String json) {
+    return ensureInitialized().decodeJson<NotificationResponseState>(json);
   }
 }
 
-mixin SentNotificationMappable {
+mixin NotificationResponseStateMappable {
   String toJson() {
-    return SentNotificationMapper.ensureInitialized()
-        .encodeJson<SentNotification>(this as SentNotification);
+    return NotificationResponseStateMapper.ensureInitialized()
+        .encodeJson<NotificationResponseState>(
+            this as NotificationResponseState);
   }
 
   Map<String, dynamic> toMap() {
-    return SentNotificationMapper.ensureInitialized()
-        .encodeMap<SentNotification>(this as SentNotification);
+    return NotificationResponseStateMapper.ensureInitialized()
+        .encodeMap<NotificationResponseState>(
+            this as NotificationResponseState);
   }
 
-  SentNotificationCopyWith<SentNotification, SentNotification, SentNotification>
-      get copyWith => _SentNotificationCopyWithImpl(
-          this as SentNotification, $identity, $identity);
+  NotificationResponseStateCopyWith<NotificationResponseState,
+          NotificationResponseState, NotificationResponseState>
+      get copyWith => _NotificationResponseStateCopyWithImpl(
+          this as NotificationResponseState, $identity, $identity);
   @override
   String toString() {
-    return SentNotificationMapper.ensureInitialized()
-        .stringifyValue(this as SentNotification);
+    return NotificationResponseStateMapper.ensureInitialized()
+        .stringifyValue(this as NotificationResponseState);
   }
 
   @override
   bool operator ==(Object other) {
-    return SentNotificationMapper.ensureInitialized()
-        .equalsValue(this as SentNotification, other);
+    return NotificationResponseStateMapper.ensureInitialized()
+        .equalsValue(this as NotificationResponseState, other);
   }
 
   @override
   int get hashCode {
-    return SentNotificationMapper.ensureInitialized()
-        .hashValue(this as SentNotification);
+    return NotificationResponseStateMapper.ensureInitialized()
+        .hashValue(this as NotificationResponseState);
   }
 }
 
-extension SentNotificationValueCopy<$R, $Out>
-    on ObjectCopyWith<$R, SentNotification, $Out> {
-  SentNotificationCopyWith<$R, SentNotification, $Out>
-      get $asSentNotification =>
-          $base.as((v, t, t2) => _SentNotificationCopyWithImpl(v, t, t2));
+extension NotificationResponseStateValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, NotificationResponseState, $Out> {
+  NotificationResponseStateCopyWith<$R, NotificationResponseState, $Out>
+      get $asNotificationResponseState => $base
+          .as((v, t, t2) => _NotificationResponseStateCopyWithImpl(v, t, t2));
 }
 
-abstract class SentNotificationCopyWith<$R, $In extends SentNotification, $Out>
-    implements PushNotificationStateCopyWith<$R, $In, $Out> {
+abstract class NotificationResponseStateCopyWith<
+    $R,
+    $In extends NotificationResponseState,
+    $Out> implements PushNotificationStateCopyWith<$R, $In, $Out> {
+  NotificationResponseCopyWith<$R, NotificationResponse, NotificationResponse>
+      get notificationResponse;
   @override
-  $R call();
-  SentNotificationCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
+  $R call({NotificationResponse? notificationResponse});
+  NotificationResponseStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
 
-class _SentNotificationCopyWithImpl<$R, $Out>
-    extends ClassCopyWithBase<$R, SentNotification, $Out>
-    implements SentNotificationCopyWith<$R, SentNotification, $Out> {
-  _SentNotificationCopyWithImpl(super.value, super.then, super.then2);
+class _NotificationResponseStateCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, NotificationResponseState, $Out>
+    implements
+        NotificationResponseStateCopyWith<$R, NotificationResponseState, $Out> {
+  _NotificationResponseStateCopyWithImpl(super.value, super.then, super.then2);
 
   @override
-  late final ClassMapperBase<SentNotification> $mapper =
-      SentNotificationMapper.ensureInitialized();
+  late final ClassMapperBase<NotificationResponseState> $mapper =
+      NotificationResponseStateMapper.ensureInitialized();
   @override
-  $R call() => $apply(FieldCopyWithData({}));
+  NotificationResponseCopyWith<$R, NotificationResponse, NotificationResponse>
+      get notificationResponse => $value.notificationResponse.copyWith
+          .$chain((v) => call(notificationResponse: v));
   @override
-  SentNotification $make(CopyWithData data) => SentNotification();
+  $R call({NotificationResponse? notificationResponse}) =>
+      $apply(FieldCopyWithData({
+        if (notificationResponse != null)
+          #notificationResponse: notificationResponse
+      }));
+  @override
+  NotificationResponseState $make(CopyWithData data) =>
+      NotificationResponseState(
+          notificationResponse:
+              data.get(#notificationResponse, or: $value.notificationResponse));
 
   @override
-  SentNotificationCopyWith<$R2, SentNotification, $Out2> $chain<$R2, $Out2>(
-          Then<$Out2, $R2> t) =>
-      _SentNotificationCopyWithImpl($value, $cast, t);
+  NotificationResponseStateCopyWith<$R2, NotificationResponseState, $Out2>
+      $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
+          _NotificationResponseStateCopyWithImpl($value, $cast, t);
 }

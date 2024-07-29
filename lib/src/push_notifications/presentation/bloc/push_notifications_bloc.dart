@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/entities/notification_response.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/entities/server_image.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/usecases/image_download.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/usecases/image_upload.dart';
@@ -9,9 +8,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:image_picker/image_picker.dart';
 
 part 'push_notifications_bloc.mapper.dart';
-
 part 'push_notifications_event.dart';
-
 part 'push_notifications_state.dart';
 
 class PushNotificationBloc
@@ -92,8 +89,8 @@ class PushNotificationBloc
 
     result.fold(
       (failure) => emit(PushNotificationError(errorMessage: failure.message)),
-      (_) => emit(
-        const SentNotification(),
+      (notificationResponse) => emit(
+        NotificationResponseState(notificationResponse: notificationResponse),
       ),
     );
   }

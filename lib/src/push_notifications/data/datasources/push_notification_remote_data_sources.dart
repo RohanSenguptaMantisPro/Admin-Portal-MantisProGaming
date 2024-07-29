@@ -4,7 +4,9 @@ import 'dart:math';
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/upload_file_to_server.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/models/notification_response_model.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/models/server_image_model.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/entities/notification_response.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/entities/server_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,7 +24,7 @@ abstract class PushNotificationRemoteDataSources {
     required String fileName,
   });
 
-  Future<void> sendNotifications({
+  Future<NotificationResponse> sendNotifications({
     required String userToken,
     required String title,
     required String body,
@@ -150,7 +152,7 @@ class PushNotificationRemoteDataSourcesImpl
 
   //send notifications..
   @override
-  Future<void> sendNotifications({
+  Future<NotificationResponse> sendNotifications({
     required String userToken,
     required String title,
     required String body,
@@ -201,6 +203,8 @@ class PushNotificationRemoteDataSourcesImpl
           statusCode: response.statusCode.toString(),
         );
       }
+
+      return NotificationResponseModel.fromJson(response.body);
     } on ServerException {
       rethrow;
     } catch (e, s) {

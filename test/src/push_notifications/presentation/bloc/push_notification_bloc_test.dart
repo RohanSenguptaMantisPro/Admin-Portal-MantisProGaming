@@ -1,4 +1,5 @@
 import 'package:admin_portal_mantis_pro_gaming/core/errors/failures.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/entities/notification_response.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/entities/server_image.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/usecases/image_download.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/usecases/image_upload.dart';
@@ -49,6 +50,7 @@ void main() {
   final tImageUploadParams = ImageUploadParams.empty();
   final tImageDownloadParams = ImageDownloadParams.empty();
   final tSendNotificationParams = SendNotificationsParams.empty();
+  final tNotificationResponse = NotificationResponse.empty();
 
   final tServerFailure = ServerFailure(
     message: '',
@@ -217,7 +219,7 @@ void main() {
       'is added and succeeds',
       build: () {
         when(() => sendNotifications(any())).thenAnswer(
-          (_) async => const Right(null),
+          (_) async => Right(tNotificationResponse),
         );
         return pushNotificationBloc;
       },
@@ -231,7 +233,7 @@ void main() {
       ),
       expect: () => [
         const SendingNotification(),
-        const SentNotification(),
+        NotificationResponseState(notificationResponse: tNotificationResponse),
       ],
       verify: (_) {
         verify(

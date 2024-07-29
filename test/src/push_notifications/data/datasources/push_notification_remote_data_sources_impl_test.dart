@@ -4,6 +4,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/upload_file_to_server.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/datasources/push_notification_remote_data_sources.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/models/notification_response_model.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/models/server_image_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -48,9 +49,21 @@ void main() {
   final tUploadImageJsonfailureResponse = {'status': 'failure', 'message': ''};
 
   final tSendNotificationJsonResponse = {
-    'message': 'Notifications Sent Successfully',
+    "message": "",
+    "success": 0,
+    "failure": 0,
+    "errors": [
+      {
+        "token": "",
+        "error": "",
+      },
+    ],
   };
-  final tSendNotificationfailureResponse = {'status': 'failure', 'message': ''};
+
+  final tSendNotificationfailureResponse = {
+    "status": "failure",
+    "message": "",
+  };
 
   final tServerImageModel = ServerImageModel.empty();
 
@@ -58,6 +71,8 @@ void main() {
     "status": "failure",
     "message": "error occurred.",
   };
+
+  final tNotificationResponseModel = NotificationResponseModel.empty();
 
   group('imageUpload.', () {
     test(
@@ -262,7 +277,7 @@ void main() {
   group('sendNotifications.', () {
     test(
       'should return [void] when the status code is 200 '
-      'or 201',
+      'or 201 ',
       () async {
         when(
           () => mockClient.postRequest(
@@ -277,12 +292,15 @@ void main() {
           ),
         );
 
-        await pushNotificationRemoteDataSources.sendNotifications(
+        final response =
+            await pushNotificationRemoteDataSources.sendNotifications(
           userToken: tUserToken,
           fileName: tFileName,
           title: tTitle,
           body: tBody,
         );
+
+        expect(response, equals(tNotificationResponseModel));
 
         verify(
           () => mockClient.postRequest(
