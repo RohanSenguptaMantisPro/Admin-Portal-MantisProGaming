@@ -114,6 +114,47 @@ final appRoutes = [
         ],
       ),
       GoRoute(
+        name: 'Game Search',
+        path: GameSearchScreen.routeName,
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return customTransitionBuilder(
+            context,
+            state,
+            BlocProvider(
+              create: (_) => sl<GameSearchBloc>(),
+              child: const GameSearchScreen(),
+            ),
+          );
+        },
+        routes: [
+          GoRoute(
+            //have to use full path in name else in goRouter observer we
+            // are unable to
+            // send the full path of the route.
+            // as it takes only the name of the path.
+            name: 'Game Search/Game Details',
+            path: '${UserDetailsScreen.routeName}/:uID',
+            pageBuilder: (BuildContext context, GoRouterState state) {
+              return customTransitionBuilder(
+                context,
+                state,
+                BlocProvider(
+                  create: (context) => sl<GameSearchBloc>(),
+                  child: //later to be added the GameDetailsBloc.
+                      /*BlocProvider(
+                    create: (_) => sl<>(),
+                    child: */
+                      GameDetailsScreen(
+                    gameID: state.pathParameters['gameID']!,
+                  ),
+                  // ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      GoRoute(
         name: 'Time Tracking',
         path: TimeTrackingScreen.routeName,
         pageBuilder: (BuildContext context, GoRouterState state) {

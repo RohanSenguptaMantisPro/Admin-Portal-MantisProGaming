@@ -12,15 +12,12 @@ import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_notification.da
 import 'package:admin_portal_mantis_pro_gaming/core/utils/rebuild_check.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/domain/usecases/user_search_results.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/bloc/user_search_bloc.dart';
-
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/data_table.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/filter_dropdown_tile.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/pagination_bar.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/search_user_form.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class UserSearchScreen extends StatefulWidget {
   const UserSearchScreen({super.key});
@@ -296,6 +293,8 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                                       closeOnSubmit: onTapFilter,
                                     ),
                                     buttonWidget: ButtonWidget(
+                                      buttonBackgroundColor:
+                                          Colours.greyBackground,
                                       borderColor:
                                           _filterToolTipController.isShowing
                                               ? Colours.primaryColour

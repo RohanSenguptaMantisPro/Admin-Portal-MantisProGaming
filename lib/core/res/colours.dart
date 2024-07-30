@@ -48,4 +48,6 @@ class Colours {
 
   static const whiteIconsColor = Color(0xFFfafafb);
   static const lightWhiteIconColor = Color(0xFF9b9da0);
+
+  static const buttonTextColor = Colors.black;
 }

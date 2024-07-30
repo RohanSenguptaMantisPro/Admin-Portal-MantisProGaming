@@ -18,6 +18,11 @@ import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecase
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/is_admin.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/is_user_logged_in.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/data/datasources/game_search_data_sources.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/data/repositories/game_search_repo_impl.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/domain/repositories/game_search_repo.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/domain/usecases/search_games.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/presentation/bloc/game_search_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/datasources/push_notification_remote_data_sources.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/repositories/push_notification_repo_impl.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/repositories/push_notification_repo.dart';

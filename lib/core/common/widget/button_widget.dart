@@ -3,22 +3,26 @@ import 'package:flutter/material.dart';
 
 class ButtonWidget extends StatelessWidget {
   const ButtonWidget({
-    this.onTap,
     this.child,
+    this.title,
+    this.onTap,
     this.height,
     this.width,
     this.borderColor,
     this.buttonBackgroundColor,
+    this.textStyle,
     super.key,
-  });
+  }) : assert(child != null || title != null,
+            'Either child or title must be provided');
 
+  final Widget? child;
   final VoidCallback? onTap;
   final double? height;
   final double? width;
   final Color? borderColor;
   final Color? buttonBackgroundColor;
-
-  final Widget? child;
+  final String? title;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,7 @@ class ButtonWidget extends StatelessWidget {
       height: height,
       width: width,
       child: Material(
-        color: buttonBackgroundColor ?? Colours.greyBackground,
+        color: buttonBackgroundColor ?? Colours.primaryColour,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
           side: BorderSide(color: borderColor ?? Colors.transparent),
@@ -43,7 +47,18 @@ class ButtonWidget extends StatelessWidget {
           // (or null, which becomes false due to the ?? false),
           // it will use null as the callback, effectively disabling the tap.
           borderRadius: BorderRadius.circular(8),
-          child: child,
+          child: Center(
+            child: child ??
+                (title != null
+                    ? Text(
+                        title!,
+                        style: textStyle ??
+                            const TextStyle(
+                              color: Colors.black, // Default to black text
+                            ),
+                      )
+                    : null),
+          ),
         ),
       ),
     );

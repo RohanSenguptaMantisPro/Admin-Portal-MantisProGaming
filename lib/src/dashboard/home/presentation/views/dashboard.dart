@@ -1,23 +1,17 @@
-import 'dart:async';
-
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/admin_user_data.dart';
-
 import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_notification.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/entities/admin_details.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
-
 import 'package:admin_portal_mantis_pro_gaming/src/dashboard/home/presentation/widgets/dashboard_container.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/dashboard/profile/presentation/views/admin_profile_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/feedback/presentation/views/feedback_screen.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/presentation/views/game_search_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/global_dashboard/presentation/views/global_dashboard_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/incentives/presentation/views/incentives_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/presentation/views/push_notifications_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/time_tracking/presentation/views/time_tracking_screen.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/views/user_search_screen.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -128,6 +122,21 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         DashboardContainer(
                           iconAsset:
+                          (_activeRoute == GameSearchScreen.routeName)
+                              ? MediaRes.consoleFilled
+                              : MediaRes.console,
+                          title: 'Game Search',
+                          goRouter: () => setActiveRoute(
+                            GameSearchScreen.routeName,
+                          ),
+                          isCurrentPageActive:
+                          _activeRoute == GameSearchScreen.routeName,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        DashboardContainer(
+                          iconAsset:
                               (_activeRoute == TimeTrackingScreen.routeName)
                                   ? MediaRes.clockIconFilled
                                   : MediaRes.clockIcon,
@@ -157,8 +166,8 @@ class _DashboardState extends State<Dashboard> {
                           height: 8,
                         ),
                         DashboardContainer(
-                          iconAsset:
-                          (_activeRoute == PushNotificationsScreen.routeName)
+                          iconAsset: (_activeRoute ==
+                                  PushNotificationsScreen.routeName)
                               ? MediaRes.bellFilled
                               : MediaRes.bell,
                           title: 'Push Notifications',
@@ -166,7 +175,7 @@ class _DashboardState extends State<Dashboard> {
                             PushNotificationsScreen.routeName,
                           ),
                           isCurrentPageActive:
-                          _activeRoute == PushNotificationsScreen.routeName,
+                              _activeRoute == PushNotificationsScreen.routeName,
                         ),
                         const SizedBox(
                           height: 8,

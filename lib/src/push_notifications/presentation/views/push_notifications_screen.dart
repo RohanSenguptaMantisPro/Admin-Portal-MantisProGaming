@@ -346,17 +346,14 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
                                                                     .greyBackground
                                                                 : Colours
                                                                     .primaryColour,
-                                                        child: Center(
-                                                          child: Text(
-                                                            'Upload',
-                                                            style: TextStyle(
-                                                              color: !imageInserted
-                                                                  ? Colours
-                                                                      .greyTextColour
-                                                                  : null,
-                                                            ),
-                                                          ),
-                                                        ),
+                                                        title: 'Upload',
+                                                        textStyle:
+                                                            !imageInserted
+                                                                ? TextStyle(
+                                                                    color: Colours
+                                                                        .greyTextColour,
+                                                                  )
+                                                                : null,
                                                       );
                                               },
                                             ),
@@ -465,18 +462,15 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
                                                               is! DownloadedNotificationImage)
                                                       ? Colours.greyBackground
                                                       : Colours.primaryColour,
-                                              child: Center(
-                                                child: Text(
-                                                  'Send',
-                                                  style: TextStyle(
-                                                    color: dataNotInserted ||
-                                                            (state
-                                                                is! DownloadedNotificationImage)
-                                                        ? Colours.greyTextColour
-                                                        : null,
-                                                  ),
-                                                ),
-                                              ),
+                                              title: 'Send',
+                                              textStyle: dataNotInserted ||
+                                                      (state
+                                                          is! DownloadedNotificationImage)
+                                                  ? TextStyle(
+                                                      color: Colours
+                                                          .greyTextColour,
+                                                    )
+                                                  : null,
                                             );
                                     },
                                   ),

@@ -11,17 +11,17 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockUploadToServer extends Mock implements UploadFileToServer {}
+class MockUploadToServer extends Mock implements CustomHttpClient {}
 
 void main() {
-  late UploadFileToServer mockClient;
+  late CustomHttpClient mockClient;
   late PushNotificationRemoteDataSources pushNotificationRemoteDataSources;
 
   setUp(() {
     mockClient = MockUploadToServer();
 
     pushNotificationRemoteDataSources =
-        PushNotificationRemoteDataSourcesImpl(uploadFileToServer: mockClient);
+        PushNotificationRemoteDataSourcesImpl(customHttpClient: mockClient);
 
     registerFallbackValue(
       Uri(),

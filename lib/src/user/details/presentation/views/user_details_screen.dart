@@ -10,10 +10,8 @@ import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_notification.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/rebuild_check.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/bloc/user_details_bloc.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:intl/intl.dart';
 
 class UserDetailsScreen extends StatefulWidget {
@@ -419,9 +417,12 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                         (state is GetUserDetailsError)
                                             ? Colours.greyBackground
                                             : Colours.primaryColour,
-                                    child: const Center(
-                                      child: Text('Save Changes'),
-                                    ),
+                                    title: 'Save Changes',
+                                    textStyle: (state is GetUserDetailsError)
+                                        ? TextStyle(
+                                            color: Colours.greyTextColour,
+                                          )
+                                        : null,
                                   ),
                           ),
                         ],

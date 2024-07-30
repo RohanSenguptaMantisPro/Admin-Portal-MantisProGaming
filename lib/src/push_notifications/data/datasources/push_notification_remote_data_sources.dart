@@ -35,10 +35,10 @@ abstract class PushNotificationRemoteDataSources {
 class PushNotificationRemoteDataSourcesImpl
     implements PushNotificationRemoteDataSources {
   const PushNotificationRemoteDataSourcesImpl({
-    required UploadFileToServer uploadFileToServer,
-  }) : _uploadFileToServer = uploadFileToServer;
+    required CustomHttpClient customHttpClient,
+  }) : _customHttpClient = customHttpClient;
 
-  final UploadFileToServer _uploadFileToServer;
+  final CustomHttpClient _customHttpClient;
 
   //image upload.
   @override
@@ -48,7 +48,7 @@ class PushNotificationRemoteDataSourcesImpl
   }) async {
     try {
       //setting up file & uri to send to server as form-data.
-      await _uploadFileToServer.setUri(
+      await _customHttpClient.setUri(
         Uri.https(
           '$baseFileServerUrl:$port',
           kNotificationImageUploadEndpoint,
@@ -58,7 +58,7 @@ class PushNotificationRemoteDataSourcesImpl
       );
 
       //sending that file to server.
-      final response = await _uploadFileToServer.sendRequest();
+      final response = await _customHttpClient.sendRequest();
 
       if (response.statusCode != 200 && response.statusCode != 201) {
         String errorMessage;
@@ -101,7 +101,7 @@ class PushNotificationRemoteDataSourcesImpl
   }) async {
     try {
       //sending that file to server.
-      final response = await _uploadFileToServer.getRequest(
+      final response = await _customHttpClient.getRequest(
         Uri.https(
           '$baseFileServerUrl:$port',
           '$kNotificationImageDownloadEndpoint/$fileName',
@@ -164,7 +164,7 @@ class PushNotificationRemoteDataSourcesImpl
       debugPrint(imageUrl);
 
       //sending that file to server.
-      final response = await _uploadFileToServer.postRequest(
+      final response = await _customHttpClient.postRequest(
         Uri.https(
           '$baseUrl:$port',
           kNotificationSendEndpoint,

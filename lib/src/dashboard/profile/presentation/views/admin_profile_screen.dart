@@ -172,6 +172,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                         )
                       else
                         ButtonWidget(
+                          buttonBackgroundColor: Colours.greyBackground,
                           onTap: () => context.read<AuthBloc>().add(
                                 const LogOutEvent(),
                               ),

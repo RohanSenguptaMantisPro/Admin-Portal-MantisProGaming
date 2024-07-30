@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 
-class UploadFileToServer {
+class CustomHttpClient {
   final _httpClient = Client();
 
   late MultipartRequest request;

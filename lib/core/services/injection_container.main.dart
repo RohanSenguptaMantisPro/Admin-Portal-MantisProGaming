@@ -9,6 +9,7 @@ Future<void> init() async {
   await _initUserSearch();
   await _initUserDetails();
   await _initPushNotifications();
+  await _initGameSearch();
 }
 
 // Authentication.
@@ -109,7 +110,7 @@ Future<void> _initUserDetails() async {
 
 // push notifications
 Future<void> _initPushNotifications() async {
-  final uploadFileToServer = UploadFileToServer();
+  final customHttpClient = CustomHttpClient();
 
   sl
     ..registerFactory(
@@ -129,8 +130,24 @@ Future<void> _initPushNotifications() async {
     )
     ..registerLazySingleton<PushNotificationRemoteDataSources>(
       () => PushNotificationRemoteDataSourcesImpl(
-        uploadFileToServer: sl(),
+        customHttpClient: sl(),
       ),
     )
-    ..registerLazySingleton(() => uploadFileToServer);
+    ..registerLazySingleton(() => customHttpClient);
+}
+
+Future<void> _initGameSearch() async {
+  sl
+    ..registerFactory(
+      () => GameSearchBloc(
+        searchGames: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => SearchGames(sl()))
+    ..registerLazySingleton<GameSearchRepo>(() => GameSearchRepoImpl(sl()))
+    ..registerLazySingleton<GameSearchRemoteDataSources>(
+      () => GameSearchRemoteDataSourcesImpl(
+        customHttpClient: sl(),
+      ),
+    );
 }

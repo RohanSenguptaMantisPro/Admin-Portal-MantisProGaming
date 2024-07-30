@@ -3,17 +3,12 @@ import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_to
 import 'package:admin_portal_mantis_pro_gaming/core/common/enum/account_status_dropdown_menu.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/enum/search_by_dropdown_menu.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/button_widget.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/common/widget/custom_dropdown.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/drop_down.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/widget/i_field.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extensions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/domain/usecases/user_search_results.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/bloc/user_search_bloc.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/account_status_dropdown_tile.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/widgets/search_by_dropdown_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class FilterDropdown extends StatefulWidget {
@@ -162,11 +157,13 @@ class _FilterDropdownState extends State<FilterDropdown> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ButtonWidget(
+                        buttonBackgroundColor: Colours.greyBackground,
                         onTap: resetFields,
                         width: 60,
                         height: 35,
-                        child: const Center(
-                          child: Text('Reset'),
+                        title: 'Reset',
+                        textStyle: const TextStyle(
+                          color: Colours.whiteTextColour,
                         ),
                       ),
                       ButtonWidget(
@@ -213,9 +210,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
                         width: 70,
                         height: 35,
                         buttonBackgroundColor: Colours.primaryColour,
-                        child: const Center(
-                          child: Text('Search'),
-                        ),
+                        title: 'Search',
                       ),
                     ],
                   ),
