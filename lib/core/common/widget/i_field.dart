@@ -37,7 +37,7 @@ class IField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      maxLines: maxLines,
+      maxLines: maxLines ?? 1,
       onChanged: onChanged,
       onFieldSubmitted: onSubmitted,
       cursorColor: Colours.white,

@@ -20,23 +20,23 @@ class GameDataMapper extends ClassMapperBase<GameData> {
   @override
   final String id = 'GameData';
 
-  static String _$id(GameData v) => v.id;
+  static String? _$id(GameData v) => v.id;
   static const Field<GameData, String> _f$id = Field('id', _$id, key: '_id');
-  static String _$name(GameData v) => v.name;
+  static String? _$name(GameData v) => v.name;
   static const Field<GameData, String> _f$name = Field('name', _$name);
-  static String _$packageName(GameData v) => v.packageName;
+  static String? _$packageName(GameData v) => v.packageName;
   static const Field<GameData, String> _f$packageName =
       Field('packageName', _$packageName);
-  static int _$timesAdded(GameData v) => v.timesAdded;
+  static int? _$timesAdded(GameData v) => v.timesAdded;
   static const Field<GameData, int> _f$timesAdded =
       Field('timesAdded', _$timesAdded);
-  static int _$timesPlayed(GameData v) => v.timesPlayed;
+  static int? _$timesPlayed(GameData v) => v.timesPlayed;
   static const Field<GameData, int> _f$timesPlayed =
       Field('timesPlayed', _$timesPlayed);
-  static String _$createdAt(GameData v) => v.createdAt;
+  static String? _$createdAt(GameData v) => v.createdAt;
   static const Field<GameData, String> _f$createdAt =
       Field('createdAt', _$createdAt);
-  static String _$updatedAt(GameData v) => v.updatedAt;
+  static String? _$updatedAt(GameData v) => v.updatedAt;
   static const Field<GameData, String> _f$updatedAt =
       Field('updatedAt', _$updatedAt);
 
@@ -132,21 +132,21 @@ class _GameDataCopyWithImpl<$R, $Out>
       GameDataMapper.ensureInitialized();
   @override
   $R call(
-          {String? id,
-          String? name,
-          String? packageName,
-          int? timesAdded,
-          int? timesPlayed,
-          String? createdAt,
-          String? updatedAt}) =>
+          {Object? id = $none,
+          Object? name = $none,
+          Object? packageName = $none,
+          Object? timesAdded = $none,
+          Object? timesPlayed = $none,
+          Object? createdAt = $none,
+          Object? updatedAt = $none}) =>
       $apply(FieldCopyWithData({
-        if (id != null) #id: id,
-        if (name != null) #name: name,
-        if (packageName != null) #packageName: packageName,
-        if (timesAdded != null) #timesAdded: timesAdded,
-        if (timesPlayed != null) #timesPlayed: timesPlayed,
-        if (createdAt != null) #createdAt: createdAt,
-        if (updatedAt != null) #updatedAt: updatedAt
+        if (id != $none) #id: id,
+        if (name != $none) #name: name,
+        if (packageName != $none) #packageName: packageName,
+        if (timesAdded != $none) #timesAdded: timesAdded,
+        if (timesPlayed != $none) #timesPlayed: timesPlayed,
+        if (createdAt != $none) #createdAt: createdAt,
+        if (updatedAt != $none) #updatedAt: updatedAt
       }));
   @override
   GameData $make(CopyWithData data) => GameData(

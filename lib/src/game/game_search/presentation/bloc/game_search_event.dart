@@ -1,7 +1,5 @@
 part of 'game_search_bloc.dart';
 
-
-
 @MappableClass()
 abstract class GameSearchEvent with GameSearchEventMappable {
   const GameSearchEvent();

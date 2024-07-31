@@ -11,16 +11,16 @@ import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/bloc
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class FilterDropdown extends StatefulWidget {
-  const FilterDropdown({required this.closeOnSubmit, super.key});
+class UserSearchFilterDropdown extends StatefulWidget {
+  const UserSearchFilterDropdown({required this.closeOnSubmit, super.key});
 
   final VoidCallback closeOnSubmit;
 
   @override
-  State<FilterDropdown> createState() => _FilterDropdownState();
+  State<UserSearchFilterDropdown> createState() => _UserSearchFilterDropdownState();
 }
 
-class _FilterDropdownState extends State<FilterDropdown> {
+class _UserSearchFilterDropdownState extends State<UserSearchFilterDropdown> {
   final formKey = GlobalKey<FormState>();
   final queryTextEditingController = TextEditingController();
   String searchByOption = SearchByDropDownMenu.none.value;

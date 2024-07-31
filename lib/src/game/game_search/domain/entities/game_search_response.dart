@@ -7,10 +7,10 @@ part 'game_search_response.mapper.dart';
 class GameSearchResponse with GameSearchResponseMappable {
   const GameSearchResponse({
     required this.status,
-    required this.page,
     required this.results,
     required this.totalResults,
-    this.data = const [],
+    required this.data,
+    required this.page,
   });
 
   const GameSearchResponse.empty()
@@ -22,9 +22,9 @@ class GameSearchResponse with GameSearchResponseMappable {
           data: const [GameData.empty()],
         );
 
-  final String status;
-  final int page;
-  final int results;
-  final int totalResults;
+  final String? status;
+  final int? page;
+  final int? results;
+  final int? totalResults;
   final List<GameData> data;
 }

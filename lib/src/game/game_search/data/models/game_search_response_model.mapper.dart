@@ -24,21 +24,21 @@ class GameSearchResponseModelMapper
   @override
   final String id = 'GameSearchResponseModel';
 
-  static String _$status(GameSearchResponseModel v) => v.status;
+  static String? _$status(GameSearchResponseModel v) => v.status;
   static const Field<GameSearchResponseModel, String> _f$status =
       Field('status', _$status);
-  static int _$page(GameSearchResponseModel v) => v.page;
+  static int? _$page(GameSearchResponseModel v) => v.page;
   static const Field<GameSearchResponseModel, int> _f$page =
       Field('page', _$page);
-  static int _$results(GameSearchResponseModel v) => v.results;
+  static int? _$results(GameSearchResponseModel v) => v.results;
   static const Field<GameSearchResponseModel, int> _f$results =
       Field('results', _$results);
-  static int _$totalResults(GameSearchResponseModel v) => v.totalResults;
+  static int? _$totalResults(GameSearchResponseModel v) => v.totalResults;
   static const Field<GameSearchResponseModel, int> _f$totalResults =
       Field('totalResults', _$totalResults);
   static List<GameData> _$data(GameSearchResponseModel v) => v.data;
   static const Field<GameSearchResponseModel, List<GameData>> _f$data =
-      Field('data', _$data, def: const []);
+      Field('data', _$data);
 
   @override
   final MappableFields<GameSearchResponseModel> fields = const {
@@ -151,16 +151,16 @@ class _GameSearchResponseModelCopyWithImpl<$R, $Out>
           $value.data, (v, t) => v.copyWith.$chain(t), (v) => call(data: v));
   @override
   $R call(
-          {String? status,
-          int? page,
-          int? results,
-          int? totalResults,
+          {Object? status = $none,
+          Object? page = $none,
+          Object? results = $none,
+          Object? totalResults = $none,
           List<GameData>? data}) =>
       $apply(FieldCopyWithData({
-        if (status != null) #status: status,
-        if (page != null) #page: page,
-        if (results != null) #results: results,
-        if (totalResults != null) #totalResults: totalResults,
+        if (status != $none) #status: status,
+        if (page != $none) #page: page,
+        if (results != $none) #results: results,
+        if (totalResults != $none) #totalResults: totalResults,
         if (data != null) #data: data
       }));
   @override

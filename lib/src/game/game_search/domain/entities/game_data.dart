@@ -26,12 +26,12 @@ class GameData with GameDataMappable {
         );
 
   @MappableField(key: '_id')
-  final String id;
+  final String? id;
 
-  final String name;
-  final String packageName;
-  final int timesAdded;
-  final int timesPlayed;
-  final String createdAt;
-  final String updatedAt;
+  final String? name;
+  final String? packageName;
+  final int? timesAdded;
+  final int? timesPlayed;
+  final String? createdAt;
+  final String? updatedAt;
 }

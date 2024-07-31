@@ -1,5 +1,6 @@
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/admin_user_data.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/bread_crumb_notifier.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/game_search_parameters.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_search_parameters.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_token_provider.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserTokenProvider()),
         ChangeNotifierProvider(create: (_) => AdminUserData()),
         ChangeNotifierProvider(create: (_) => UserSearchParameters()),
+        ChangeNotifierProvider(create: (_) => GameSearchParameters()),
         ChangeNotifierProvider(create: (_) => BreadcrumbNotifier()),
       ],
       // Builder : context defined below MultiProvider should be sent to

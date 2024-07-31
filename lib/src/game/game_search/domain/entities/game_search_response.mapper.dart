@@ -21,37 +21,37 @@ class GameSearchResponseMapper extends ClassMapperBase<GameSearchResponse> {
   @override
   final String id = 'GameSearchResponse';
 
-  static String _$status(GameSearchResponse v) => v.status;
+  static String? _$status(GameSearchResponse v) => v.status;
   static const Field<GameSearchResponse, String> _f$status =
       Field('status', _$status);
-  static int _$page(GameSearchResponse v) => v.page;
-  static const Field<GameSearchResponse, int> _f$page = Field('page', _$page);
-  static int _$results(GameSearchResponse v) => v.results;
+  static int? _$results(GameSearchResponse v) => v.results;
   static const Field<GameSearchResponse, int> _f$results =
       Field('results', _$results);
-  static int _$totalResults(GameSearchResponse v) => v.totalResults;
+  static int? _$totalResults(GameSearchResponse v) => v.totalResults;
   static const Field<GameSearchResponse, int> _f$totalResults =
       Field('totalResults', _$totalResults);
   static List<GameData> _$data(GameSearchResponse v) => v.data;
   static const Field<GameSearchResponse, List<GameData>> _f$data =
-      Field('data', _$data, opt: true, def: const []);
+      Field('data', _$data);
+  static int? _$page(GameSearchResponse v) => v.page;
+  static const Field<GameSearchResponse, int> _f$page = Field('page', _$page);
 
   @override
   final MappableFields<GameSearchResponse> fields = const {
     #status: _f$status,
-    #page: _f$page,
     #results: _f$results,
     #totalResults: _f$totalResults,
     #data: _f$data,
+    #page: _f$page,
   };
 
   static GameSearchResponse _instantiate(DecodingData data) {
     return GameSearchResponse(
         status: data.dec(_f$status),
-        page: data.dec(_f$page),
         results: data.dec(_f$results),
         totalResults: data.dec(_f$totalResults),
-        data: data.dec(_f$data));
+        data: data.dec(_f$data),
+        page: data.dec(_f$page));
   }
 
   @override
@@ -112,10 +112,10 @@ abstract class GameSearchResponseCopyWith<$R, $In extends GameSearchResponse,
   ListCopyWith<$R, GameData, GameDataCopyWith<$R, GameData, GameData>> get data;
   $R call(
       {String? status,
-      int? page,
       int? results,
       int? totalResults,
-      List<GameData>? data});
+      List<GameData>? data,
+      int? page});
   GameSearchResponseCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -134,25 +134,25 @@ class _GameSearchResponseCopyWithImpl<$R, $Out>
           $value.data, (v, t) => v.copyWith.$chain(t), (v) => call(data: v));
   @override
   $R call(
-          {String? status,
-          int? page,
-          int? results,
-          int? totalResults,
-          List<GameData>? data}) =>
+          {Object? status = $none,
+          Object? results = $none,
+          Object? totalResults = $none,
+          List<GameData>? data,
+          Object? page = $none}) =>
       $apply(FieldCopyWithData({
-        if (status != null) #status: status,
-        if (page != null) #page: page,
-        if (results != null) #results: results,
-        if (totalResults != null) #totalResults: totalResults,
-        if (data != null) #data: data
+        if (status != $none) #status: status,
+        if (results != $none) #results: results,
+        if (totalResults != $none) #totalResults: totalResults,
+        if (data != null) #data: data,
+        if (page != $none) #page: page
       }));
   @override
   GameSearchResponse $make(CopyWithData data) => GameSearchResponse(
       status: data.get(#status, or: $value.status),
-      page: data.get(#page, or: $value.page),
       results: data.get(#results, or: $value.results),
       totalResults: data.get(#totalResults, or: $value.totalResults),
-      data: data.get(#data, or: $value.data));
+      data: data.get(#data, or: $value.data),
+      page: data.get(#page, or: $value.page));
 
   @override
   GameSearchResponseCopyWith<$R2, GameSearchResponse, $Out2> $chain<$R2, $Out2>(
