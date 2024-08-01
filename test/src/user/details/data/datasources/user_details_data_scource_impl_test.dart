@@ -101,7 +101,7 @@ void main() {
         verify(
           () => mockClient.get(
             Uri.https(
-              '$baseUrl:$port',
+              '$baseUrl:$testServerPort',
               '$kGetUserDetailsEndpoint/$tUserID',
             ),
             headers: {
@@ -148,7 +148,7 @@ void main() {
         verify(
           () => mockClient.get(
             Uri.https(
-              '$baseUrl:$port',
+              '$baseUrl:$testServerPort',
               '$kGetUserDetailsEndpoint/$tUserID',
             ),
             headers: {
@@ -190,7 +190,7 @@ void main() {
         verify(
           () => mockClient.post(
             Uri.https(
-              '$baseUrl:$port',
+              '$baseUrl:$testServerPort',
               '$kUpdateUserDetailsEndpont/$tUserID',
             ),
             headers: {
@@ -242,7 +242,7 @@ void main() {
         verify(
           () => mockClient.post(
             Uri.https(
-              '$baseUrl:$port',
+              '$baseUrl:$testServerPort',
               '$kUpdateUserDetailsEndpont/$tUserID',
             ),
             headers: {

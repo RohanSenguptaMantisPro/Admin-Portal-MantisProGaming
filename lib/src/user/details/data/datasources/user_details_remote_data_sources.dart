@@ -37,7 +37,7 @@ class UserDetailsDataScourceImpl implements UserDetailsRemoteDataSources {
     try {
       final response = await _httpClient.get(
         Uri.https(
-          '$baseUrl:$port',
+          '$baseUrl:$testServerPort',
           '$kGetUserDetailsEndpoint/$userID',
         ),
         headers: {
@@ -89,7 +89,7 @@ class UserDetailsDataScourceImpl implements UserDetailsRemoteDataSources {
     try {
       final response = await _httpClient.post(
         Uri.https(
-          '$baseUrl:$port',
+          '$baseUrl:$testServerPort',
           '$kUpdateUserDetailsEndpont/$userID',
         ),
         headers: {

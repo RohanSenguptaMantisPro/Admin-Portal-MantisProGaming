@@ -8,7 +8,9 @@ const kUserToken = 'cached_user_token';
 
 const baseUrl = 'analytics.mantispro.app';
 const baseFileServerUrl = 'fileserver.mantispro.app';
-const port = 5000;
+
+const testServerPort = 5100;
+
 const kCreateUserEndpoint = '/api/v1/users/auth/android/google';
 
 const kIsAdminEndpoint = '/api/v1/users/isAdmin';

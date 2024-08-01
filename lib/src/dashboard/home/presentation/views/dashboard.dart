@@ -122,15 +122,15 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         DashboardContainer(
                           iconAsset:
-                          (_activeRoute == GameSearchScreen.routeName)
-                              ? MediaRes.consoleFilled
-                              : MediaRes.console,
+                              (_activeRoute == GameSearchScreen.routeName)
+                                  ? MediaRes.consoleFilled
+                                  : MediaRes.console,
                           title: 'Game Search',
                           goRouter: () => setActiveRoute(
                             GameSearchScreen.routeName,
                           ),
                           isCurrentPageActive:
-                          _activeRoute == GameSearchScreen.routeName,
+                              _activeRoute == GameSearchScreen.routeName,
                         ),
                         const SizedBox(
                           height: 8,
@@ -264,11 +264,6 @@ class _DashboardState extends State<Dashboard> {
               ),
             ),
           ),
-
-          // so tab board above, add provider listener, so if index changes,
-          // based on that with the help of IndexedStack the current index's
-          // screen will be shown from the list of screens in
-          // DashBoardController.
           Expanded(
             child: Container(
               decoration: const BoxDecoration(
@@ -279,11 +274,7 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
               ),
-              child: /* IndexedStack(
-                          index: dashboardController.currentIndex,
-                          children: dashboardController.screens,
-                        ),*/
-                  widget.child,
+              child: widget.child,
             ),
           ),
         ],

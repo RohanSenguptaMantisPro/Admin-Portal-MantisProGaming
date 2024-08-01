@@ -92,7 +92,7 @@ void main() {
         verify(
           () => mockCustomHttpClient.getRequest(
             Uri.https(
-              '$baseUrl:$port',
+              '$baseUrl:$testServerPort',
               kGameSearchEndpoint,
               queryParameters,
             ),
@@ -143,7 +143,7 @@ void main() {
         verify(
           () => mockCustomHttpClient.getRequest(
             Uri.https(
-              '$baseUrl:$port',
+              '$baseUrl:$testServerPort',
               kGameSearchEndpoint,
               queryParameters,
             ),
@@ -194,7 +194,7 @@ void main() {
         verify(
           () => mockCustomHttpClient.getRequest(
             Uri.https(
-              '$baseUrl:$port',
+              '$baseUrl:$testServerPort',
               kGameSearchEndpoint,
               queryParameters,
             ),

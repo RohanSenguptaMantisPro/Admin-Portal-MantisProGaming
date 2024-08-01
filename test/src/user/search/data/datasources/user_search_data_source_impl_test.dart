@@ -104,7 +104,7 @@ void main() {
         verify(
           () => mockClient.get(
             Uri.https(
-              '$baseUrl:$port',
+              '$baseUrl:$testServerPort',
               kUserDetailsEndpoint,
               queryParameters,
             ),
@@ -157,7 +157,7 @@ void main() {
         verify(
           () => mockClient.get(
             Uri.https(
-              '$baseUrl:$port',
+              '$baseUrl:$testServerPort',
               kUserDetailsEndpoint,
               queryParameters,
             ),

@@ -50,7 +50,7 @@ class PushNotificationRemoteDataSourcesImpl
       //setting up file & uri to send to server as form-data.
       await _customHttpClient.setUri(
         Uri.https(
-          '$baseFileServerUrl:$port',
+          '$baseFileServerUrl:$testServerPort',
           kNotificationImageUploadEndpoint,
         ),
         userToken,
@@ -103,7 +103,7 @@ class PushNotificationRemoteDataSourcesImpl
       //sending that file to server.
       final response = await _customHttpClient.getRequest(
         Uri.https(
-          '$baseFileServerUrl:$port',
+          '$baseFileServerUrl:$testServerPort',
           '$kNotificationImageDownloadEndpoint/$fileName',
         ),
         header: {
@@ -160,13 +160,13 @@ class PushNotificationRemoteDataSourcesImpl
   }) async {
     try {
       final imageUrl =
-          'https://$baseFileServerUrl:$port$kNotificationImageDownloadEndpoint/$fileName';
+          'https://$baseFileServerUrl:$testServerPort$kNotificationImageDownloadEndpoint/$fileName';
       debugPrint(imageUrl);
 
       //sending that file to server.
       final response = await _customHttpClient.postRequest(
         Uri.https(
-          '$baseUrl:$port',
+          '$baseUrl:$testServerPort',
           kNotificationSendEndpoint,
         ),
         body: {

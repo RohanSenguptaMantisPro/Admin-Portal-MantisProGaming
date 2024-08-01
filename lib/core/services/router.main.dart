@@ -133,7 +133,7 @@ final appRoutes = [
             // send the full path of the route.
             // as it takes only the name of the path.
             name: 'Game Search/Game Details',
-            path: '${GameDetailsScreen.routeName}/:uID',
+            path: '${GameDetailsScreen.routeName}/:gameID',
             pageBuilder: (BuildContext context, GoRouterState state) {
               return customTransitionBuilder(
                 context,

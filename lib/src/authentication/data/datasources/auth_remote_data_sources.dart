@@ -87,7 +87,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     debugPrint('------- Calling createUser Endpoint.');
     try {
       final response = await _httpClient.post(
-        Uri.https('$baseUrl:$port', kCreateUserEndpoint),
+        Uri.https('$baseUrl:$testServerPort', kCreateUserEndpoint),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -123,7 +123,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // later to be configured according to the
       // isAdmin endpoint.
       final response = await _httpClient.get(
-        Uri.https('$baseUrl:$port', kIsAdminEndpoint),
+        Uri.https('$baseUrl:$testServerPort', kIsAdminEndpoint),
         headers: {
           'Authorization': 'Bearer $userToken',
         },
@@ -185,7 +185,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // later to be configured according to the
       // isAdmin endpoint.
       final response = await _httpClient.get(
-        Uri.https('$baseUrl:$port', kGetAdminDataEndpoint),
+        Uri.https('$baseUrl:$testServerPort', kGetAdminDataEndpoint),
         headers: {
           'Authorization': 'Bearer $userToken',
         },

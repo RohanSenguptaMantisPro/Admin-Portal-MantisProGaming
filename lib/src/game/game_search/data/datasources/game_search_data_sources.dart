@@ -50,7 +50,7 @@ class GameSearchRemoteDataSourcesImpl implements GameSearchRemoteDataSources {
     try {
       final response = await _customHttpClient.getRequest(
         Uri.https(
-          '$baseUrl:$port',
+          '$baseUrl:$testServerPort',
           kGameSearchEndpoint,
           queryParameters,
         ),

@@ -203,7 +203,7 @@ class _GameSearchScreenState extends State<GameSearchScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 700,
+                        height: state is FetchedGameData ? null : 700,
                         width: double.infinity,
                         child: (state is GameSearchLoading)
                             ? const Center(

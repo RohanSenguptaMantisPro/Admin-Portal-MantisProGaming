@@ -77,7 +77,7 @@ class UserSearchDataSourceImpl implements UserSearchRemoteDataSources {
     try {
       final response = await _httpClient.get(
         Uri.https(
-          '$baseUrl:$port',
+          '$baseUrl:$testServerPort',
           kUserDetailsEndpoint,
           queryParameters,
         ),

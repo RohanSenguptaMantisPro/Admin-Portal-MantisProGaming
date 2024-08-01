@@ -22,7 +22,7 @@ void main() {
   const tTitle = '';
   const tBody = '';
   const tImageUrl =
-      'https://$baseFileServerUrl:$port$kNotificationImageDownloadEndpoint/$tFileName';
+      'https://$baseFileServerUrl:$testServerPort$kNotificationImageDownloadEndpoint/$tFileName';
   final tNotificationResponse = NotificationResponse.empty();
 
   test(

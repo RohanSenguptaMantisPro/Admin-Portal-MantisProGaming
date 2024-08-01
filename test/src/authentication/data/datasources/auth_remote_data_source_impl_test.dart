@@ -148,7 +148,7 @@ void main() {
 
         verify(
           () => mockClient.post(
-            Uri.https('$baseUrl:$port', kCreateUserEndpoint),
+            Uri.https('$baseUrl:$testServerPort', kCreateUserEndpoint),
             headers: {
               'Content-Type': 'application/json',
             },
@@ -193,7 +193,7 @@ void main() {
 
         verify(
           () => mockClient.post(
-            Uri.https('$baseUrl:$port', kCreateUserEndpoint),
+            Uri.https('$baseUrl:$testServerPort', kCreateUserEndpoint),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({'data': 'encryptedData'}),
           ),
@@ -235,7 +235,7 @@ void main() {
 
         verify(
           () => mockClient.get(
-            Uri.https('$baseUrl:$port', kIsAdminEndpoint),
+            Uri.https('$baseUrl:$testServerPort', kIsAdminEndpoint),
             headers: {
               'Authorization': 'Bearer $tUserToken',
             },
@@ -275,7 +275,7 @@ void main() {
 
         verify(
           () => mockClient.get(
-            Uri.https('$baseUrl:$port', kIsAdminEndpoint),
+            Uri.https('$baseUrl:$testServerPort', kIsAdminEndpoint),
             headers: {
               'Authorization': 'Bearer $tUserToken',
             },
@@ -316,7 +316,7 @@ void main() {
 
         verify(
           () => mockClient.get(
-            Uri.https('$baseUrl:$port', kIsAdminEndpoint),
+            Uri.https('$baseUrl:$testServerPort', kIsAdminEndpoint),
             headers: {
               'Authorization': 'Bearer $tUserToken',
             },
@@ -463,7 +463,7 @@ void main() {
 
         verify(
           () => mockClient.get(
-            Uri.https('$baseUrl:$port', kGetAdminDataEndpoint),
+            Uri.https('$baseUrl:$testServerPort', kGetAdminDataEndpoint),
             headers: {
               'Authorization': 'Bearer $tUserToken',
             },
@@ -506,7 +506,7 @@ void main() {
 
         verify(
           () => mockClient.get(
-            Uri.https('$baseUrl:$port', kGetAdminDataEndpoint),
+            Uri.https('$baseUrl:$testServerPort', kGetAdminDataEndpoint),
             headers: {
               'Authorization': 'Bearer $tUserToken',
             },

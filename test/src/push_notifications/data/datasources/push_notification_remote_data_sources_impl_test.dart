@@ -40,7 +40,7 @@ void main() {
   const tBody = '';
 
   const tImageUrl =
-      'https://$baseFileServerUrl:$port$kNotificationImageDownloadEndpoint/$tFileName';
+      'https://$baseFileServerUrl:$testServerPort$kNotificationImageDownloadEndpoint/$tFileName';
 
   final tUploadImageJsonResponse = {
     'status': 'success',
@@ -104,7 +104,7 @@ void main() {
         verify(
           () => mockClient.setUri(
             Uri.https(
-              '$baseFileServerUrl:$port',
+              '$baseFileServerUrl:$testServerPort',
               kNotificationImageUploadEndpoint,
             ),
             tUserToken,
@@ -159,7 +159,7 @@ void main() {
         verify(
           () => mockClient.setUri(
             Uri.https(
-              '$baseFileServerUrl:$port',
+              '$baseFileServerUrl:$testServerPort',
               kNotificationImageUploadEndpoint,
             ),
             tUserToken,
@@ -212,7 +212,7 @@ void main() {
         verify(
           () => mockClient.getRequest(
             Uri.https(
-              '$baseFileServerUrl:$port',
+              '$baseFileServerUrl:$testServerPort',
               '$kNotificationImageDownloadEndpoint/$tFileName',
             ),
             header: {
@@ -259,7 +259,7 @@ void main() {
         verify(
           () => mockClient.getRequest(
             Uri.https(
-              '$baseFileServerUrl:$port',
+              '$baseFileServerUrl:$testServerPort',
               '$kNotificationImageDownloadEndpoint/$tFileName',
             ),
             header: {
@@ -305,7 +305,7 @@ void main() {
         verify(
           () => mockClient.postRequest(
             Uri.https(
-              '$baseUrl:$port',
+              '$baseUrl:$testServerPort',
               kNotificationSendEndpoint,
             ),
             header: {
@@ -360,7 +360,7 @@ void main() {
         verify(
           () => mockClient.postRequest(
             Uri.https(
-              '$baseUrl:$port',
+              '$baseUrl:$testServerPort',
               kNotificationSendEndpoint,
             ),
             header: {
