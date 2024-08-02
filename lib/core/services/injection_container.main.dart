@@ -10,6 +10,7 @@ Future<void> init() async {
   await _initUserDetails();
   await _initPushNotifications();
   await _initGameSearch();
+  await _initGameDetails();
 }
 
 // Authentication.
@@ -147,6 +148,28 @@ Future<void> _initGameSearch() async {
     ..registerLazySingleton<GameSearchRepo>(() => GameSearchRepoImpl(sl()))
     ..registerLazySingleton<GameSearchRemoteDataSources>(
       () => GameSearchRemoteDataSourcesImpl(
+        customHttpClient: sl(),
+      ),
+    );
+}
+
+Future<void> _initGameDetails() async {
+  sl
+    ..registerFactory(
+      () => GameDetailsBloc(
+        getGameDetails: sl(),
+        updateGameDetails: sl(),
+        downloadGameImages: sl(),
+        uploadGameImages: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => GetGameDetails(sl()))
+    ..registerLazySingleton(() => UpdateGameDetails(sl()))
+    ..registerLazySingleton(() => DownloadGameImages(sl()))
+    ..registerLazySingleton(() => UploadGameImages(sl()))
+    ..registerLazySingleton<GameDetailsRepo>(() => GameDetailsRepoImpl(sl()))
+    ..registerLazySingleton<GameDetailsRemoteDataSource>(
+      () => GameDetailsRemoteDataSourceImpl(
         customHttpClient: sl(),
       ),
     );

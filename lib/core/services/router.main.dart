@@ -141,13 +141,12 @@ final appRoutes = [
                 BlocProvider(
                   create: (context) => sl<GameSearchBloc>(),
                   child: //later to be added the GameDetailsBloc.
-                      /*BlocProvider(
-                    create: (_) => sl<>(),
-                    child: */
-                      GameDetailsScreen(
-                    gameID: state.pathParameters['gameID']!,
+                      BlocProvider(
+                    create: (_) => sl<GameDetailsBloc>(),
+                    child: GameDetailsScreen(
+                      gameID: state.pathParameters['gameID']!,
+                    ),
                   ),
-                  // ),
                 ),
               );
             },

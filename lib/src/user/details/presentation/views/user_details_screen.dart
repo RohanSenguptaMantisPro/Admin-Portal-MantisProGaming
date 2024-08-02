@@ -267,44 +267,44 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(
-                    height: boxConstraints.maxHeight * 0.85,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 25,
-                        right: 25,
-                        top: 60,
-                        bottom: 25,
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            decoration: const BoxDecoration(
-                                // border: Border.all(
-                                //   color: Colours.primaryColour,
-                                // ),
-                                ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                //route navigation path here.
-                                Breadcrumb(),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 25,
+                      right: 25,
+                      top: 60,
+                      bottom: 25,
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          decoration: const BoxDecoration(
+                              // border: Border.all(
+                              //   color: Colours.primaryColour,
+                              // ),
+                              ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              //route navigation path here.
+                              Breadcrumb(),
 
-                                Text(
-                                  'User Details',
-                                  style: context.theme.textTheme.titleMedium,
-                                ),
-                                const Divider(
-                                  thickness: 0.2,
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(height: 10),
-                              ],
-                            ),
+                              Text(
+                                'User Details',
+                                style: context.theme.textTheme.titleMedium,
+                              ),
+                              const Divider(
+                                thickness: 0.2,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(height: 10),
+                            ],
                           ),
-                          Container(
-                            height: 550,
+                        ),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            minHeight: 500,
+                          ),
+                          child: Container(
                             width: double.infinity,
                             decoration: const BoxDecoration(
                                 // border: Border.all(
@@ -320,114 +320,110 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                       color: Colours.primaryColour,
                                     ),
                                   )
-                                : SingleChildScrollView(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 45,
-                                          backgroundImage: imageProvider,
-                                          // find displayPicture element and empty check.
-                                        ),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        Container(
-                                          width: boxConstraints.maxWidth * 0.7,
-                                          alignment: Alignment.topLeft,
-                                          child: Wrap(
-                                            spacing: 20,
-                                            runSpacing: 30,
-                                            children: [
-                                              ...userData.map(
-                                                (data) => DataContainers(
-                                                  height: 35,
-                                                  width: double.parse(
-                                                    data['width']!,
-                                                  ),
-                                                  dataText:
-                                                      (data['data']!).isEmpty
-                                                          ? '--'
-                                                          : data['data']!,
-                                                  title: data['title']!,
+                                : Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 45,
+                                        backgroundImage: imageProvider,
+                                        // find displayPicture element and empty check.
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Container(
+                                        width: boxConstraints.maxWidth * 0.7,
+                                        alignment: Alignment.topLeft,
+                                        child: Wrap(
+                                          spacing: 20,
+                                          runSpacing: 30,
+                                          children: [
+                                            ...userData.map(
+                                              (data) => DataContainers(
+                                                height: 35,
+                                                width: double.parse(
+                                                  data['width']!,
                                                 ),
+                                                dataText:
+                                                    (data['data']!).isEmpty
+                                                        ? '--'
+                                                        : data['data']!,
+                                                title: data['title']!,
                                               ),
-                                              DropDown(
-                                                title: 'Account Status',
-                                                // Converting items of AccountStatus
-                                                // enum to DropdownMenuItem<String>
-                                                // for dropdown options.
-                                                menuItemList:
-                                                    AccountStatusDropDownMenu
-                                                        .values
-                                                        .map<
-                                                            DropdownMenuItem<
-                                                                String>>((
+                                            ),
+                                            DropDown(
+                                              title: 'Account Status',
+                                              // Converting items of AccountStatus
+                                              // enum to DropdownMenuItem<String>
+                                              // for dropdown options.
+                                              menuItemList:
                                                   AccountStatusDropDownMenu
-                                                      accountStatus,
-                                                ) {
-                                                  return DropdownMenuItem<
-                                                      String>(
-                                                    value: accountStatus.value,
-                                                    child: Text(
-                                                        accountStatus.value),
-                                                  );
-                                                }).toList(),
-                                                onChanged: (newValue) {
-                                                  accountStatus = newValue;
-                                                },
-                                                initialValue: accountStatus,
-                                              ),
-                                            ],
-                                          ),
+                                                      .values
+                                                      .map<
+                                                          DropdownMenuItem<
+                                                              String>>((
+                                                AccountStatusDropDownMenu
+                                                    accountStatus,
+                                              ) {
+                                                return DropdownMenuItem<String>(
+                                                  value: accountStatus.value,
+                                                  child:
+                                                      Text(accountStatus.value),
+                                                );
+                                              }).toList(),
+                                              onChanged: (newValue) {
+                                                accountStatus = newValue;
+                                              },
+                                              initialValue: accountStatus,
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                           ),
-                          const Spacer(),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: (state is UpdatingUserDetails)
-                                ? const CircularProgressIndicator(
-                                    color: Colours.primaryColour,
-                                  )
-                                : ButtonWidget(
-                                    onTap: () =>
-                                        //update user details bloc event add.
-                                        (state is GetUserDetailsError)
-                                            ? ()
-                                            : context
-                                                .read<UserDetailsBloc>()
-                                                .add(
-                                                  UpdateUserDetailsEvent(
-                                                    userToken: userToken ?? '',
-                                                    userID: widget.uID,
-                                                    accountStatus:
-                                                        accountStatus,
-                                                  ),
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: (state is UpdatingUserDetails)
+                              ? const CircularProgressIndicator(
+                                  color: Colours.primaryColour,
+                                )
+                              : ButtonWidget(
+                                  onTap: () =>
+                                      //update user details bloc event add.
+                                      (state is GetUserDetailsError)
+                                          ? ()
+                                          : context.read<UserDetailsBloc>().add(
+                                                UpdateUserDetailsEvent(
+                                                  userToken: userToken ?? '',
+                                                  userID: widget.uID,
+                                                  accountStatus: accountStatus,
                                                 ),
-                                    width: 150,
-                                    height: 35,
-                                    buttonBackgroundColor:
-                                        (state is GetUserDetailsError)
-                                            ? Colours.greyBackground
-                                            : Colours.primaryColour,
-                                    title: 'Save Changes',
-                                    textStyle: (state is GetUserDetailsError)
-                                        ? TextStyle(
-                                            color: Colours.greyTextColour,
-                                          )
-                                        : null,
-                                  ),
-                          ),
-                        ],
-                      ),
+                                              ),
+                                  width: 150,
+                                  height: 35,
+                                  buttonBackgroundColor:
+                                      (state is GetUserDetailsError)
+                                          ? Colours.greyBackground
+                                          : Colours.primaryColour,
+                                  title: 'Save Changes',
+                                  textStyle: (state is GetUserDetailsError)
+                                      ? TextStyle(
+                                          color: Colours.greyTextColour,
+                                        )
+                                      : null,
+                                ),
+                        ),
+                      ],
                     ),
+                  ),
+                  const SizedBox(
+                    height: 24,
                   ),
                   Container(
                     height: 15,
