@@ -40,6 +40,8 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
         );
   }
 
+  final gameNameEditingController = TextEditingController();
+
   String gameName = '';
   List<Map<String, String>> gameDetails = [
     {
@@ -243,32 +245,8 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                                                   title: data['title']!,
                                                 ),
                                               ),
-                                              // DropDown(
-                                              //   title: 'Account Status',
-                                              //   // Converting items of AccountStatus
-                                              //   // enum to DropdownMenuItem<String>
-                                              //   // for dropdown options.
-                                              //   menuItemList:
-                                              //       AccountStatusDropDownMenu
-                                              //           .values
-                                              //           .map<
-                                              //               DropdownMenuItem<
-                                              //                   String>>((
-                                              //     AccountStatusDropDownMenu
-                                              //         accountStatus,
-                                              //   ) {
-                                              //     return DropdownMenuItem<
-                                              //         String>(
-                                              //       value: accountStatus.value,
-                                              //       child: Text(
-                                              //           accountStatus.value),
-                                              //     );
-                                              //   }).toList(),
-                                              //   onChanged: (newValue) {
-                                              //     accountStatus = newValue;
-                                              //   },
-                                              //   initialValue: accountStatus,
-                                              // ),
+
+
                                             ],
                                           ),
                                         ),
