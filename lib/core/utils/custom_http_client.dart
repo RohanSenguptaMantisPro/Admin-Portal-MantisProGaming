@@ -42,7 +42,7 @@ class CustomHttpClient {
 
   //send get request.
   Future<Response> getRequest(Uri uri, {Map<String, String>? header}) async {
-    debugPrint('--------[UploadFileToServer] : [getRequest] : URI :$uri');
+    debugPrint('--------[CustomHttpClient] : [getRequest] : URI :$uri');
 
     final response = await _httpClient.get(uri, headers: header);
 

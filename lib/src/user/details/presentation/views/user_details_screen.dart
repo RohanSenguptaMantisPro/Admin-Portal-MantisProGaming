@@ -257,8 +257,8 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             context,
             'Success! Updated User Details.',
           );
-          //check to refetch userSearch screen data or not.
-          isUserDetailsEdited = true;
+          // //check to refetch userSearch screen data or not.
+          // isUserDetailsEdited = true;
         }
       },
       builder: (context, state) {
@@ -300,89 +300,77 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                             ],
                           ),
                         ),
-                        ConstrainedBox(
+                        Container(
+                          width: boxConstraints.maxWidth,
                           constraints: const BoxConstraints(
                             minHeight: 500,
                           ),
-                          child: Container(
-                            width: double.infinity,
-                            decoration: const BoxDecoration(
-                                // border: Border.all(
-                                //   color: Colors.purple,
-                                // ),
-                                ),
-                            //Because first initialState is emitted.
-                            // to handle that.
-                            child: (state is UserDetailsInitial ||
-                                    state is GettingUserDetails)
-                                ? const Center(
-                                    child: CircularProgressIndicator(
-                                      color: Colours.primaryColour,
-                                    ),
-                                  )
-                                : Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 45,
-                                        backgroundImage: imageProvider,
-                                        // find displayPicture element and empty check.
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      Container(
-                                        width: boxConstraints.maxWidth * 0.7,
-                                        alignment: Alignment.topLeft,
-                                        child: Wrap(
-                                          spacing: 20,
-                                          runSpacing: 30,
-                                          children: [
-                                            ...userData.map(
-                                              (data) => DataContainers(
-                                                height: 35,
-                                                width: double.parse(
-                                                  data['width']!,
-                                                ),
-                                                dataText:
-                                                    (data['data']!).isEmpty
-                                                        ? '--'
-                                                        : data['data']!,
-                                                title: data['title']!,
-                                              ),
-                                            ),
-                                            DropDown(
-                                              title: 'Account Status',
-                                              // Converting items of AccountStatus
-                                              // enum to DropdownMenuItem<String>
-                                              // for dropdown options.
-                                              menuItemList:
-                                                  AccountStatusDropDownMenu
-                                                      .values
-                                                      .map<
-                                                          DropdownMenuItem<
-                                                              String>>((
-                                                AccountStatusDropDownMenu
-                                                    accountStatus,
-                                              ) {
-                                                return DropdownMenuItem<String>(
-                                                  value: accountStatus.value,
-                                                  child:
-                                                      Text(accountStatus.value),
-                                                );
-                                              }).toList(),
-                                              onChanged: (newValue) {
-                                                accountStatus = newValue;
-                                              },
-                                              initialValue: accountStatus,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                          child: (state is UserDetailsInitial ||
+                                  state is GettingUserDetails)
+                              ? const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colours.primaryColour,
                                   ),
-                          ),
+                                )
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 45,
+                                      backgroundImage: imageProvider,
+                                      // find displayPicture element and empty check.
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Container(
+                                      width: boxConstraints.maxWidth * 0.7,
+                                      alignment: Alignment.topLeft,
+                                      child: Wrap(
+                                        spacing: 20,
+                                        runSpacing: 30,
+                                        children: [
+                                          ...userData.map(
+                                            (data) => DataContainers(
+                                              height: 35,
+                                              width: double.parse(
+                                                data['width']!,
+                                              ),
+                                              dataText: (data['data']!).isEmpty
+                                                  ? '--'
+                                                  : data['data']!,
+                                              title: data['title']!,
+                                            ),
+                                          ),
+                                          DropDown(
+                                            title: 'Account Status',
+                                            // Converting items of AccountStatus
+                                            // enum to DropdownMenuItem<String>
+                                            // for dropdown options.
+                                            menuItemList:
+                                                AccountStatusDropDownMenu.values
+                                                    .map<
+                                                        DropdownMenuItem<
+                                                            String>>((
+                                              AccountStatusDropDownMenu
+                                                  accountStatus,
+                                            ) {
+                                              return DropdownMenuItem<String>(
+                                                value: accountStatus.value,
+                                                child:
+                                                    Text(accountStatus.value),
+                                              );
+                                            }).toList(),
+                                            onChanged: (newValue) {
+                                              accountStatus = newValue;
+                                            },
+                                            initialValue: accountStatus,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                         ),
                         const SizedBox(
                           height: 24,

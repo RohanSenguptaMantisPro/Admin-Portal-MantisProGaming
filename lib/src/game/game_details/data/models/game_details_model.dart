@@ -7,12 +7,12 @@ part 'game_details_model.mapper.dart';
 class GameDetailsModel extends GameDetails with GameDetailsModelMappable {
   const GameDetailsModel({
     required super.id,
-    required super.name,
     required super.packageName,
     required super.timesAdded,
     required super.timesPlayed,
     required super.createdAt,
     required super.updatedAt,
+    required super.name,
   });
 
   const GameDetailsModel.empty()

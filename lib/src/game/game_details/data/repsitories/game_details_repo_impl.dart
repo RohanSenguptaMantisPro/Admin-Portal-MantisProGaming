@@ -10,6 +10,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/usec
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/usecases/update_game_details.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/usecases/upload_game_images.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
 
 class GameDetailsRepoImpl implements GameDetailsRepo {
   const GameDetailsRepoImpl(this._remoteDataSource);
@@ -24,6 +25,7 @@ class GameDetailsRepoImpl implements GameDetailsRepo {
       final gameDetails = await _remoteDataSource.getGameDetails(
         getGameDetailsParams: getGameDetailsParams,
       );
+      // debugPrint('--------data layer: repo : $gameDetails');
       return Right(gameDetails);
     } on ServerException catch (e) {
       return Left(ServerFailure.fromException(e));

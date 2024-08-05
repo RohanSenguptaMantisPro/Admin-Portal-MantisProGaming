@@ -6,24 +6,24 @@ part 'game_details.mapper.dart';
 class GameDetails with GameDetailsMappable {
   const GameDetails({
     required this.id,
-    required this.name,
     required this.packageName,
     required this.timesAdded,
     required this.timesPlayed,
     required this.createdAt,
     required this.updatedAt,
+    required this.name,
   });
 
   const GameDetails.empty()
       : this(
-    id: '',
-    name: '',
-    packageName: '',
-    timesAdded: 0,
-    timesPlayed: 0,
-    createdAt: '',
-    updatedAt: '',
-  );
+          id: '',
+          name: '',
+          packageName: '',
+          timesAdded: 0,
+          timesPlayed: 0,
+          createdAt: '',
+          updatedAt: '',
+        );
 
   @MappableField(key: '_id')
   final String? id;

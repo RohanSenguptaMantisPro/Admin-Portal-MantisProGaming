@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/upload_file_to_server.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_http_client.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/models/notification_response_model.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/models/server_image_model.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/entities/notification_response.dart';

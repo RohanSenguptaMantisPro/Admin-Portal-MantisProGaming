@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/upload_file_to_server.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_http_client.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/data/datasources/game_search_data_sources.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/data/models/game_search_response_model.dart';
 import 'package:flutter_test/flutter_test.dart';

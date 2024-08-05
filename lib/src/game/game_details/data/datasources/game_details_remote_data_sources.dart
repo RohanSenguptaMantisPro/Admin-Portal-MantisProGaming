@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/upload_file_to_server.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_http_client.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/data/models/game_details_image_model.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/data/models/game_details_model.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/entities/game_details.dart';
@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 abstract class GameDetailsRemoteDataSource {
   const GameDetailsRemoteDataSource();
 
-  Future<GameDetails> getGameDetails({
+  Future<GameDetailsModel> getGameDetails({
     required GetGameDetailsParams getGameDetailsParams,
   });
 
@@ -25,7 +25,7 @@ abstract class GameDetailsRemoteDataSource {
     required UpdateGameDetailsParams updateGameDetailsParams,
   });
 
-  Future<GameDetailsImage> downloadGameImages({
+  Future<GameDetailsImageModel> downloadGameImages({
     required DownloadGameImagesParams downloadGameImagesParams,
   });
 
@@ -60,7 +60,13 @@ class GameDetailsRemoteDataSourceImpl implements GameDetailsRemoteDataSource {
         throw _handleErrorResponse(response, 'Could not fetch game details');
       }
 
-      return GameDetailsModel.fromJson(response.body);
+      debugPrint(response.body.toString());
+
+      final extractedUserData = jsonEncode(
+        (jsonDecode(response.body) as Map<String, dynamic>)['data'],
+      );
+
+      return GameDetailsModel.fromJson(extractedUserData);
     } on ServerException {
       rethrow;
     } catch (e, s) {

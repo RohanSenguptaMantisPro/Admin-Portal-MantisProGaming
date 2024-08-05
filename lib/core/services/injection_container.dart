@@ -1,7 +1,7 @@
 
 import 'dart:io';
 
-import 'package:admin_portal_mantis_pro_gaming/core/utils/upload_file_to_server.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_http_client.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/fetch_user_data.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/log_out.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/utils/aes_encryption.dart';
