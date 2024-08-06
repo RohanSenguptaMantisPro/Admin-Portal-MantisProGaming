@@ -6,13 +6,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/common/app/providers/user_to
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/services/injection_container.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/services/router.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/views/login_screen.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/bloc/user_details_bloc.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/bloc/user_search_bloc.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
@@ -49,6 +43,10 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               title: 'Education App',
               theme: ThemeData(
+                scrollbarTheme: const ScrollbarThemeData(
+                    thumbColor: WidgetStatePropertyAll(
+                  Colours.grey,
+                )),
                 useMaterial3: true,
                 visualDensity: VisualDensity.adaptivePlatformDensity,
                 // fontFamily: Fonts.poppins,

@@ -1,3 +1,4 @@
+
 enum GameImageType {
   capsule,
   widecapsule,

@@ -17,26 +17,33 @@ class IField extends StatelessWidget {
     this.onSubmitted,
     this.onChanged,
     this.maxLines,
+    this.prefixIconConstraints,
+    this.errorText,
+    this.focusNode,
+    this.prefixIconPadding, // New parameter
   });
 
   final String? Function(String?)? validator;
   final TextEditingController controller;
   final bool obscureText;
   final bool readOnly;
-
   final Widget? suffixIcon;
   final String? hintText;
   final TextInputType? keyboardType;
   final bool overrideValidator;
-
-  final Icon? prefixIcon;
+  final Widget? prefixIcon;
   final void Function(String)? onSubmitted;
   final void Function(String)? onChanged;
   final int? maxLines;
+  final BoxConstraints? prefixIconConstraints;
+  final String? errorText;
+  final FocusNode? focusNode;
+  final EdgeInsets? prefixIconPadding; // New parameter
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      focusNode: focusNode,
       maxLines: maxLines ?? 1,
       onChanged: onChanged,
       onFieldSubmitted: onSubmitted,
@@ -47,11 +54,11 @@ class IField extends StatelessWidget {
       validator: overrideValidator
           ? validator
           : (value) {
-              if (value == null || value.isEmpty) {
-                return 'This field is required ';
-              }
-              return validator?.call(value);
-            },
+        if (value == null || value.isEmpty) {
+          return 'This field is required ';
+        }
+        return validator?.call(value);
+      },
       onTapOutside: (_) {
         FocusScope.of(context).unfocus();
       },
@@ -59,11 +66,13 @@ class IField extends StatelessWidget {
       obscureText: obscureText,
       readOnly: readOnly,
       decoration: InputDecoration(
-        prefixIcon: prefixIcon,
-        // prefixIconConstraints: BoxConstraints(
-        //   maxWidth: 10,
-        // ),
-
+        prefixIconConstraints: prefixIconConstraints,
+        prefixIcon: prefixIcon != null
+            ? Padding(
+          padding: prefixIconPadding ?? EdgeInsets.zero,
+          child: prefixIcon,
+        )
+            : null,
         border: OutlineInputBorder(
           borderSide: const BorderSide(
             color: Colours.grey,
@@ -82,17 +91,15 @@ class IField extends StatelessWidget {
             color: Colours.grey,
           ),
         ),
-        // overwriting the default padding helps with that puffy look
         contentPadding: EdgeInsets.symmetric(
-          horizontal: 10,
-          // if maxLines is defined, padding is required else no space between
-          // text and borders.
+          horizontal: 12,
           vertical: maxLines != null ? 12 : 0,
         ),
         filled: true,
         fillColor: Colours.backgroundColorDark,
         suffixIcon: suffixIcon,
         hintText: hintText,
+        errorText: errorText,
         hintStyle: context.theme.textTheme.bodySmall!.copyWith(
           color: Colours.greyTextColour,
         ),

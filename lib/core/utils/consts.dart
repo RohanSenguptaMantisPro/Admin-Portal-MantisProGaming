@@ -28,7 +28,7 @@ const kNotificationSendEndpoint = '/api/v1/notifications/send';
 
 const kGameSearchEndpoint = '/api/v1/games/searchgames';
 const kGetGameEndpoint = '/api/v1/games/getgame';
-const kUpdateGameEndpoint = '/v1/games/updategameap';
+const kUpdateGameEndpoint = '/api/v1/games/updategameap';
 
 const kGameAssetsDownloadEndpoint = '/api/v1/gameassets/download';
 const kGameAssetsUploadEndpoint = '/api/v1/gameassets/upload';

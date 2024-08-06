@@ -7,7 +7,10 @@ import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_notification.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/entities/game_details.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/usecases/get_game_details.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/usecases/update_game_details.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/presentation/bloc/game_details_bloc.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/presentation/widgets/game_genre_tags.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/presentation/widgets/game_name_edit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -42,17 +45,13 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
 
   final gameNameEditingController = TextEditingController();
 
-  String gameName = '';
+  final GlobalKey<FormState> gameNameFormKey = GlobalKey<FormState>();
+
   List<Map<String, String>> gameDetails = [
     {
       'title': 'Game ID',
       'data': '',
       'width': '260',
-    },
-    {
-      'title': 'Game Name',
-      'data': '',
-      'width': '220',
     },
     {
       'title': 'Package Name',
@@ -85,8 +84,11 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
 
   void updateGameDetails(GameDetails details) {
     gameDetails = [
-      {'title': 'Game ID', 'data': details.id ?? '', 'width': '260'},
-      {'title': 'Game Name', 'data': details.name ?? '', 'width': '220'},
+      {
+        'title': 'Game ID',
+        'data': details.id ?? '',
+        'width': '260',
+      },
       {
         'title': 'Package Name',
         'data': details.packageName ?? '',
@@ -125,15 +127,20 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<GameDetailsBloc, GameDetailsState>(
       listener: (context, state) {
-        if (state is GameDetailsError || state is GameImageError) {
+        if (state is GameDetailsError) {
           showErrorNotification(
             context,
-            'Some data could not be loaded!',
+            'Could not load some data!\n\n Error details : ${state.message}',
+          );
+        } else if (state is GameImageError) {
+          showErrorNotification(
+            context,
+            'Could not load fetch/upload some game asset image!\n\n Error details : ${state.message}',
           );
         } else if (state is GotGameDetails) {
           debugPrint('------------- Game Details :${state.gameDetails}\n');
 
-          gameName = state.gameDetails.name ?? '';
+          gameNameEditingController.text = state.gameDetails.name ?? '';
           updateGameDetails(state.gameDetails);
         } else if (state is UpdatedGameDetails) {
           // debugPrint('Updated User Details.');
@@ -165,7 +172,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                         padding: const EdgeInsets.only(
                           left: 24,
                           right: 24,
-                          top: 64,
+                          top: 56,
                           bottom: 24,
                         ),
                         child: Column(
@@ -211,9 +218,20 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                                   color: Colors.purple,
                                 ),
                               ),
-                              constraints: const BoxConstraints(
-                                minHeight: 550,
-                              ),
+
+                              //conditional height because
+                              // only when loading  min sized block
+                              //else  dynamic dimensions according to content.
+
+                              //not constraints cause: it might set a min height
+                              //but if content loaded requires less space it
+                              // won't take that it will still take the min
+                              // space.
+
+                              height: (state is GameDetailsInitial ||
+                                      state is GettingGameDetails)
+                                  ? 550
+                                  : null,
                               child: (state is GameDetailsInitial ||
                                       state is GettingGameDetails)
                                   ? const Center(
@@ -245,8 +263,19 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                                                   title: data['title']!,
                                                 ),
                                               ),
+                                              const SizedBox(
+                                                width: double.infinity,
+                                              ),
 
+                                              //game genre tags.
+                                              GameGenreTags(),
 
+                                              //form to edit game Name.
+                                              GameNameEditForm(
+                                                textEditingController:
+                                                    gameNameEditingController,
+                                                formKey: gameNameFormKey,
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -254,7 +283,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                                     ),
                             ),
                             const SizedBox(
-                              height: 24,
+                              height: 16,
                             ),
                             Align(
                               alignment: Alignment.bottomLeft,
@@ -263,22 +292,28 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                                       color: Colours.primaryColour,
                                     )
                                   : ButtonWidget(
-                                      onTap: () => (),
-                                      //update user details bloc event add.
-                                      // (state is GameDetailsError)
-                                      //     ? ()
-                                      //     : context.read<GameDetailsBloc>().add(
-                                      //           UpdateGameDetailsEvent(
-                                      //             updateGameDetailsParams:
-                                      //                 UpdateGameDetailsParams(
-                                      //               userToken: userToken ?? '',
-                                      //
-                                      //               gameObjectId: widget.gameID,
-                                      //                   gameName: ''
-                                      //             ),
-                                      //           ),
-                                      //         ),
-
+                                      onTap: () {
+                                        FocusScope.of(context).unfocus();
+                                        //update user details bloc event add.
+                                        if (state is! GameDetailsError) {
+                                          context.read<GameDetailsBloc>().add(
+                                                UpdateGameDetailsEvent(
+                                                  updateGameDetailsParams:
+                                                      UpdateGameDetailsParams(
+                                                    userToken: context
+                                                            .read<
+                                                                UserTokenProvider>()
+                                                            .userToken ??
+                                                        '',
+                                                    gameObjectId: widget.gameID,
+                                                    gameName:
+                                                        gameNameEditingController
+                                                            .text,
+                                                  ),
+                                                ),
+                                              );
+                                        }
+                                      },
                                       width: 150,
                                       height: 35,
                                       buttonBackgroundColor:
