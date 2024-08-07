@@ -6,9 +6,12 @@ import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extension
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_notification.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/entities/game_details.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/usecases/download_game_images.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/usecases/get_game_details.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/usecases/update_game_details.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/presentation/bloc/game_details_bloc.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/presentation/enums/game_asset_name_enum.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/presentation/widgets/game_asset_containers_widget.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/presentation/widgets/game_genre_tags.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/presentation/widgets/game_name_edit_form.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +44,20 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
             ),
           ),
         );
+
+    //fetch game asset images. (5)
+    final gameDetailsBloc = context.read<GameDetailsBloc>();
+    for (var imageType in GameImageType.values) {
+      gameDetailsBloc.add(
+        DownloadGameImagesEvent(
+          downloadGameImagesParams: DownloadGameImagesParams(
+            gameObjectId: widget.gameID,
+            imageAssetName: imageType.apiValue,
+          ),
+          imageType: imageType,
+        ),
+      );
+    }
   }
 
   final gameNameEditingController = TextEditingController();
@@ -181,11 +198,11 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                             //this container takes the full available width
                             // because Divider is one of the children.
                             Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colours.primaryColour,
-                                ),
-                              ),
+                              // decoration: BoxDecoration(
+                              //   border: Border.all(
+                              //     color: Colours.primaryColour,
+                              //   ),
+                              // ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -205,9 +222,12 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                                 ],
                               ),
                             ),
-                            Container(
-                              color: Colours.primaryColour,
-                              height: 200,
+                            GameAssetContainersWidget(
+                              onBrowse: (gameImageType) {
+                                //Add Upload Game Assets Event.
+
+                                // context.read<GameDetailsBloc>().add();
+                              },
                             ),
                             const SizedBox(
                               height: 16,
