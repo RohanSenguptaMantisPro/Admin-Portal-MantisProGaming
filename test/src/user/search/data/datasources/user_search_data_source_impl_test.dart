@@ -21,14 +21,9 @@ void main() {
       httpClient: mockClient,
     );
 
-    registerFallbackValue(
-      Uri(),
-    );
+    registerFallbackValue(Uri());
   });
 
-  // can't send empty parameters for test,
-  // cause empty parameter checks in the rds method
-  // will cause problems.
   const tUserToken = 'test user token';
   const tPageNumber = '1';
   const tPageLimit = '10';
@@ -36,8 +31,6 @@ void main() {
   const tQuery = 'sandipan';
   const tCountry = 'india';
   const tAccountStatus = 'unrestricted';
-  // queryParameters should be same as received parameters
-  // by the userSearchResults method
   const queryParameters = {
     'page': tPageNumber,
     'limit': tPageLimit,
@@ -49,39 +42,31 @@ void main() {
 
   const tUserSearchResponseModel = UserSearchResponseModel.empty();
 
-  const tUserDataFetchException = ServerException(
-    message: 'could not fetch user data',
-    statusCode: '404',
-  );
-
-  group('userSearchResults.', () {
+  group('userSearchResults', () {
     test(
-      'should return [UserSearchResponseModel] when the status code is 200 '
-      'or 201',
-      () async {
+      'should return [UserSearchResponseModel] when the status code is 200 or 201',
+          () async {
         when(
-          () => mockClient.get(
+              () => mockClient.get(
             any(),
             headers: any(named: 'headers'),
           ),
         ).thenAnswer(
-          (_) async => http.Response(
-            jsonEncode(
-              {
-                'status': '',
-                'page': 1,
-                'results': 1,
-                'totalResults': 1,
-                'data': [
-                  {
-                    '_id': '',
-                    'name': '',
-                    'userName': '',
-                    'email': '',
-                  }
-                ],
-              },
-            ),
+              (_) async => http.Response(
+            jsonEncode({
+              'status': '',
+              'page': 1,
+              'results': 1,
+              'totalResults': 1,
+              'data': [
+                {
+                  '_id': '',
+                  'name': '',
+                  'userName': '',
+                  'email': '',
+                }
+              ],
+            }),
             200,
           ),
         );
@@ -96,13 +81,10 @@ void main() {
           accountStatus: tAccountStatus,
         );
 
-        expect(
-          methodCall,
-          equals(tUserSearchResponseModel),
-        );
+        expect(methodCall, equals(tUserSearchResponseModel));
 
         verify(
-          () => mockClient.get(
+              () => mockClient.get(
             Uri.https(
               '$baseUrl:$testServerPort',
               kUserDetailsEndpoint,
@@ -119,16 +101,15 @@ void main() {
     );
 
     test(
-      'should throw [ServerException] when the status code is not 200 or '
-      '201',
-      () async {
+      'should throw [ServerException] when the status code is not 200 or 201',
+          () async {
         when(
-          () => mockClient.get(
+              () => mockClient.get(
             any(),
             headers: any(named: 'headers'),
           ),
         ).thenAnswer(
-          (_) async => http.Response(
+              (_) async => http.Response(
             'Invalid Request',
             500,
           ),
@@ -137,7 +118,7 @@ void main() {
         final methodCall = userSearchDataSourceImpl.userSearchResults;
 
         expect(
-          () async => methodCall(
+              () async => methodCall(
             userToken: tUserToken,
             pageNumber: tPageNumber,
             limit: tPageLimit,
@@ -146,16 +127,64 @@ void main() {
             country: tCountry,
             accountStatus: tAccountStatus,
           ),
-          throwsA(
-            const ServerException(
-              message: 'Invalid Request',
-              statusCode: '500',
-            ),
-          ),
+          throwsA(isA<ServerException>()),
         );
 
         verify(
-          () => mockClient.get(
+              () => mockClient.get(
+            Uri.https(
+              '$baseUrl:$testServerPort',
+              kUserDetailsEndpoint,
+              queryParameters,
+            ),
+            headers: {
+              'Authorization': 'Bearer $tUserToken',
+            },
+          ),
+        ).called(1);
+
+        verifyNoMoreInteractions(mockClient);
+      },
+    );
+
+    test(
+      'should throw [ServerException] when the response data is null or empty',
+          () async {
+        when(
+              () => mockClient.get(
+            any(),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer(
+              (_) async => http.Response(
+            jsonEncode({
+              'status': '',
+              'page': 1,
+              'results': 0,
+              'totalResults': 0,
+              'data': [],
+            }),
+            200,
+          ),
+        );
+
+        final methodCall = userSearchDataSourceImpl.userSearchResults;
+
+        expect(
+              () async => methodCall(
+            userToken: tUserToken,
+            pageNumber: tPageNumber,
+            limit: tPageLimit,
+            field: tField,
+            query: tQuery,
+            country: tCountry,
+            accountStatus: tAccountStatus,
+          ),
+          throwsA(isA<ServerException>()),
+        );
+
+        verify(
+              () => mockClient.get(
             Uri.https(
               '$baseUrl:$testServerPort',
               kUserDetailsEndpoint,

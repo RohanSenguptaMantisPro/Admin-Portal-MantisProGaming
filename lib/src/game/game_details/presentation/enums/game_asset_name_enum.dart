@@ -1,7 +1,7 @@
 
 enum GameImageType {
   capsule,
-  widecapsule,
+  wideCapsule,
   logo,
   icon,
   hero,
@@ -12,7 +12,7 @@ extension GameImageTypeExtension on GameImageType {
     switch (this) {
       case GameImageType.capsule:
         return 'Capsule';
-      case GameImageType.widecapsule:
+      case GameImageType.wideCapsule:
         return 'Wide Capsule';
       case GameImageType.logo:
         return 'Logo';
@@ -27,8 +27,8 @@ extension GameImageTypeExtension on GameImageType {
     switch (this) {
       case GameImageType.capsule:
         return 'capsule';
-      case GameImageType.widecapsule:
-        return 'wide_capsule';
+      case GameImageType.wideCapsule:
+        return 'wideCapsule';
       case GameImageType.logo:
         return 'logo';
       case GameImageType.icon:

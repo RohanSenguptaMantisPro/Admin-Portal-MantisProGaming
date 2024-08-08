@@ -21,9 +21,7 @@ void main() {
       httpClient: mockClient,
     );
 
-    registerFallbackValue(
-      Uri(),
-    );
+    registerFallbackValue(Uri());
   });
 
   const tUserToken = '';
@@ -32,49 +30,39 @@ void main() {
 
   const tUserDetailsModel = UserDetailsModel.empty();
 
-  const tGetUserDetailsException = ServerException(
-    message: 'could not get user data',
-    statusCode: '404',
-  );
-
-  final tGetUserDetailsJsonResponse = jsonEncode(
-    {
-      'status': 'success',
-      'data': {
-        'userEvents': <List<String>>[],
-        '_id': '',
-        'accountType': '',
-        'name': '',
-        'userName': '',
-        'googleId': '',
-        'email': '',
-        'emailVerified': false,
-        'displayPicture': '',
-        'role': 0,
-        'locale': '',
-        'country': '',
-        'pairedDevices': <List<String>>[],
-        'creditsAvailable': 0,
-        'gameMappings': <List<String>>[],
-        'accountActive': false,
-        'accountStatus': '',
-        'createdAt': '',
-        'updatedAt': '',
-        '__v': 0,
-      },
+  final tGetUserDetailsJsonResponse = jsonEncode({
+    'status': 'success',
+    'data': {
+      'userEvents': <List<String>>[],
+      '_id': '',
+      'accountType': '',
+      'name': '',
+      'userName': '',
+      'googleId': '',
+      'email': '',
+      'emailVerified': false,
+      'displayPicture': '',
+      'role': 0,
+      'locale': '',
+      'country': '',
+      'pairedDevices': <List<String>>[],
+      'creditsAvailable': 0,
+      'gameMappings': <List<String>>[],
+      'accountActive': false,
+      'accountStatus': '',
+      'createdAt': '',
+      'updatedAt': '',
+      '__v': 0,
     },
-  );
-  final tUpdateUserDetailsJsonResponse = jsonEncode(
-    {
-      'status': 'success',
-      'message': 'User has been successfully updated',
-    },
-  );
+  });
+  final tUpdateUserDetailsJsonResponse = jsonEncode({
+    'status': 'success',
+    'message': 'User has been successfully updated',
+  });
 
-  group('getUserDetails.', () {
+  group('getUserDetails', () {
     test(
-      'should return [UserDetailsModel] when the status code is 200 '
-      'or 201',
+      'should return [UserDetailsModel] when the status code is 200 or 201',
       () async {
         when(
           () => mockClient.get(
@@ -93,10 +81,7 @@ void main() {
           userID: tUserID,
         );
 
-        expect(
-          methodCall,
-          equals(tUserDetailsModel),
-        );
+        expect(methodCall, equals(tUserDetailsModel));
 
         verify(
           () => mockClient.get(
@@ -115,8 +100,7 @@ void main() {
     );
 
     test(
-      'should throw [ServerException] when the status code is not 200 or '
-      '201',
+      'should throw [ServerException] when the status code is not 200 or 201',
       () async {
         when(
           () => mockClient.get(
@@ -138,10 +122,7 @@ void main() {
             userID: tUserID,
           ),
           throwsA(
-            const ServerException(
-              message: 'Error',
-              statusCode: '500',
-            ),
+            isA<ServerException>(),
           ),
         );
 
@@ -162,11 +143,9 @@ void main() {
     );
   });
 
-  // updateUserDetails.
-  group('updateUserDetails.', () {
+  group('updateUserDetails', () {
     test(
-      'should return [void] when the status code is 200 '
-      'or 201',
+      'should complete successfully when the status code is 200 or 201',
       () async {
         when(
           () => mockClient.post(
@@ -181,10 +160,13 @@ void main() {
           ),
         );
 
-        await userDetailsRemoteDataSources.updateUserDetails(
-          userToken: tUserToken,
-          userID: tUserID,
-          accountStatus: tAccountStatus,
+        await expectLater(
+          userDetailsRemoteDataSources.updateUserDetails(
+            userToken: tUserToken,
+            userID: tUserID,
+            accountStatus: tAccountStatus,
+          ),
+          completes,
         );
 
         verify(
@@ -207,8 +189,7 @@ void main() {
     );
 
     test(
-      'should throw [ServerException] when the status code is not 200 or '
-      '201',
+      'should throw [ServerException] when the status code is not 200 or 201',
       () async {
         when(
           () => mockClient.post(
@@ -232,10 +213,7 @@ void main() {
             accountStatus: tAccountStatus,
           ),
           throwsA(
-            const ServerException(
-              message: 'Error',
-              statusCode: '500',
-            ),
+            isA<ServerException>(),
           ),
         );
 

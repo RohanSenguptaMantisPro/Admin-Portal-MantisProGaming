@@ -167,7 +167,7 @@ void main() {
           ),
         ).thenAnswer(
           (_) async => http.Response(
-            jsonEncode({'data': []}),
+            jsonEncode({'data': <List<dynamic>>[]}),
             200,
           ),
         );

@@ -312,10 +312,11 @@ void main() {
       'should complete successfully when the status code is 200 or 201',
       () async {
         when(
-          () => mockCustomHttpClient.setUri(
-            any(),
-            any(),
-            any(),
+          () => mockCustomHttpClient.setMultipartRequest(
+            uri: any(named: 'uri'),
+            userToken: any(named: 'userToken'),
+            fields: any(named: 'fields'),
+            files: any(named: 'files'),
           ),
         ).thenAnswer((_) async {});
 
@@ -336,13 +337,19 @@ void main() {
         );
 
         verify(
-          () => mockCustomHttpClient.setUri(
-            Uri.https(
+          () => mockCustomHttpClient.setMultipartRequest(
+            uri: Uri.https(
               '$baseFileServerUrl:$testServerPort',
               kGameAssetsUploadEndpoint,
             ),
-            tUploadGameImagesParams.userToken,
-            tUploadGameImagesParams.imageFile,
+            userToken: tUploadGameImagesParams.userToken,
+            fields: {
+              'imgAssetName': tUploadGameImagesParams.imageAssetName,
+              'gameObjId': tUploadGameImagesParams.gameObjectId,
+            },
+            files: {
+              'image': tUploadGameImagesParams.imageFile,
+            },
           ),
         ).called(1);
 
@@ -353,15 +360,16 @@ void main() {
         verifyNoMoreInteractions(mockCustomHttpClient);
       },
     );
-
+    //
     test(
       'should throw [ServerException] when the status code is not 200 or 201',
       () async {
         when(
-          () => mockCustomHttpClient.setUri(
-            any(),
-            any(),
-            any(),
+          () => mockCustomHttpClient.setMultipartRequest(
+            uri: any(named: 'uri'),
+            userToken: any(named: 'userToken'),
+            fields: any(named: 'fields'),
+            files: any(named: 'files'),
           ),
         ).thenAnswer((_) async {});
 
@@ -386,13 +394,19 @@ void main() {
         );
 
         verify(
-          () => mockCustomHttpClient.setUri(
-            Uri.https(
+          () => mockCustomHttpClient.setMultipartRequest(
+            uri: Uri.https(
               '$baseFileServerUrl:$testServerPort',
               kGameAssetsUploadEndpoint,
             ),
-            tUploadGameImagesParams.userToken,
-            tUploadGameImagesParams.imageFile,
+            userToken: tUploadGameImagesParams.userToken,
+            fields: {
+              'imgAssetName': tUploadGameImagesParams.imageAssetName,
+              'gameObjId': tUploadGameImagesParams.gameObjectId,
+            },
+            files: {
+              'image': tUploadGameImagesParams.imageFile,
+            },
           ),
         ).called(1);
 

@@ -2,9 +2,10 @@ import 'dart:convert';
 
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/global_error_handler.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/data/models/user_details_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 abstract class UserDetailsRemoteDataSources {
@@ -46,10 +47,9 @@ class UserDetailsDataScourceImpl implements UserDetailsRemoteDataSources {
       );
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        debugPrint('------- ServerException has occurred.');
-        throw ServerException(
-          message: response.body,
-          statusCode: response.statusCode.toString(),
+        throw GlobalErrorHandler.handleErrorResponse(
+          response,
+          'Could not fetch user details',
         );
       }
 
@@ -63,16 +63,13 @@ class UserDetailsDataScourceImpl implements UserDetailsRemoteDataSources {
         );
       }
 
-      final extractedUserData = jsonEncode(
-        (jsonDecode(response.body) as Map<String, dynamic>)['data'],
-      );
+      final extractedUserData = jsonEncode(userData);
 
-      debugPrint(receivedJson.toString());
       return UserDetailsModel.fromJson(extractedUserData);
     } on ServerException {
       rethrow;
-    } catch (e, s) {
-      debugPrintStack(stackTrace: s);
+    } catch (e) {
+      debugPrint('---USER DETAILS DATA SOURCE : [getUserDetails] :ERROR: $e');
       throw ServerException(
         message: e.toString(),
         statusCode: '505',
@@ -101,16 +98,16 @@ class UserDetailsDataScourceImpl implements UserDetailsRemoteDataSources {
       );
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        debugPrint('------- ServerException has occurred.');
-        throw ServerException(
-          message: response.body,
-          statusCode: response.statusCode.toString(),
+        throw GlobalErrorHandler.handleErrorResponse(
+          response,
+          'Could not update user details',
         );
       }
     } on ServerException {
       rethrow;
-    } catch (e, s) {
-      debugPrintStack(stackTrace: s);
+    } catch (e) {
+      debugPrint(
+          '---USER DETAILS DATA SOURCE : [updateUserDetails] :ERROR: $e');
       throw ServerException(
         message: e.toString(),
         statusCode: '505',

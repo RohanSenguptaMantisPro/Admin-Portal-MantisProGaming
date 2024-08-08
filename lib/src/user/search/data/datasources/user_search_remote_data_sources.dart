@@ -2,9 +2,10 @@ import 'dart:convert';
 
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/global_error_handler.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/data/models/user_search_response_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 abstract class UserSearchRemoteDataSources {
@@ -38,40 +39,18 @@ class UserSearchDataSourceImpl implements UserSearchRemoteDataSources {
     required String country,
     required String accountStatus,
   }) async {
-    Map<String, dynamic> queryParameters;
+    Map<String, dynamic> queryParameters = {
+      'page': pageNumber,
+      'limit': limit,
+      'country': country,
+      'accountStatus': accountStatus,
+    };
 
-    if (field.isEmpty) {
-      queryParameters = {
-        'page': pageNumber,
-        'limit': limit,
-        'query': query,
-        'country': country,
-        'accountStatus': accountStatus,
-      };
-    } else if (query.isEmpty) {
-      queryParameters = {
-        'page': pageNumber,
-        'limit': limit,
-        'field': field,
-        'country': country,
-        'accountStatus': accountStatus,
-      };
-    } else if (field.isEmpty && query.isEmpty) {
-      queryParameters = {
-        'page': pageNumber,
-        'limit': limit,
-        'country': country,
-        'accountStatus': accountStatus,
-      };
-    } else {
-      queryParameters = {
-        'page': pageNumber,
-        'limit': limit,
-        'field': field,
-        'query': query,
-        'country': country,
-        'accountStatus': accountStatus,
-      };
+    if (field.isNotEmpty) {
+      queryParameters['field'] = field;
+    }
+    if (query.isNotEmpty) {
+      queryParameters['query'] = query;
     }
 
     try {
@@ -87,10 +66,9 @@ class UserSearchDataSourceImpl implements UserSearchRemoteDataSources {
       );
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        debugPrint('------- ServerException has occurred.');
-        throw ServerException(
-          message: response.body,
-          statusCode: response.statusCode.toString(),
+        throw GlobalErrorHandler.handleErrorResponse(
+          response,
+          'Could not fetch user search results',
         );
       }
 
@@ -99,23 +77,18 @@ class UserSearchDataSourceImpl implements UserSearchRemoteDataSources {
 
       if (userData == null || userData.isEmpty) {
         throw ServerException(
-          message: (userData != null)
-              ? userData.isEmpty
-                  ? 'No User Data Available'
-                  : 'Could not fetch data.'
+          message: userData?.isEmpty == true
+              ? 'No User Data Available'
               : 'Could not fetch data',
           statusCode: '505',
         );
       }
 
-      debugPrint(receivedJson.toString());
-      return UserSearchResponseModel.fromJson(
-        response.body,
-      );
+      return UserSearchResponseModel.fromJson(response.body);
     } on ServerException {
       rethrow;
-    } catch (e, s) {
-      debugPrintStack(stackTrace: s);
+    } catch (e) {
+      debugPrint('---USER SEARCH DATA SOURCE : [userSearchResults] :ERROR: $e');
       throw ServerException(
         message: e.toString(),
         statusCode: '505',

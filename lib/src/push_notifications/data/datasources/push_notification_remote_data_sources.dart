@@ -1,14 +1,12 @@
-import 'dart:convert';
-import 'dart:math';
-
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_http_client.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/global_error_handler.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/models/notification_response_model.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/data/models/server_image_model.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/entities/notification_response.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/push_notifications/domain/entities/server_image.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 
 abstract class PushNotificationRemoteDataSources {
@@ -40,50 +38,32 @@ class PushNotificationRemoteDataSourcesImpl
 
   final CustomHttpClient _customHttpClient;
 
-  //image upload.
   @override
   Future<void> imageUpload({
     required String userToken,
     required XFile imageFile,
   }) async {
     try {
-      //setting up file & uri to send to server as form-data.
-      await _customHttpClient.setUri(
-        Uri.https(
+      await _customHttpClient.setMultipartRequest(
+        uri: Uri.https(
           '$baseFileServerUrl:$testServerPort',
           kNotificationImageUploadEndpoint,
         ),
-        userToken,
-        imageFile,
+        userToken: userToken,
+        files: {'image': imageFile},
       );
 
-      //sending that file to server.
       final response = await _customHttpClient.sendRequest();
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        String errorMessage;
-        try {
-          // Attempt to parse as JSON
-          final responseBody =
-              response.body.isNotEmpty ? jsonDecode(response.body) : null;
-          errorMessage = (responseBody?['message'] as String?) ??
-              'Could not download & preview image';
-        } catch (e) {
-          // If JSON parsing fails, use some part of
-          // the raw response body or a default message
-          errorMessage = response.body.isNotEmpty
-              ? 'Server error: ${response.body.substring(0, min(100, response.body.length))}...'
-              : 'Could not upload image';
-        }
-
-        throw ServerException(
-          message: errorMessage,
-          statusCode: response.statusCode.toString(),
+        throw GlobalErrorHandler.handleErrorResponse(
+          response,
+          'Could not upload image',
         );
       }
     } on ServerException {
       rethrow;
-    } catch (e, s) {
+    } catch (e) {
       debugPrint(
           '---PUSH NOTIFICATION DATA SOURCE : [imageUpload] :ERROR: $e ');
       throw ServerException(
@@ -93,14 +73,12 @@ class PushNotificationRemoteDataSourcesImpl
     }
   }
 
-  //image download.
   @override
   Future<ServerImageModel> imageDownload({
     required String userToken,
     required String fileName,
   }) async {
     try {
-      //sending that file to server.
       final response = await _customHttpClient.getRequest(
         Uri.https(
           '$baseFileServerUrl:$testServerPort',
@@ -112,26 +90,9 @@ class PushNotificationRemoteDataSourcesImpl
       );
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        debugPrint(
-            '------- PUSH NOTIFICATION DATA SOURCE : [imageDownload] ERROR : ${response.body}');
-        String errorMessage;
-        try {
-          // Attempt to parse as JSON
-          final responseBody =
-              response.body.isNotEmpty ? jsonDecode(response.body) : null;
-          errorMessage = (responseBody?['message'] as String?) ??
-              'Could not download & preview image';
-        } catch (e) {
-          // If JSON parsing fails, use some part of
-          // the raw response body or a default message
-          errorMessage = response.body.isNotEmpty
-              ? 'Server error: ${response.body.substring(0, min(100, response.body.length))}...'
-              : 'Could not download & preview image';
-        }
-
-        throw ServerException(
-          message: errorMessage,
-          statusCode: response.statusCode.toString(),
+        throw GlobalErrorHandler.handleErrorResponse(
+          response,
+          'Could not download & preview image',
         );
       }
 
@@ -141,8 +102,9 @@ class PushNotificationRemoteDataSourcesImpl
       );
     } on ServerException {
       rethrow;
-    } catch (e, s) {
-      debugPrintStack(stackTrace: s);
+    } catch (e) {
+      debugPrint(
+          '---PUSH NOTIFICATION DATA SOURCE : [imageDownload] :ERROR: $e ');
       throw ServerException(
         message: e.toString(),
         statusCode: '505',
@@ -150,7 +112,6 @@ class PushNotificationRemoteDataSourcesImpl
     }
   }
 
-  //send notifications..
   @override
   Future<NotificationResponse> sendNotifications({
     required String userToken,
@@ -163,7 +124,6 @@ class PushNotificationRemoteDataSourcesImpl
           'https://$baseFileServerUrl:$testServerPort$kNotificationImageDownloadEndpoint/$fileName';
       debugPrint(imageUrl);
 
-      //sending that file to server.
       final response = await _customHttpClient.postRequest(
         Uri.https(
           '$baseUrl:$testServerPort',
@@ -180,35 +140,18 @@ class PushNotificationRemoteDataSourcesImpl
       );
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        debugPrint(
-            '------- PUSH NOTIFICATION DATA SOURCE : [sendNotifications] ERROR : ${response.body}');
-
-        String errorMessage;
-        try {
-          // Attempt to parse as JSON
-          final responseBody =
-              response.body.isNotEmpty ? jsonDecode(response.body) : null;
-          errorMessage = (responseBody?['message'] as String?) ??
-              'Could not download & preview image';
-        } catch (e) {
-          // If JSON parsing fails, use some part of
-          // the raw response body or a default message
-          errorMessage = response.body.isNotEmpty
-              ? 'Server error: ${response.body.substring(0, min(100, response.body.length))}...'
-              : 'Could not send notification';
-        }
-
-        throw ServerException(
-          message: errorMessage,
-          statusCode: response.statusCode.toString(),
+        throw GlobalErrorHandler.handleErrorResponse(
+          response,
+          'Could not send notification',
         );
       }
 
       return NotificationResponseModel.fromJson(response.body);
     } on ServerException {
       rethrow;
-    } catch (e, s) {
-      debugPrintStack(stackTrace: s);
+    } catch (e) {
+      debugPrint(
+          '---PUSH NOTIFICATION DATA SOURCE : [sendNotifications] :ERROR: $e ');
       throw ServerException(
         message: e.toString(),
         statusCode: '505',

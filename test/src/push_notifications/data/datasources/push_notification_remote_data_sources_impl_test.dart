@@ -74,16 +74,16 @@ void main() {
 
   final tNotificationResponseModel = NotificationResponseModel.empty();
 
-  group('imageUpload.', () {
+  group('imageUpload', () {
     test(
-      'should return [void] when the status code is 200 '
-      'or 201',
+      'should return [void] when the status code is 200 or 201',
       () async {
         when(
-          () => mockClient.setUri(
-            any(),
-            any(),
-            any(),
+          () => mockClient.setMultipartRequest(
+            uri: any(named: 'uri'),
+            userToken: any(named: 'userToken'),
+            fields: any(named: 'fields'),
+            files: any(named: 'files'),
           ),
         ).thenAnswer((_) async {});
 
@@ -102,13 +102,13 @@ void main() {
         );
 
         verify(
-          () => mockClient.setUri(
-            Uri.https(
+          () => mockClient.setMultipartRequest(
+            uri: Uri.https(
               '$baseFileServerUrl:$testServerPort',
               kNotificationImageUploadEndpoint,
             ),
-            tUserToken,
-            tImageFile,
+            userToken: tUserToken,
+            files: {'image': tImageFile},
           ),
         ).called(1);
 
@@ -121,18 +121,17 @@ void main() {
     );
 
     test(
-      'should throw [ServerException] when the status code is not 200 or '
-      '201',
+      'should throw [ServerException] when the status code is not 200 or 201',
       () async {
         when(
-          () => mockClient.setUri(
-            any(),
-            any(),
-            any(),
+          () => mockClient.setMultipartRequest(
+            uri: any(named: 'uri'),
+            userToken: any(named: 'userToken'),
+            fields: any(named: 'fields'),
+            files: any(named: 'files'),
           ),
-        ).thenAnswer(
-          (_) async {},
-        );
+        ).thenAnswer((_) async {});
+
         when(
           () => mockClient.sendRequest(),
         ).thenAnswer(
@@ -144,26 +143,22 @@ void main() {
 
         final methodCall = pushNotificationRemoteDataSources.imageUpload;
 
-        //multiple async methods are called so to verify
-        // have to properly await.
         await expectLater(
-          () async => methodCall(
+          () => methodCall(
             userToken: tUserToken,
             imageFile: tImageFile,
           ),
-          throwsA(
-            isA<ServerException>(),
-          ),
+          throwsA(isA<ServerException>()),
         );
 
         verify(
-          () => mockClient.setUri(
-            Uri.https(
+          () => mockClient.setMultipartRequest(
+            uri: Uri.https(
               '$baseFileServerUrl:$testServerPort',
               kNotificationImageUploadEndpoint,
             ),
-            tUserToken,
-            tImageFile,
+            userToken: tUserToken,
+            files: {'image': tImageFile},
           ),
         ).called(1);
 

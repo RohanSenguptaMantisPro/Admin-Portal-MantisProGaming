@@ -4,7 +4,6 @@ import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/datasources/auth_remote_data_sources.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/models/admin_details_model.dart';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
@@ -119,15 +118,15 @@ void main() {
   group('createUser', () {
     test(
       'should return [String] when the status code is 200 or 201',
-      () async {
+          () async {
         when(
-          () => mockClient.post(
+              () => mockClient.post(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
           ),
         ).thenAnswer(
-          (_) async => http.Response(
+              (_) async => http.Response(
             jsonEncode(
               {
                 'status': 'success',
@@ -139,19 +138,14 @@ void main() {
         );
 
         final methodCall =
-            await remoteDataSourceImpl.createUser({'data': 'encryptedData'});
+        await remoteDataSourceImpl.createUser({'data': 'encryptedData'});
 
-        expect(
-          methodCall,
-          equals(tUserToken),
-        );
+        expect(methodCall, equals(tUserToken));
 
         verify(
-          () => mockClient.post(
+              () => mockClient.post(
             Uri.https('$baseUrl:$testServerPort', kCreateUserEndpoint),
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: {'Content-Type': 'application/json'},
             body: jsonEncode({'data': 'encryptedData'}),
           ),
         ).called(1);
@@ -161,20 +155,17 @@ void main() {
     );
 
     test(
-      'should throw [ServerException] when the status code is not 200 or '
-      '201',
-      () async {
+      'should throw [ServerException] when the status code is not 200 or 201',
+          () async {
         when(
-          () => mockClient.post(
+              () => mockClient.post(
             any(),
-            headers: any(
-              named: 'headers',
-            ),
+            headers: any(named: 'headers'),
             body: any(named: 'body'),
           ),
         ).thenAnswer(
-          (_) async => http.Response(
-            'Could not log user in',
+              (_) async => http.Response(
+            'Could not create user',
             500,
           ),
         );
@@ -182,17 +173,18 @@ void main() {
         final methodCall = remoteDataSourceImpl.createUser;
 
         expect(
-          () async => methodCall({'data': 'encryptedData'}),
+              () async => methodCall({'data': 'encryptedData'}),
           throwsA(
-            const ServerException(
-              message: 'Could not log user in',
-              statusCode: '500',
+            isA<ServerException>().having(
+                  (e) => e.message,
+              'message',
+              contains('Could not create user'),
             ),
           ),
         );
 
         verify(
-          () => mockClient.post(
+              () => mockClient.post(
             Uri.https('$baseUrl:$testServerPort', kCreateUserEndpoint),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({'data': 'encryptedData'}),
@@ -287,17 +279,16 @@ void main() {
     );
 
     test(
-      'should throw [ServerException] when the status code is not 200 and '
-      '[status != failure] ',
-      () async {
+      'should throw [ServerException] when the status code is not 200 and [status != failure]',
+          () async {
         when(
-          () => mockClient.get(
+              () => mockClient.get(
             any(),
             headers: any(named: 'headers'),
           ),
         ).thenAnswer(
-          (_) async => http.Response(
-            'something went wrong',
+              (_) async => http.Response(
+            'Could not check admin status',
             500,
           ),
         );
@@ -305,17 +296,18 @@ void main() {
         final methodCall = remoteDataSourceImpl.isAdmin;
 
         expect(
-          () async => methodCall(tUserToken),
+              () async => methodCall(tUserToken),
           throwsA(
-            const ServerException(
-              message: 'something went wrong',
-              statusCode: '500',
+            isA<ServerException>().having(
+                  (e) => e.message,
+              'message',
+              contains('Could not check admin status'),
             ),
           ),
         );
 
         verify(
-          () => mockClient.get(
+              () => mockClient.get(
             Uri.https('$baseUrl:$testServerPort', kIsAdminEndpoint),
             headers: {
               'Authorization': 'Bearer $tUserToken',
@@ -475,19 +467,16 @@ void main() {
     );
 
     test(
-      'should throw [ServerException] when the status code is not 200 or '
-      '201',
-      () async {
+      'should throw [ServerException] when the status code is not 200 or 201',
+          () async {
         when(
-          () => mockClient.get(
+              () => mockClient.get(
             any(),
-            headers: any(
-              named: 'headers',
-            ),
+            headers: any(named: 'headers'),
           ),
         ).thenAnswer(
-          (_) async => http.Response(
-            'Could not log user in',
+              (_) async => http.Response(
+            'Could not fetch user data',
             500,
           ),
         );
@@ -495,17 +484,18 @@ void main() {
         final methodCall = remoteDataSourceImpl.fetchUserData;
 
         expect(
-          () async => methodCall(tUserToken),
+              () async => methodCall(tUserToken),
           throwsA(
-            const ServerException(
-              message: 'Could not log user in',
-              statusCode: '500',
+            isA<ServerException>().having(
+                  (e) => e.message,
+              'message',
+              contains('Could not fetch user data'),
             ),
           ),
         );
 
         verify(
-          () => mockClient.get(
+              () => mockClient.get(
             Uri.https('$baseUrl:$testServerPort', kGetAdminDataEndpoint),
             headers: {
               'Authorization': 'Bearer $tUserToken',
@@ -521,66 +511,102 @@ void main() {
 //   logOut.
   group('logOut', () {
     test(
-      'should call [SharedPreferences] to log user out',
+      'should call SharedPreferences.clear(), GoogleSignIn.signOut(),'
+      ' and GoogleSignIn.disconnect() when logging out',
       () async {
-        when(() => mockSharedPreferences.remove(any())).thenAnswer(
-          (_) async => true,
-        );
-        when(() => mockGoogleSignIn.signOut()).thenAnswer(
-          (_) async => null,
-        );
+        // Arrange
+        when(() => mockSharedPreferences.clear()).thenAnswer((_) async => true);
+        when(() => mockGoogleSignIn.signOut()).thenAnswer((_) async => null);
+        when(() => mockGoogleSignIn.disconnect()).thenAnswer((_) async => null);
 
+        // Act
         await remoteDataSourceImpl.logOut();
 
-        verify(
-          () => mockSharedPreferences.remove(kUserToken),
-        ).called(1);
+        // Assert
+        verify(() => mockSharedPreferences.clear()).called(1);
         verify(() => mockGoogleSignIn.signOut()).called(1);
-        verifyNoMoreInteractions(mockSharedPreferences);
-        verifyNoMoreInteractions(mockGoogleSignIn);
+        verify(() => mockGoogleSignIn.disconnect()).called(1);
       },
     );
 
     test(
-      'should return [CacheException] to log user out',
+      'should throw CacheException when SharedPreferences.clear() returns false',
       () async {
-        // when(() => mockGoogleSignIn)
-        when(() => mockSharedPreferences.remove(any())).thenAnswer(
-          (_) async => false,
+        // Arrange
+        when(() => mockSharedPreferences.clear())
+            .thenAnswer((_) async => false);
+
+        // Act
+        final call = remoteDataSourceImpl.logOut;
+
+        // Assert
+        await expectLater(
+          call(),
+          throwsA(
+            isA<CacheException>().having(
+              (e) => e.message,
+              'message',
+              'Could not log user out',
+            ),
+          ),
         );
-
-        final methodCall = remoteDataSourceImpl.logOut;
-
-        expect(
-          () async => methodCall(),
-          throwsA(isA<CacheException>()),
-        );
-
-        verify(
-          () => mockSharedPreferences.remove(kUserToken),
-        ).called(1);
-        verifyNoMoreInteractions(mockSharedPreferences);
+        verify(() => mockSharedPreferences.clear()).called(1);
+        verifyNever(() => mockGoogleSignIn.signOut());
+        verifyNever(() => mockGoogleSignIn.disconnect());
       },
     );
 
     test(
-      'should throw a [CacheException] when there is an error caching the data',
+      'should throw CacheException when GoogleSignIn.signOut() throws an exception',
       () async {
-        when(
-          () => mockSharedPreferences.remove(any()),
-        ).thenThrow(Exception());
+        // Arrange
+        when(() => mockSharedPreferences.clear()).thenAnswer((_) async => true);
+        when(() => mockGoogleSignIn.signOut())
+            .thenThrow(Exception('Sign out failed'));
 
-        final methodCall = remoteDataSourceImpl.logOut;
+        // Act
+        final call = remoteDataSourceImpl.logOut;
 
-        expect(
-          () async => methodCall(),
-          throwsA(isA<CacheException>()),
+        // Assert
+        await expectLater(
+          call(),
+          throwsA(
+            isA<CacheException>().having(
+              (e) => e.message,
+              'message',
+              contains('Sign out failed'),
+            ),
+          ),
         );
+        verify(() => mockSharedPreferences.clear()).called(1);
+        verify(() => mockGoogleSignIn.signOut()).called(1);
+        verifyNever(() => mockGoogleSignIn.disconnect());
+      },
+    );
+    //
+    test(
+      'should throw CacheException when GoogleSignIn.disconnect() throws an exception',
+          () async {
+        // Arrange
+        when(() => mockSharedPreferences.clear()).thenAnswer((_) async => true);
+        when(() => mockGoogleSignIn.signOut()).thenAnswer((_) async => null);
+        when(() => mockGoogleSignIn.disconnect()).thenThrow(Exception('Disconnect failed'));
 
-        verify(
-          () => mockSharedPreferences.remove(kUserToken),
-        ).called(1);
-        verifyNoMoreInteractions(mockSharedPreferences);
+        // Act
+        final call = remoteDataSourceImpl.logOut;
+
+        // Assert
+        await expectLater(
+          call(),
+          throwsA(isA<CacheException>().having(
+                (e) => e.message,
+            'message',
+            contains('Disconnect failed'),
+          )),
+        );
+        verify(() => mockSharedPreferences.clear()).called(1);
+        verify(() => mockGoogleSignIn.signOut()).called(1);
+        verify(() => mockGoogleSignIn.disconnect()).called(1);
       },
     );
   });

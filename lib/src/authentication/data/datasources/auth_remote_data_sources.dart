@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/global_error_handler.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/models/admin_details_model.dart';
 import 'package:flutter/material.dart';
@@ -37,19 +38,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         _httpClient = httpClient,
         _googleSignIn = googleSignIn;
 
-  // _googleSignIn = googleSignIn
-
   final SharedPreferences _prefs;
   final http.Client _httpClient;
   final GoogleSignIn _googleSignIn;
-
-  // final FirebaseAuth _authClient;
-  // final FirebaseFirestore _cloudStoreClient;
-  // final FirebaseStorage _dbClient;
-
-  // google sign in
-  // encrypt.
-  // createUser as below with updates.
 
   @override
   Future<String> googleSignInService() async {
@@ -83,8 +74,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<String> createUser(DataMap jsonPayload) async {
-    // Call createUser endpoint.
-    debugPrint('------- Calling createUser Endpoint.');
     try {
       final response = await _httpClient.post(
         Uri.https('$baseUrl:$testServerPort', kCreateUserEndpoint),
@@ -95,15 +84,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        debugPrint('------- ServerException has occurred.');
-        throw ServerException(
-          message: response.body,
-          statusCode: response.statusCode.toString(),
-        );
+        throw GlobalErrorHandler.handleErrorResponse(
+            response, 'Could not create user');
       }
 
       final receivedJson = jsonDecode(response.body) as DataMap;
-      debugPrint(receivedJson.toString());
       return receivedJson['token'].toString();
     } on ServerException {
       rethrow;
@@ -120,8 +105,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<bool> isAdmin(String userToken) async {
     try {
-      // later to be configured according to the
-      // isAdmin endpoint.
       final response = await _httpClient.get(
         Uri.https('$baseUrl:$testServerPort', kIsAdminEndpoint),
         headers: {
@@ -140,10 +123,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           return true;
         }
       } else {
-        throw ServerException(
-          message: response.body,
-          statusCode: response.statusCode.toString(),
-        );
+        throw GlobalErrorHandler.handleErrorResponse(
+            response, 'Could not check admin status');
       }
       return false;
     } on ServerException {
@@ -182,8 +163,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<AdminDetailsModel> fetchUserData(String userToken) async {
     try {
-      // later to be configured according to the
-      // isAdmin endpoint.
       final response = await _httpClient.get(
         Uri.https('$baseUrl:$testServerPort', kGetAdminDataEndpoint),
         headers: {
@@ -192,11 +171,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        debugPrint('------- ServerException has occurred.');
-        throw ServerException(
-          message: response.body,
-          statusCode: response.statusCode.toString(),
-        );
+        throw GlobalErrorHandler.handleErrorResponse(
+            response, 'Could not fetch user data');
       }
 
       final receivedJson = jsonDecode(response.body) as DataMap;
@@ -209,7 +185,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
-      debugPrint(receivedJson.toString());
       return AdminDetailsModel.fromJson(
         jsonEncode(userData),
       );
@@ -227,7 +202,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> logOut() async {
     try {
-      final result = await _prefs.remove(kUserToken);
+      final result = await _prefs.clear();
 
       if (result == false) {
         throw const CacheException(
@@ -236,6 +211,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
       await _googleSignIn.signOut();
+      await _googleSignIn.disconnect();
     } on CacheException {
       rethrow;
     } catch (e) {

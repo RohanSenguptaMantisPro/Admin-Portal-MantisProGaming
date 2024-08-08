@@ -1,12 +1,12 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_http_client.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/global_error_handler.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/data/models/game_search_response_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 abstract class GameSearchRemoteDataSources {
   const GameSearchRemoteDataSources();
@@ -60,21 +60,9 @@ class GameSearchRemoteDataSourcesImpl implements GameSearchRemoteDataSources {
       );
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        String errorMessage;
-        try {
-          final responseBody =
-              response.body.isNotEmpty ? jsonDecode(response.body) : null;
-          errorMessage = (responseBody?['message'] as String?) ??
-              'Could not fetch game data';
-        } catch (e) {
-          errorMessage = response.body.isNotEmpty
-              ? 'Server error: ${response.body.substring(0, min(100, response.body.length))}...'
-              : 'Could not fetch game data';
-        }
-
-        throw ServerException(
-          message: errorMessage,
-          statusCode: response.statusCode.toString(),
+        throw GlobalErrorHandler.handleErrorResponse(
+          response,
+          'Could not fetch game data',
         );
       }
 

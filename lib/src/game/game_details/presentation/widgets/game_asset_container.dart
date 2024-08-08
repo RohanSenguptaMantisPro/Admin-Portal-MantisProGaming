@@ -11,12 +11,14 @@ class GameAssetContainer extends StatefulWidget {
     required this.type,
     required this.onBrowse,
     required this.imageBytes,
+    required this.isLoading,
     super.key,
   });
 
   final GameImageType type;
-  final VoidCallback onBrowse;
+  final void Function(GameImageType, XFile) onBrowse;
   final Uint8List? imageBytes;
+  final bool isLoading;
 
   @override
   State<GameAssetContainer> createState() => _GameAssetContainerState();
@@ -27,7 +29,7 @@ class _GameAssetContainerState extends State<GameAssetContainer> {
   String _validationMessage = '';
   bool _isValidImage = false;
 
-  Future<void> pickImage(GameImageType type) async {
+  Future<void> pickImage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image != null) {
       bool isValid = await _validateImage(image);
@@ -88,29 +90,43 @@ class _GameAssetContainerState extends State<GameAssetContainer> {
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          insetPadding: EdgeInsets.zero,
-          child: Stack(
-            children: [
-              if (_isValidImage)
-                Image.network(
-                  pickedImage!.path,
-                  fit: BoxFit.contain,
-                )
-              else if (widget.imageBytes != null)
-                Image.memory(
-                  widget.imageBytes!,
-                  fit: BoxFit.contain,
+        return Center(
+          child: Material(
+            type: MaterialType.transparency,
+            child: Stack(
+              children: [
+                if (_isValidImage && pickedImage != null)
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: context.width * 0.5,
+                      maxHeight: context.height * 0.5,
+                    ),
+                    child: Image.network(
+                      pickedImage!.path,
+                      fit: BoxFit.contain,
+                    ),
+                  )
+                else if (widget.imageBytes != null)
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: context.width * 0.5,
+                      maxHeight: context.height * 0.5,
+                    ),
+                    child: Image.memory(
+                      widget.imageBytes!,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                Positioned(
+                  top: 1,
+                  right: 1,
+                  child: IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
                 ),
-              Positioned(
-                top: 10,
-                right: 10,
-                child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -121,10 +137,6 @@ class _GameAssetContainerState extends State<GameAssetContainer> {
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: DottedBorderPainter(),
-      //ClipRRect clips the children of the direct child of the ClipRRect
-      // meaning, Container's child will be clipped so that its children will
-      // remain inside the Container's dimensions also respecting the border
-      // radius.
       child: ClipRRect(
         child: Container(
           width: 200,
@@ -137,8 +149,6 @@ class _GameAssetContainerState extends State<GameAssetContainer> {
                     image: NetworkImage(pickedImage!.path),
                     fit: BoxFit.cover,
                   )
-                //else show if there is already fetched image
-                // else show null.
                 : widget.imageBytes != null
                     ? DecorationImage(
                         image: MemoryImage(widget.imageBytes!),
@@ -148,50 +158,56 @@ class _GameAssetContainerState extends State<GameAssetContainer> {
           ),
           child: Stack(
             children: [
-              //if container has no child it will take the whole dimensions of
-              // the parent widget.  in this case which is the parent container.
               Container(
                 decoration: BoxDecoration(
                   color: !_isValidImage && widget.imageBytes == null
                       ? Colors.transparent
                       : Colours.backgroundColourLightDark.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(
-                    16,
-                  ),
+                  borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildButton(
-                    text: 'Browse Images',
-                    onPressed: () async {
-                      await pickImage(widget.type);
-                      widget.onBrowse();
-                    },
-                    iconData: Icons.cloud_upload_outlined,
+              if (widget.isLoading)
+                const Center(
+                  child: CircularProgressIndicator(
+                    color: Colours.primaryColour,
                   ),
-                  Center(
-                    child: Text(
-                      widget.type.value,
-                      textAlign: TextAlign.center,
+                )
+              else
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildButton(
+                      text: 'Browse Images',
+                      onPressed: () async {
+                        await pickImage();
+                        if (_isValidImage) {
+                          widget.onBrowse(widget.type, pickedImage!);
+                        }
+                      },
+                      iconData: Icons.cloud_upload_outlined,
                     ),
-                  ),
-                  _buildButton(
-                      text: 'View Image',
-                      onPressed: _showFullScreenImage,
-                      iconData: Icons.remove_red_eye_outlined),
-                  if (!_isValidImage)
-                    Text(
-                      _validationMessage,
-                      textAlign: TextAlign.center,
-                      style: context.theme.textTheme.labelSmall?.copyWith(
-                        color: Colours.redColour,
+                    Center(
+                      child: Text(
+                        widget.type.value,
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                ],
-              ),
+                    _buildButton(
+                      text: 'View Image',
+                      onPressed: _showFullScreenImage,
+                      iconData: Icons.remove_red_eye_outlined,
+                    ),
+                    if (!_isValidImage)
+                      Text(
+                        _validationMessage,
+                        textAlign: TextAlign.center,
+                        style: context.theme.textTheme.labelSmall?.copyWith(
+                          color: Colours.redColour,
+                        ),
+                      ),
+                  ],
+                ),
             ],
           ),
         ),
@@ -199,21 +215,20 @@ class _GameAssetContainerState extends State<GameAssetContainer> {
     );
   }
 
-  Widget _buildButton(
-      {required String text,
-      required VoidCallback onPressed,
-      required IconData iconData}) {
+  Widget _buildButton({
+    required String text,
+    required VoidCallback onPressed,
+    required IconData iconData,
+  }) {
     return TextButton.icon(
-      icon: Icon(
-        iconData,
-      ),
+      icon: Icon(iconData),
       label: Text(text),
       onPressed: onPressed,
       style: ButtonStyle(
-        foregroundColor: WidgetStatePropertyAll(Colours.primaryColour),
-        iconColor: WidgetStatePropertyAll(Colours.primaryColour),
-        iconSize: WidgetStatePropertyAll(14),
-        overlayColor: WidgetStatePropertyAll(Colours.primaryColourLight),
+        foregroundColor: WidgetStateProperty.all(Colours.primaryColour),
+        iconColor: WidgetStateProperty.all(Colours.primaryColour),
+        iconSize: WidgetStateProperty.all(14),
+        overlayColor: WidgetStateProperty.all(Colours.primaryColourLight),
       ),
     );
   }

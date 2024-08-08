@@ -9,6 +9,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/enti
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/usecases/download_game_images.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/usecases/get_game_details.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/usecases/update_game_details.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/domain/usecases/upload_game_images.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/presentation/bloc/game_details_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/presentation/enums/game_asset_name_enum.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_details/presentation/widgets/game_asset_containers_widget.dart';
@@ -165,6 +166,11 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
             context,
             'Success! Updated Game Details.',
           );
+        } else if (state is UploadedGameImage) {
+          showSuccessNotification(
+            context,
+            'Success! Uploaded ${state.imageType.value} Asset Image!',
+          );
         }
       },
       builder: (context, state) {
@@ -179,9 +185,9 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                     minHeight: 950,
                     minWidth: 1200,
                   ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colours.redColour),
-                  ),
+                  // decoration: BoxDecoration(
+                  //   border: Border.all(color: Colours.redColour),
+                  // ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -223,21 +229,35 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                               ),
                             ),
                             GameAssetContainersWidget(
-                              onBrowse: (gameImageType) {
+                              onBrowse: (gameImageType, imageFile) {
                                 //Add Upload Game Assets Event.
-
-                                // context.read<GameDetailsBloc>().add();
+                                context.read<GameDetailsBloc>().add(
+                                      UploadGameImagesEvent(
+                                        uploadGameImagesParams:
+                                            UploadGameImagesParams(
+                                          gameObjectId: widget.gameID,
+                                          userToken: context
+                                                  .read<UserTokenProvider>()
+                                                  .userToken ??
+                                              '',
+                                          imageFile: imageFile,
+                                          imageAssetName:
+                                              gameImageType.apiValue,
+                                        ),
+                                        imageType: gameImageType,
+                                      ),
+                                    );
                               },
                             ),
                             const SizedBox(
                               height: 16,
                             ),
                             Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.purple,
-                                ),
-                              ),
+                              // decoration: BoxDecoration(
+                              //   border: Border.all(
+                              //     color: Colors.purple,
+                              //   ),
+                              // ),
 
                               //conditional height because
                               // only when loading  min sized block
