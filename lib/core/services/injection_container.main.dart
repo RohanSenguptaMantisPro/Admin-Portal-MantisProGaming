@@ -2,8 +2,31 @@ part of 'injection_container.dart';
 
 final sl = GetIt.instance;
 
+late final http.Client httpClient;
+late final SharedPreferences prefs;
+late final GoogleSignIn googleSignIn;
+late final RSAService rsaService;
+late final AESService aesService;
+late final BrowserInfo browserInfo;
+
+Future<void> instantiateDependencies() async {
+  httpClient = http.Client();
+  prefs = await SharedPreferences.getInstance();
+  googleSignIn = GoogleSignIn(
+    clientId: webClientId,
+    scopes: [
+      'email',
+      'profile',
+    ],
+  );
+  rsaService = const RSAService();
+  aesService = AESService();
+  browserInfo = BrowserInfo();
+}
+
 Future<void> init() async {
   //global injections.
+  await instantiateDependencies();
 
   await _initAuth();
   await _initUserSearch();
@@ -15,19 +38,6 @@ Future<void> init() async {
 
 // Authentication.
 Future<void> _initAuth() async {
-  final httpClient = http.Client();
-  final prefs = await SharedPreferences.getInstance();
-
-  final GoogleSignIn googleSignIn = GoogleSignIn(
-    clientId: webClientId,
-    scopes: [
-      'email',
-      'profile',
-    ],
-  );
-  final rsaService = RSAService();
-  final aesService = AESService();
-
   sl
     ..registerFactory(
       () => AuthBloc(
@@ -56,18 +66,21 @@ Future<void> _initAuth() async {
       ),
     )
     ..registerLazySingleton(
-      BrowserInfo.new,
+      () => browserInfo,
     )
     ..registerLazySingleton(() => rsaService)
     ..registerLazySingleton(() => aesService)
     ..registerLazySingleton<AuthRepo>(() => AuthRepoImpl(sl()))
     ..registerLazySingleton<AuthRemoteDataSource>(
       () => AuthRemoteDataSourceImpl(
-        googleSignIn: sl(),
+        customSignupClient: sl(),
         prefs: sl(),
         httpClient: sl(),
       ),
     )
+    ..registerLazySingleton(() => CustomSignUpClient(googleSignIn: sl()))
+    ..registerLazySingleton(() => CustomLocalStorage(prefs: sl()))
+    ..registerLazySingleton(() => CustomHttpClient(httpClient: sl()))
     ..registerLazySingleton(() => googleSignIn)
     ..registerLazySingleton(() => prefs)
     ..registerLazySingleton(() => httpClient);
@@ -111,8 +124,6 @@ Future<void> _initUserDetails() async {
 
 // push notifications
 Future<void> _initPushNotifications() async {
-  final customHttpClient = CustomHttpClient();
-
   sl
     ..registerFactory(
       () => PushNotificationBloc(
@@ -133,8 +144,7 @@ Future<void> _initPushNotifications() async {
       () => PushNotificationRemoteDataSourcesImpl(
         customHttpClient: sl(),
       ),
-    )
-    ..registerLazySingleton(() => customHttpClient);
+    );
 }
 
 Future<void> _initGameSearch() async {

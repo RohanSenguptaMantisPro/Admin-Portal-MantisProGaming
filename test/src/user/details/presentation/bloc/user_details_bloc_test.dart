@@ -102,7 +102,7 @@ void main() {
       ),
       expect: () => [
         const GettingUserDetails(),
-        GetUserDetailsError(message: tServerFailure.message),
+        GetUserDetailsError(message: tServerFailure.errorMessage),
       ],
       verify: (_) {
         verify(
@@ -167,7 +167,7 @@ void main() {
       ),
       expect: () => [
         const UpdatingUserDetails(),
-        UpdateUserDetailsError(message: tServerFailure.message),
+        UpdateUserDetailsError(message: tServerFailure.errorMessage),
       ],
       verify: (_) {
         verify(

@@ -129,7 +129,7 @@ void main() {
       ),
       expect: () => [
         const UploadingNotificationImage(),
-        PushNotificationError(errorMessage: tServerFailure.message),
+        PushNotificationError(errorMessage: tServerFailure.errorMessage),
       ],
       verify: (_) {
         verify(
@@ -197,7 +197,7 @@ void main() {
       ),
       expect: () => [
         const DownloadingNotificationImage(),
-        PushNotificationError(errorMessage: tServerFailure.message),
+        PushNotificationError(errorMessage: tServerFailure.errorMessage),
       ],
       verify: (_) {
         verify(
@@ -266,7 +266,7 @@ void main() {
       ),
       expect: () => [
         const SendingNotification(),
-        PushNotificationError(errorMessage: tServerFailure.message),
+        PushNotificationError(errorMessage: tServerFailure.errorMessage),
       ],
       verify: (_) {
         verify(

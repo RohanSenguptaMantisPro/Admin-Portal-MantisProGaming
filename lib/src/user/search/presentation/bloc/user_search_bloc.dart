@@ -4,9 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 
 part 'user_search_bloc.mapper.dart';
-
 part 'user_search_event.dart';
-
 part 'user_search_state.dart';
 
 class UserSearchBloc extends Bloc<UserSearchEvent, UserSearchState> {
@@ -39,7 +37,7 @@ class UserSearchBloc extends Bloc<UserSearchEvent, UserSearchState> {
     );
 
     result.fold(
-      (failure) => emit(UserSearchError(message: failure.message)),
+      (failure) => emit(UserSearchError(message: failure.errorMessage)),
       (userSearchResponse) => emit(
         FetchedUserData(
           userSearchResponse: userSearchResponse,

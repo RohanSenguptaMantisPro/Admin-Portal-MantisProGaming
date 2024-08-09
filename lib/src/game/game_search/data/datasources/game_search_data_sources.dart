@@ -6,17 +6,14 @@ import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_http_client.dar
 import 'package:admin_portal_mantis_pro_gaming/core/utils/global_error_handler.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/data/models/game_search_response_model.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/domain/usecases/search_games.dart';
 import 'package:flutter/foundation.dart';
 
 abstract class GameSearchRemoteDataSources {
   const GameSearchRemoteDataSources();
 
   Future<GameSearchResponseModel> searchGames({
-    required String userToken,
-    required String pageNumber,
-    required String limit,
-    required String field,
-    required String query,
+    required SearchGamesParams searchGamesParams,
   });
 }
 
@@ -29,22 +26,18 @@ class GameSearchRemoteDataSourcesImpl implements GameSearchRemoteDataSources {
 
   @override
   Future<GameSearchResponseModel> searchGames({
-    required String userToken,
-    required String pageNumber,
-    required String limit,
-    required String field,
-    required String query,
+    required SearchGamesParams searchGamesParams,
   }) async {
     Map<String, dynamic> queryParameters = {
-      'page': pageNumber,
-      'limit': limit,
+      'page': searchGamesParams.pageNumber,
+      'limit': searchGamesParams.limit,
     };
 
-    if (field.isNotEmpty) {
-      queryParameters['field'] = field;
+    if (searchGamesParams.field.isNotEmpty) {
+      queryParameters['field'] = searchGamesParams.field;
     }
-    if (query.isNotEmpty) {
-      queryParameters['query'] = query;
+    if (searchGamesParams.query.isNotEmpty) {
+      queryParameters['query'] = searchGamesParams.query;
     }
 
     try {
@@ -55,7 +48,7 @@ class GameSearchRemoteDataSourcesImpl implements GameSearchRemoteDataSources {
           queryParameters,
         ),
         header: {
-          'Authorization': 'Bearer $userToken',
+          'Authorization': 'Bearer ${searchGamesParams.userToken}',
         },
       );
 

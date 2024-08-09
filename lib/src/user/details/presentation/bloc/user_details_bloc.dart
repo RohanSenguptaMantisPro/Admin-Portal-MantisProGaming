@@ -38,7 +38,7 @@ class UserDetailsBloc extends Bloc<UserDetailsEvent, UserDetailsState> {
     );
 
     result.fold(
-      (failure) => emit(GetUserDetailsError(message: failure.message)),
+      (failure) => emit(GetUserDetailsError(message: failure.errorMessage)),
       (userDetails) => emit(
         GotUserDetails(
           userDetails: userDetails,
@@ -62,7 +62,7 @@ class UserDetailsBloc extends Bloc<UserDetailsEvent, UserDetailsState> {
     );
 
     result.fold(
-      (failure) => emit(UpdateUserDetailsError(message: failure.message)),
+      (failure) => emit(UpdateUserDetailsError(message: failure.errorMessage)),
       (_) => emit(
         const UpdatedUserDetails(),
       ),

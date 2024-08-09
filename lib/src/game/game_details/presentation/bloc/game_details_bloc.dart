@@ -45,7 +45,7 @@ class GameDetailsBloc extends Bloc<GameDetailsEvent, GameDetailsState> {
     );
 
     result.fold(
-      (failure) => emit(GameDetailsError(message: failure.message)),
+      (failure) => emit(GameDetailsError(message: failure.errorMessage)),
       (gameDetails) => emit(GotGameDetails(gameDetails: gameDetails)),
     );
   }
@@ -61,7 +61,7 @@ class GameDetailsBloc extends Bloc<GameDetailsEvent, GameDetailsState> {
     );
 
     result.fold(
-      (failure) => emit(GameDetailsError(message: failure.message)),
+      (failure) => emit(GameDetailsError(message: failure.errorMessage)),
       (_) => emit(const UpdatedGameDetails()),
     );
   }
@@ -82,7 +82,7 @@ class GameDetailsBloc extends Bloc<GameDetailsEvent, GameDetailsState> {
 
     result.fold(
       (failure) => emit(
-          GameImageError(message: failure.message, imageType: event.imageType)),
+          GameImageError(message: failure.errorMessage, imageType: event.imageType)),
       (gameDetailsImage) => emit(DownloadedGameImage(
           gameDetailsImage: gameDetailsImage, imageType: event.imageType)),
     );
@@ -100,7 +100,7 @@ class GameDetailsBloc extends Bloc<GameDetailsEvent, GameDetailsState> {
 
     result.fold(
       (failure) => emit(
-          GameImageError(message: failure.message, imageType: event.imageType)),
+          GameImageError(message: failure.errorMessage, imageType: event.imageType)),
       (_) => emit(UploadedGameImage(imageType: event.imageType)),
     );
   }

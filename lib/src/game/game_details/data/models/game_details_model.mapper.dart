@@ -24,8 +24,6 @@ class GameDetailsModelMapper extends SubClassMapperBase<GameDetailsModel> {
   static String? _$id(GameDetailsModel v) => v.id;
   static const Field<GameDetailsModel, String> _f$id =
       Field('id', _$id, key: '_id');
-  static String? _$name(GameDetailsModel v) => v.name;
-  static const Field<GameDetailsModel, String> _f$name = Field('name', _$name);
   static String? _$packageName(GameDetailsModel v) => v.packageName;
   static const Field<GameDetailsModel, String> _f$packageName =
       Field('packageName', _$packageName);
@@ -41,16 +39,18 @@ class GameDetailsModelMapper extends SubClassMapperBase<GameDetailsModel> {
   static String? _$updatedAt(GameDetailsModel v) => v.updatedAt;
   static const Field<GameDetailsModel, String> _f$updatedAt =
       Field('updatedAt', _$updatedAt);
+  static String? _$name(GameDetailsModel v) => v.name;
+  static const Field<GameDetailsModel, String> _f$name = Field('name', _$name);
 
   @override
   final MappableFields<GameDetailsModel> fields = const {
     #id: _f$id,
-    #name: _f$name,
     #packageName: _f$packageName,
     #timesAdded: _f$timesAdded,
     #timesPlayed: _f$timesPlayed,
     #createdAt: _f$createdAt,
     #updatedAt: _f$updatedAt,
+    #name: _f$name,
   };
 
   @override
@@ -64,12 +64,12 @@ class GameDetailsModelMapper extends SubClassMapperBase<GameDetailsModel> {
   static GameDetailsModel _instantiate(DecodingData data) {
     return GameDetailsModel(
         id: data.dec(_f$id),
-        name: data.dec(_f$name),
         packageName: data.dec(_f$packageName),
         timesAdded: data.dec(_f$timesAdded),
         timesPlayed: data.dec(_f$timesPlayed),
         createdAt: data.dec(_f$createdAt),
-        updatedAt: data.dec(_f$updatedAt));
+        updatedAt: data.dec(_f$updatedAt),
+        name: data.dec(_f$name));
   }
 
   @override
@@ -129,12 +129,12 @@ abstract class GameDetailsModelCopyWith<$R, $In extends GameDetailsModel, $Out>
   @override
   $R call(
       {String? id,
-      String? name,
       String? packageName,
       int? timesAdded,
       int? timesPlayed,
       String? createdAt,
-      String? updatedAt});
+      String? updatedAt,
+      String? name});
   GameDetailsModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -150,30 +150,30 @@ class _GameDetailsModelCopyWithImpl<$R, $Out>
   @override
   $R call(
           {Object? id = $none,
-          Object? name = $none,
           Object? packageName = $none,
           Object? timesAdded = $none,
           Object? timesPlayed = $none,
           Object? createdAt = $none,
-          Object? updatedAt = $none}) =>
+          Object? updatedAt = $none,
+          Object? name = $none}) =>
       $apply(FieldCopyWithData({
         if (id != $none) #id: id,
-        if (name != $none) #name: name,
         if (packageName != $none) #packageName: packageName,
         if (timesAdded != $none) #timesAdded: timesAdded,
         if (timesPlayed != $none) #timesPlayed: timesPlayed,
         if (createdAt != $none) #createdAt: createdAt,
-        if (updatedAt != $none) #updatedAt: updatedAt
+        if (updatedAt != $none) #updatedAt: updatedAt,
+        if (name != $none) #name: name
       }));
   @override
   GameDetailsModel $make(CopyWithData data) => GameDetailsModel(
       id: data.get(#id, or: $value.id),
-      name: data.get(#name, or: $value.name),
       packageName: data.get(#packageName, or: $value.packageName),
       timesAdded: data.get(#timesAdded, or: $value.timesAdded),
       timesPlayed: data.get(#timesPlayed, or: $value.timesPlayed),
       createdAt: data.get(#createdAt, or: $value.createdAt),
-      updatedAt: data.get(#updatedAt, or: $value.updatedAt));
+      updatedAt: data.get(#updatedAt, or: $value.updatedAt),
+      name: data.get(#name, or: $value.name));
 
   @override
   GameDetailsModelCopyWith<$R2, GameDetailsModel, $Out2> $chain<$R2, $Out2>(

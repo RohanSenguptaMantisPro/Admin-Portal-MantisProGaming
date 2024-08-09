@@ -16,7 +16,8 @@ class GameSearchFilterDropdown extends StatefulWidget {
   final VoidCallback closeOnSubmit;
 
   @override
-  State<GameSearchFilterDropdown> createState() => _GameSearchFilterDropdownState();
+  State<GameSearchFilterDropdown> createState() =>
+      _GameSearchFilterDropdownState();
 }
 
 class _GameSearchFilterDropdownState extends State<GameSearchFilterDropdown> {
@@ -147,14 +148,16 @@ class _GameSearchFilterDropdownState extends State<GameSearchFilterDropdown> {
 
                           context.read<GameSearchBloc>().add(
                                 SearchGamesEvent(
-                                  userToken: userToken ?? '',
-                                  pageNumber: '1',
-                                  limit: '10',
-                                  field: searchByOption ==
-                                          GameSearchByDropDownMenu.none
-                                      ? ''
-                                      : searchByOption.value,
-                                  query: queryTextEditingController.text,
+                                  searchGamesParams: SearchGamesParams(
+                                    userToken: userToken ?? '',
+                                    pageNumber: '1',
+                                    limit: '10',
+                                    field: searchByOption ==
+                                            GameSearchByDropDownMenu.none
+                                        ? ''
+                                        : searchByOption.value,
+                                    query: queryTextEditingController.text,
+                                  ),
                                 ),
                               );
 

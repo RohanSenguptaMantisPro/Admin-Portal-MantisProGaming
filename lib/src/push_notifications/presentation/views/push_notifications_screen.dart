@@ -152,7 +152,7 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
           showErrorNotification(
             context,
             'Sorry! Something went wrong! \n\n'
-            'Details : \n ${state.errorMessage}',
+            'Error Details : ${state.errorMessage}',
           );
         } else if (state is UploadedNotificationImage) {
           debugPrint(

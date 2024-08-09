@@ -4,6 +4,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/data/datasou
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/data/models/game_search_response_model.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/data/repositories/game_search_repo_impl.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/domain/entities/game_search_response.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/domain/usecases/search_games.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -15,17 +16,21 @@ void main() {
   late MockGameSearchRemoteDataSources remoteDataSource;
   late GameSearchRepoImpl repoImpl;
 
-  setUp(() {
-    remoteDataSource = MockGameSearchRemoteDataSources();
-    repoImpl = GameSearchRepoImpl(remoteDataSource);
-  });
-
   const tGameSearchResponseModel = GameSearchResponseModel.empty();
 
   const tGameDataFetchException = ServerException(
     message: 'could not fetch game data',
     statusCode: '404',
   );
+
+  const tSearchGamesParams = SearchGamesParams.empty();
+
+  setUp(() {
+    remoteDataSource = MockGameSearchRemoteDataSources();
+    repoImpl = GameSearchRepoImpl(remoteDataSource);
+
+    registerFallbackValue(tSearchGamesParams);
+  });
 
   const tUserToken = '';
   const tPageNumber = '';
@@ -40,22 +45,14 @@ void main() {
       () async {
         when(
           () => remoteDataSource.searchGames(
-            userToken: any(named: 'userToken'),
-            pageNumber: any(named: 'pageNumber'),
-            limit: any(named: 'limit'),
-            field: any(named: 'field'),
-            query: any(named: 'query'),
+            searchGamesParams: tSearchGamesParams,
           ),
         ).thenAnswer(
           (_) async => tGameSearchResponseModel,
         );
 
         final result = await repoImpl.searchGames(
-          userToken: tUserToken,
-          pageNumber: tPageNumber,
-          limit: tPageLimit,
-          field: tField,
-          query: tQuery,
+          searchGamesParams: tSearchGamesParams,
         );
 
         expect(
@@ -69,11 +66,7 @@ void main() {
 
         verify(
           () => remoteDataSource.searchGames(
-            userToken: tUserToken,
-            pageNumber: tPageNumber,
-            limit: tPageLimit,
-            field: tField,
-            query: tQuery,
+            searchGamesParams: tSearchGamesParams,
           ),
         ).called(1);
 
@@ -87,22 +80,14 @@ void main() {
       () async {
         when(
           () => remoteDataSource.searchGames(
-            userToken: any(named: 'userToken'),
-            pageNumber: any(named: 'pageNumber'),
-            limit: any(named: 'limit'),
-            field: any(named: 'field'),
-            query: any(named: 'query'),
+            searchGamesParams: tSearchGamesParams,
           ),
         ).thenThrow(
           tGameDataFetchException,
         );
 
         final result = await repoImpl.searchGames(
-          userToken: tUserToken,
-          pageNumber: tPageNumber,
-          limit: tPageLimit,
-          field: tField,
-          query: tQuery,
+          searchGamesParams: tSearchGamesParams,
         );
 
         expect(
@@ -119,11 +104,7 @@ void main() {
 
         verify(
           () => remoteDataSource.searchGames(
-            userToken: tUserToken,
-            pageNumber: tPageNumber,
-            limit: tPageLimit,
-            field: tField,
-            query: tQuery,
+            searchGamesParams: tSearchGamesParams,
           ),
         ).called(1);
 

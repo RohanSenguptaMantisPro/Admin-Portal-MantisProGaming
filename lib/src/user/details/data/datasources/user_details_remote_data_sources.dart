@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_http_client.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/global_error_handler.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/data/models/user_details_model.dart';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 
 abstract class UserDetailsRemoteDataSources {
   const UserDetailsRemoteDataSources();
@@ -25,10 +25,10 @@ abstract class UserDetailsRemoteDataSources {
 
 class UserDetailsDataScourceImpl implements UserDetailsRemoteDataSources {
   const UserDetailsDataScourceImpl({
-    required http.Client httpClient,
+    required CustomHttpClient httpClient,
   }) : _httpClient = httpClient;
 
-  final http.Client _httpClient;
+  final CustomHttpClient _httpClient;
 
   @override
   Future<UserDetailsModel> getUserDetails({
@@ -36,12 +36,12 @@ class UserDetailsDataScourceImpl implements UserDetailsRemoteDataSources {
     required String userID,
   }) async {
     try {
-      final response = await _httpClient.get(
+      final response = await _httpClient.getRequest(
         Uri.https(
           '$baseUrl:$testServerPort',
           '$kGetUserDetailsEndpoint/$userID',
         ),
-        headers: {
+        header: {
           'Authorization': 'Bearer $userToken',
         },
       );
@@ -84,12 +84,12 @@ class UserDetailsDataScourceImpl implements UserDetailsRemoteDataSources {
     required String accountStatus,
   }) async {
     try {
-      final response = await _httpClient.post(
+      final response = await _httpClient.postRequest(
         Uri.https(
           '$baseUrl:$testServerPort',
           '$kUpdateUserDetailsEndpont/$userID',
         ),
-        headers: {
+        header: {
           'Authorization': 'Bearer $userToken',
         },
         body: {

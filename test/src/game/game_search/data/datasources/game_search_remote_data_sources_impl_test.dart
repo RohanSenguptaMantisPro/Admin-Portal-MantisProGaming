@@ -5,6 +5,7 @@ import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_http_client.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/data/datasources/game_search_data_sources.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/data/models/game_search_response_model.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/domain/usecases/search_games.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
@@ -14,6 +15,16 @@ class MockCustomHttpClient extends Mock implements CustomHttpClient {}
 void main() {
   late CustomHttpClient mockCustomHttpClient;
   late GameSearchRemoteDataSources gameSearchDataSourceImpl;
+
+  const tGameSearchResponseModel = GameSearchResponseModel.empty();
+  const tSearchGamesParams = SearchGamesParams.empty();
+
+  final queryParameters = {
+    'page': tSearchGamesParams.pageNumber,
+    'limit': tSearchGamesParams.limit,
+    'field': tSearchGamesParams.field,
+    'query': tSearchGamesParams.query,
+  };
 
   setUp(() {
     mockCustomHttpClient = MockCustomHttpClient();
@@ -25,22 +36,8 @@ void main() {
     registerFallbackValue(
       Uri(),
     );
+    registerFallbackValue(tSearchGamesParams);
   });
-
-  const tUserToken = 'test user token';
-  const tPageNumber = '1';
-  const tPageLimit = '10';
-  const tField = 'name';
-  const tQuery = 'Call of Duty';
-
-  const queryParameters = {
-    'page': tPageNumber,
-    'limit': tPageLimit,
-    'field': tField,
-    'query': tQuery,
-  };
-
-  const tGameSearchResponseModel = GameSearchResponseModel.empty();
 
   group('searchGames', () {
     test(
@@ -77,11 +74,7 @@ void main() {
         );
 
         final methodCall = await gameSearchDataSourceImpl.searchGames(
-          userToken: tUserToken,
-          pageNumber: tPageNumber,
-          limit: tPageLimit,
-          field: tField,
-          query: tQuery,
+          searchGamesParams: tSearchGamesParams,
         );
 
         expect(
@@ -97,7 +90,7 @@ void main() {
               queryParameters,
             ),
             header: {
-              'Authorization': 'Bearer $tUserToken',
+              'Authorization': 'Bearer ${tSearchGamesParams.userToken}',
             },
           ),
         ).called(1);
@@ -125,11 +118,7 @@ void main() {
 
         expect(
           () async => methodCall(
-            userToken: tUserToken,
-            pageNumber: tPageNumber,
-            limit: tPageLimit,
-            field: tField,
-            query: tQuery,
+            searchGamesParams: tSearchGamesParams,
           ),
           throwsA(
             isA<ServerException>().having(
@@ -148,7 +137,7 @@ void main() {
               queryParameters,
             ),
             header: {
-              'Authorization': 'Bearer $tUserToken',
+              'Authorization': 'Bearer ${tSearchGamesParams.userToken}',
             },
           ),
         ).called(1);
@@ -176,11 +165,7 @@ void main() {
 
         expect(
           () async => methodCall(
-            userToken: tUserToken,
-            pageNumber: tPageNumber,
-            limit: tPageLimit,
-            field: tField,
-            query: tQuery,
+            searchGamesParams: tSearchGamesParams,
           ),
           throwsA(
             isA<ServerException>().having(
@@ -199,7 +184,7 @@ void main() {
               queryParameters,
             ),
             header: {
-              'Authorization': 'Bearer $tUserToken',
+              'Authorization': 'Bearer ${tSearchGamesParams.userToken}',
             },
           ),
         ).called(1);

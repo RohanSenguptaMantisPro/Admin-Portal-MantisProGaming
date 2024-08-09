@@ -1,15 +1,15 @@
 import 'package:admin_portal_mantis_pro_gaming/core/errors/failures.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/entities/admin_details.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/fetch_user_data.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/log_out.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/utils/browser_info.dart';
-import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/utils/encryption_service.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/cache_user_token.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/create_user.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/fetch_user_data.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/google_sign_in_service.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/is_admin.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/is_user_logged_in.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/domain/usecases/log_out.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/utils/browser_info.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/utils/encryption_service.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -156,7 +156,7 @@ void main() {
       act: (bloc) => bloc.add(const CreateUserEvent()),
       expect: () => [
         const AuthLoading(),
-        AuthError(tServerFailure.message),
+        AuthError(tServerFailure.errorMessage),
       ],
       verify: (_) {
         verify(() => googleSignInService()).called(1);
@@ -350,6 +350,7 @@ void main() {
       act: (bloc) => bloc.add(FetchAdminDataEvent(userToken: tUserToken)),
       expect: () => [
         const AuthLoading(),
+        const FetchingAdminData(),
         FetchedAdminData(adminDetails: tAdminDetails),
       ],
       verify: (_) {
@@ -373,11 +374,48 @@ void main() {
       ),
       expect: () => [
         const AuthLoading(),
-        FetchAdminDataError(message: tServerFailure.message),
+        const FetchingAdminData(),
+        FetchAdminDataError(message: tServerFailure.errorMessage),
       ],
       verify: (_) {
         verify(() => fetchUserData(tUserToken)).called(1);
         verifyNoMoreInteractions(fetchUserData);
+      },
+    );
+  });
+
+  group('LogOutEvent', () {
+    blocTest<AuthBloc, AuthState>(
+      'should emit [AuthLoading, LoggedOut] when LogOutEvent is added and succeeds',
+      build: () {
+        when(() => logOut()).thenAnswer((_) async => const Right(null));
+        return authBloc;
+      },
+      act: (bloc) => bloc.add(const LogOutEvent()),
+      expect: () => [
+        const AuthLoading(),
+        const LoggedOut(),
+      ],
+      verify: (_) {
+        verify(() => logOut()).called(1);
+        verifyNoMoreInteractions(logOut);
+      },
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'should emit [AuthLoading, AuthError] when LogOutEvent is added and fails',
+      build: () {
+        when(() => logOut()).thenAnswer((_) async => Left(tServerFailure));
+        return authBloc;
+      },
+      act: (bloc) => bloc.add(const LogOutEvent()),
+      expect: () => [
+        const AuthLoading(),
+        AuthError(tServerFailure.errorMessage),
+      ],
+      verify: (_) {
+        verify(() => logOut()).called(1);
+        verifyNoMoreInteractions(logOut);
       },
     );
   });

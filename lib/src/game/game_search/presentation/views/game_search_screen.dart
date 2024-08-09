@@ -66,11 +66,13 @@ class _GameSearchScreenState extends State<GameSearchScreen> {
 
       context.read<GameSearchBloc>().add(
             SearchGamesEvent(
-              userToken: userToken ?? '',
-              pageNumber: newPageNumber.toString(),
-              limit: gameSearchParameters.limit,
-              field: gameSearchParameters.field,
-              query: gameSearchParameters.query,
+              searchGamesParams: SearchGamesParams(
+                userToken: userToken ?? '',
+                pageNumber: newPageNumber.toString(),
+                limit: gameSearchParameters.limit,
+                field: gameSearchParameters.field,
+                query: gameSearchParameters.query,
+              ),
             ),
           );
     }
@@ -137,11 +139,14 @@ class _GameSearchScreenState extends State<GameSearchScreen> {
 
                                       context.read<GameSearchBloc>().add(
                                             SearchGamesEvent(
-                                              userToken: userToken ?? '',
-                                              pageNumber: '1',
-                                              limit: '10',
-                                              field: '',
-                                              query: queryValue,
+                                              searchGamesParams:
+                                                  SearchGamesParams(
+                                                userToken: userToken ?? '',
+                                                pageNumber: '1',
+                                                limit: '10',
+                                                field: '',
+                                                query: queryValue,
+                                              ),
                                             ),
                                           );
                                     },

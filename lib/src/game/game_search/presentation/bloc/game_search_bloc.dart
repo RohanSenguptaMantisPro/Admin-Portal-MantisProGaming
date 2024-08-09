@@ -4,7 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 
 part 'game_search_bloc.mapper.dart';
+
 part 'game_search_event.dart';
+
 part 'game_search_state.dart';
 
 class GameSearchBloc extends Bloc<GameSearchEvent, GameSearchState> {
@@ -25,17 +27,11 @@ class GameSearchBloc extends Bloc<GameSearchEvent, GameSearchState> {
     Emitter<GameSearchState> emit,
   ) async {
     final result = await _searchGames(
-      SearchGamesParams(
-        userToken: event.userToken,
-        pageNumber: event.pageNumber,
-        limit: event.limit,
-        field: event.field,
-        query: event.query,
-      ),
+      event.searchGamesParams,
     );
 
     result.fold(
-      (failure) => emit(GameSearchError(message: failure.message)),
+      (failure) => emit(GameSearchError(message: failure.errorMessage)),
       (gameSearchResponse) => emit(
         FetchedGameData(
           gameSearchResponse: gameSearchResponse,

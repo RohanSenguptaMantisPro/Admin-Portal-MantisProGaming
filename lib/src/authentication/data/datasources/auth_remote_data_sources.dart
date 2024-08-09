@@ -3,13 +3,13 @@ import 'dart:convert';
 
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_http_client.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_local_storage.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_signup_client.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/global_error_handler.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/data/models/admin_details_model.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthRemoteDataSource {
   const AuthRemoteDataSource();
@@ -31,31 +31,25 @@ abstract class AuthRemoteDataSource {
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   const AuthRemoteDataSourceImpl({
-    required SharedPreferences prefs,
-    required http.Client httpClient,
-    required GoogleSignIn googleSignIn,
+    required CustomLocalStorage prefs,
+    required CustomHttpClient httpClient,
+    required CustomSignUpClient customSignupClient,
   })  : _prefs = prefs,
-        _httpClient = httpClient,
-        _googleSignIn = googleSignIn;
+        _customHttpClient = httpClient,
+        _customSignupClient = customSignupClient;
 
-  final SharedPreferences _prefs;
-  final http.Client _httpClient;
-  final GoogleSignIn _googleSignIn;
+  final CustomLocalStorage _prefs;
+  final CustomHttpClient _customHttpClient;
+  final CustomSignUpClient _customSignupClient;
 
   @override
   Future<String> googleSignInService() async {
     try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await _googleSignIn.signInSilently();
-
-      final GoogleSignInAuthentication googleUserAuthentication =
-          await googleSignInAccount!.authentication;
-
-      final userIdToken = googleUserAuthentication.idToken ?? '';
+      final userIdToken = await _customSignupClient.signInSilently();
       if (userIdToken.isEmpty) {
         throw const ServerException(
           message: 'Could not retrieve userIdToken',
-          statusCode: '505',
+          statusCode: '500',
         );
       }
 
@@ -63,11 +57,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      debugPrint('------- [RemoteDataSource Error] : $e ');
+      debugPrint(
+          '------- [RemoteDataSource Error : googleSignInService: ] : $e ');
       debugPrintStack(stackTrace: s);
       throw ServerException(
         message: e.toString(),
-        statusCode: '505',
+        statusCode: '500',
       );
     }
   }
@@ -75,9 +70,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<String> createUser(DataMap jsonPayload) async {
     try {
-      final response = await _httpClient.post(
+      final response = await _customHttpClient.postRequest(
         Uri.https('$baseUrl:$testServerPort', kCreateUserEndpoint),
-        headers: {
+        header: {
           'Content-Type': 'application/json',
         },
         body: jsonEncode(jsonPayload),
@@ -97,7 +92,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrintStack(stackTrace: s);
       throw ServerException(
         message: e.toString(),
-        statusCode: '505',
+        statusCode: '500',
       );
     }
   }
@@ -105,9 +100,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<bool> isAdmin(String userToken) async {
     try {
-      final response = await _httpClient.get(
+      final response = await _customHttpClient.getRequest(
         Uri.https('$baseUrl:$testServerPort', kIsAdminEndpoint),
-        headers: {
+        header: {
           'Authorization': 'Bearer $userToken',
         },
       );
@@ -133,7 +128,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrintStack(stackTrace: s);
       throw ServerException(
         message: e.toString(),
-        statusCode: '505',
+        statusCode: '500',
       );
     }
   }
@@ -145,7 +140,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (e) {
       throw CacheException(
         message: e.toString(),
-        statusCode: '505',
+        statusCode: '500',
       );
     }
   }
@@ -163,9 +158,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<AdminDetailsModel> fetchUserData(String userToken) async {
     try {
-      final response = await _httpClient.get(
+      final response = await _customHttpClient.getRequest(
         Uri.https('$baseUrl:$testServerPort', kGetAdminDataEndpoint),
-        headers: {
+        header: {
           'Authorization': 'Bearer $userToken',
         },
       );
@@ -181,7 +176,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (userData == null) {
         throw const ServerException(
           message: 'No User Data Available',
-          statusCode: '505',
+          statusCode: '500',
         );
       }
 
@@ -194,7 +189,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrintStack(stackTrace: s);
       throw ServerException(
         message: e.toString(),
-        statusCode: '505',
+        statusCode: '500',
       );
     }
   }
@@ -207,17 +202,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (result == false) {
         throw const CacheException(
           message: 'Could not log user out',
-          statusCode: '505',
+          statusCode: '500',
         );
       }
-      await _googleSignIn.signOut();
-      await _googleSignIn.disconnect();
+      await _customSignupClient.signOut();
+      await _customSignupClient.disconnect();
     } on CacheException {
       rethrow;
     } catch (e) {
       throw CacheException(
         message: e.toString(),
-        statusCode: '505',
+        statusCode: '500',
       );
     }
   }

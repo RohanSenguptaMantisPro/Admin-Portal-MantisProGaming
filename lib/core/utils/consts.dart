@@ -16,7 +16,7 @@ const kCreateUserEndpoint = '/api/v1/users/auth/android/google';
 const kIsAdminEndpoint = '/api/v1/users/isAdmin';
 const kGetAdminDataEndpoint = '/api/v1/users/currentuser';
 
-const kUserDetailsEndpoint = '/api/v1/users/searchusers';
+const kUserSearchEndpoint = '/api/v1/users/searchusers';
 
 const kGetUserDetailsEndpoint = '/api/v1/users/getUser';
 const kUpdateUserDetailsEndpont = '/api/v1/users/updateuserap';

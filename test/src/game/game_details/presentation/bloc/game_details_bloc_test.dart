@@ -114,7 +114,7 @@ void main() {
           GetGameDetailsEvent(getGameDetailsParams: tGetGameDetailsParams)),
       expect: () => [
         const GettingGameDetails(),
-        GameDetailsError(message: tGameDetailsFetchFailure.message),
+        GameDetailsError(message: tGameDetailsFetchFailure.errorMessage),
       ],
       verify: (_) {
         verify(() => getGameDetails(tGetGameDetailsParams)).called(1);
@@ -156,7 +156,7 @@ void main() {
           updateGameDetailsParams: tUpdateGameDetailsParams)),
       expect: () => [
         const UpdatingGameDetails(),
-        GameDetailsError(message: tGameDetailsUpdateFailure.message),
+        GameDetailsError(message: tGameDetailsUpdateFailure.errorMessage),
       ],
       verify: (_) {
         verify(() => updateGameDetails(tUpdateGameDetailsParams)).called(1);
@@ -204,7 +204,8 @@ void main() {
       expect: () => [
         const DownloadingGameImage(imageType: tImageType),
         GameImageError(
-            message: tGameImageDownloadFailure.message, imageType: tImageType),
+            message: tGameImageDownloadFailure.errorMessage,
+            imageType: tImageType),
       ],
       verify: (_) {
         verify(() => downloadGameImages(tDownloadGameImagesParams)).called(1);
@@ -213,13 +214,12 @@ void main() {
     );
   });
 
-
   group('UploadGameImagesEvent', () {
     blocTest<GameDetailsBloc, GameDetailsState>(
       'should emit [UploadingGameImage, UploadedGameImage] when UploadGameImagesEvent is added and succeeds',
       build: () {
         when(() => uploadGameImages(any())).thenAnswer(
-              (_) async => const Right(null),
+          (_) async => const Right(null),
         );
         return gameDetailsBloc;
       },
@@ -241,7 +241,7 @@ void main() {
       'should emit [UploadingGameImage, GameImageError] when UploadGameImagesEvent is added and fails',
       build: () {
         when(() => uploadGameImages(any())).thenAnswer(
-              (_) async => Left(tGameImageUploadFailure),
+          (_) async => Left(tGameImageUploadFailure),
         );
         return gameDetailsBloc;
       },
@@ -251,7 +251,9 @@ void main() {
       )),
       expect: () => [
         const UploadingGameImage(imageType: tImageType),
-        GameImageError(message: tGameImageUploadFailure.message, imageType: tImageType),
+        GameImageError(
+            message: tGameImageUploadFailure.errorMessage,
+            imageType: tImageType),
       ],
       verify: (_) {
         verify(() => uploadGameImages(tUploadGameImagesParams)).called(1);

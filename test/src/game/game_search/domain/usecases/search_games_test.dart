@@ -11,11 +11,6 @@ void main() {
   late GameSearchRepo gameSearchRepo;
   late SearchGames searchGames;
 
-  setUp(() {
-    gameSearchRepo = MockGameSearchRepo();
-    searchGames = SearchGames(gameSearchRepo);
-  });
-
   const tUserToken = '';
   const tPageNumber = '';
   const tPageLimit = '';
@@ -24,29 +19,28 @@ void main() {
 
   const tGameSearchResponse = GameSearchResponse.empty();
 
+  const tSearchGamesParams = SearchGamesParams.empty();
+
+  setUp(() {
+    gameSearchRepo = MockGameSearchRepo();
+    searchGames = SearchGames(gameSearchRepo);
+
+    registerFallbackValue(tSearchGamesParams);
+  });
+
   test(
     'should call the [GameSearchRepo.searchGames]',
     () async {
       when(
         () => gameSearchRepo.searchGames(
-          userToken: any(named: 'userToken'),
-          pageNumber: any(named: 'pageNumber'),
-          limit: any(named: 'limit'),
-          field: any(named: 'field'),
-          query: any(named: 'query'),
+          searchGamesParams: any(named: 'searchGamesParams'),
         ),
       ).thenAnswer(
         (_) async => const Right(tGameSearchResponse),
       );
 
       final result = await searchGames(
-        const SearchGamesParams(
-          userToken: tUserToken,
-          pageNumber: tPageNumber,
-          limit: tPageLimit,
-          field: tField,
-          query: tQuery,
-        ),
+        tSearchGamesParams,
       );
 
       expect(
@@ -58,11 +52,7 @@ void main() {
 
       verify(
         () => gameSearchRepo.searchGames(
-          userToken: tUserToken,
-          pageNumber: tPageNumber,
-          limit: tPageLimit,
-          field: tField,
-          query: tQuery,
+          searchGamesParams: tSearchGamesParams,
         ),
       ).called(1);
 

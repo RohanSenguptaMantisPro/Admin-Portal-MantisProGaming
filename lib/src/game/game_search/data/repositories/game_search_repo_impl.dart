@@ -5,6 +5,7 @@ import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/data/datasou
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/data/models/game_search_response_model.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/domain/entities/game_search_response.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/domain/repositories/game_search_repo.dart';
+import 'package:admin_portal_mantis_pro_gaming/src/game/game_search/domain/usecases/search_games.dart';
 import 'package:dartz/dartz.dart';
 
 class GameSearchRepoImpl implements GameSearchRepo {
@@ -14,20 +15,12 @@ class GameSearchRepoImpl implements GameSearchRepo {
 
   @override
   ResultFuture<GameSearchResponse> searchGames({
-    required String userToken,
-    required String pageNumber,
-    required String limit,
-    required String field,
-    required String query,
+    required SearchGamesParams searchGamesParams,
   }) async {
     try {
       final GameSearchResponseModel result =
           await _remoteDataSource.searchGames(
-        userToken: userToken,
-        pageNumber: pageNumber,
-        limit: limit,
-        field: field,
-        query: query,
+        searchGamesParams: searchGamesParams,
       );
       return Right(result);
     } on ServerException catch (e) {

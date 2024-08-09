@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_http_client.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/global_error_handler.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/typedefs.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/data/models/user_search_response_model.dart';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 
 abstract class UserSearchRemoteDataSources {
   const UserSearchRemoteDataSources();
@@ -24,10 +24,10 @@ abstract class UserSearchRemoteDataSources {
 
 class UserSearchDataSourceImpl implements UserSearchRemoteDataSources {
   const UserSearchDataSourceImpl({
-    required http.Client httpClient,
+    required CustomHttpClient httpClient,
   }) : _httpClient = httpClient;
 
-  final http.Client _httpClient;
+  final CustomHttpClient _httpClient;
 
   @override
   Future<UserSearchResponseModel> userSearchResults({
@@ -54,13 +54,13 @@ class UserSearchDataSourceImpl implements UserSearchRemoteDataSources {
     }
 
     try {
-      final response = await _httpClient.get(
+      final response = await _httpClient.getRequest(
         Uri.https(
           '$baseUrl:$testServerPort',
-          kUserDetailsEndpoint,
+          kUserSearchEndpoint,
           queryParameters,
         ),
-        headers: {
+        header: {
           'Authorization': 'Bearer $userToken',
         },
       );

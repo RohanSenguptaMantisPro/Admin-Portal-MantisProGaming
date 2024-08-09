@@ -1,12 +1,12 @@
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class CustomHttpClient {
-  final _httpClient = Client();
-  late MultipartRequest request;
+  CustomHttpClient({required this.httpClient});
+
+  final http.Client httpClient;
+  late http.MultipartRequest request;
 
   Future<void> setMultipartRequest({
     required Uri uri,
@@ -14,7 +14,7 @@ class CustomHttpClient {
     Map<String, String>? fields,
     Map<String, XFile>? files,
   }) async {
-    request = MultipartRequest('POST', uri);
+    request = http.MultipartRequest('POST', uri);
 
     // Add authorization header
     request.headers['Authorization'] = 'Bearer $userToken';
@@ -29,7 +29,7 @@ class CustomHttpClient {
     if (files != null) {
       for (var entry in files.entries) {
         Uint8List bytes = await entry.value.readAsBytes();
-        MultipartFile multipartFile = MultipartFile.fromBytes(
+        http.MultipartFile multipartFile = http.MultipartFile.fromBytes(
           entry.key,
           bytes,
           filename: entry.value.name,
@@ -39,24 +39,25 @@ class CustomHttpClient {
     }
   }
 
-  Future<Response> sendRequest() async {
+  Future<http.Response> sendRequest() async {
     final streamedResponse = await request.send();
-    Response response = await Response.fromStream(streamedResponse);
+    http.Response response = await http.Response.fromStream(streamedResponse);
     return response;
   }
 
-  Future<Response> getRequest(Uri uri, {Map<String, String>? header}) async {
+  Future<http.Response> getRequest(Uri uri,
+      {Map<String, String>? header}) async {
     debugPrint('--------[CustomHttpClient] : [getRequest] : URI: $uri');
-    final response = await _httpClient.get(uri, headers: header);
+    final response = await httpClient.get(uri, headers: header);
     return response;
   }
 
-  Future<Response> postRequest(
-      Uri uri, {
-        Map<String, String>? header,
-        Object? body,
-      }) async {
-    final response = await _httpClient.post(
+  Future<http.Response> postRequest(
+    Uri uri, {
+    Map<String, String>? header,
+    Object? body,
+  }) async {
+    final response = await httpClient.post(
       uri,
       headers: header,
       body: body,

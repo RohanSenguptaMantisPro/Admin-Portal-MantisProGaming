@@ -148,7 +148,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
         if (state is GameDetailsError) {
           showErrorNotification(
             context,
-            'Could not load some data!\n\n Error details : ${state.message}',
+            'Could not fetch/upload some data!\n\n Error details : ${state.message}',
           );
         } else if (state is GameImageError) {
           showErrorNotification(

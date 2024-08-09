@@ -62,6 +62,7 @@ class SearchGamesEventMapper extends ClassMapperBase<SearchGamesEvent> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = SearchGamesEventMapper._());
       GameSearchEventMapper.ensureInitialized();
+      SearchGamesParamsMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -69,38 +70,18 @@ class SearchGamesEventMapper extends ClassMapperBase<SearchGamesEvent> {
   @override
   final String id = 'SearchGamesEvent';
 
-  static String _$userToken(SearchGamesEvent v) => v.userToken;
-  static const Field<SearchGamesEvent, String> _f$userToken =
-      Field('userToken', _$userToken);
-  static String _$pageNumber(SearchGamesEvent v) => v.pageNumber;
-  static const Field<SearchGamesEvent, String> _f$pageNumber =
-      Field('pageNumber', _$pageNumber);
-  static String _$limit(SearchGamesEvent v) => v.limit;
-  static const Field<SearchGamesEvent, String> _f$limit =
-      Field('limit', _$limit);
-  static String _$field(SearchGamesEvent v) => v.field;
-  static const Field<SearchGamesEvent, String> _f$field =
-      Field('field', _$field);
-  static String _$query(SearchGamesEvent v) => v.query;
-  static const Field<SearchGamesEvent, String> _f$query =
-      Field('query', _$query);
+  static SearchGamesParams _$searchGamesParams(SearchGamesEvent v) =>
+      v.searchGamesParams;
+  static const Field<SearchGamesEvent, SearchGamesParams> _f$searchGamesParams =
+      Field('searchGamesParams', _$searchGamesParams);
 
   @override
   final MappableFields<SearchGamesEvent> fields = const {
-    #userToken: _f$userToken,
-    #pageNumber: _f$pageNumber,
-    #limit: _f$limit,
-    #field: _f$field,
-    #query: _f$query,
+    #searchGamesParams: _f$searchGamesParams,
   };
 
   static SearchGamesEvent _instantiate(DecodingData data) {
-    return SearchGamesEvent(
-        userToken: data.dec(_f$userToken),
-        pageNumber: data.dec(_f$pageNumber),
-        limit: data.dec(_f$limit),
-        field: data.dec(_f$field),
-        query: data.dec(_f$query));
+    return SearchGamesEvent(searchGamesParams: data.dec(_f$searchGamesParams));
   }
 
   @override
@@ -157,13 +138,10 @@ extension SearchGamesEventValueCopy<$R, $Out>
 
 abstract class SearchGamesEventCopyWith<$R, $In extends SearchGamesEvent, $Out>
     implements GameSearchEventCopyWith<$R, $In, $Out> {
+  SearchGamesParamsCopyWith<$R, SearchGamesParams, SearchGamesParams>
+      get searchGamesParams;
   @override
-  $R call(
-      {String? userToken,
-      String? pageNumber,
-      String? limit,
-      String? field,
-      String? query});
+  $R call({SearchGamesParams? searchGamesParams});
   SearchGamesEventCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -177,26 +155,16 @@ class _SearchGamesEventCopyWithImpl<$R, $Out>
   late final ClassMapperBase<SearchGamesEvent> $mapper =
       SearchGamesEventMapper.ensureInitialized();
   @override
-  $R call(
-          {String? userToken,
-          String? pageNumber,
-          String? limit,
-          String? field,
-          String? query}) =>
-      $apply(FieldCopyWithData({
-        if (userToken != null) #userToken: userToken,
-        if (pageNumber != null) #pageNumber: pageNumber,
-        if (limit != null) #limit: limit,
-        if (field != null) #field: field,
-        if (query != null) #query: query
-      }));
+  SearchGamesParamsCopyWith<$R, SearchGamesParams, SearchGamesParams>
+      get searchGamesParams => $value.searchGamesParams.copyWith
+          .$chain((v) => call(searchGamesParams: v));
+  @override
+  $R call({SearchGamesParams? searchGamesParams}) => $apply(FieldCopyWithData(
+      {if (searchGamesParams != null) #searchGamesParams: searchGamesParams}));
   @override
   SearchGamesEvent $make(CopyWithData data) => SearchGamesEvent(
-      userToken: data.get(#userToken, or: $value.userToken),
-      pageNumber: data.get(#pageNumber, or: $value.pageNumber),
-      limit: data.get(#limit, or: $value.limit),
-      field: data.get(#field, or: $value.field),
-      query: data.get(#query, or: $value.query));
+      searchGamesParams:
+          data.get(#searchGamesParams, or: $value.searchGamesParams));
 
   @override
   SearchGamesEventCopyWith<$R2, SearchGamesEvent, $Out2> $chain<$R2, $Out2>(

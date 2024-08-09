@@ -15,11 +15,7 @@ class SearchGames
   @override
   ResultFuture<GameSearchResponse> call(SearchGamesParams params) =>
       _repo.searchGames(
-        userToken: params.userToken,
-        pageNumber: params.pageNumber,
-        limit: params.limit,
-        field: params.field,
-        query: params.query,
+        searchGamesParams: params,
       );
 }
 
@@ -38,8 +34,8 @@ class SearchGamesParams with SearchGamesParamsMappable {
           userToken: '',
           limit: '',
           pageNumber: '',
-          field: '',
-          query: '',
+          field: 'field',
+          query: 'query',
         );
 
   final String userToken;

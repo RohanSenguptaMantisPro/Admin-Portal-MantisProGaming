@@ -2,16 +2,17 @@ import 'dart:convert';
 
 import 'package:admin_portal_mantis_pro_gaming/core/errors/exceptions.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/consts.dart';
+import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_http_client.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/data/datasources/user_details_remote_data_sources.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/data/models/user_details_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 
-class MockHttpClient extends Mock implements http.Client {}
+class MockHttpClient extends Mock implements CustomHttpClient {}
 
 void main() {
-  late http.Client mockClient;
+  late CustomHttpClient mockClient;
   late UserDetailsRemoteDataSources userDetailsRemoteDataSources;
 
   setUp(() {
@@ -65,9 +66,9 @@ void main() {
       'should return [UserDetailsModel] when the status code is 200 or 201',
       () async {
         when(
-          () => mockClient.get(
+          () => mockClient.getRequest(
             any(),
-            headers: any(named: 'headers'),
+            header: any(named: 'header'),
           ),
         ).thenAnswer(
           (_) async => http.Response(
@@ -84,12 +85,12 @@ void main() {
         expect(methodCall, equals(tUserDetailsModel));
 
         verify(
-          () => mockClient.get(
+          () => mockClient.getRequest(
             Uri.https(
               '$baseUrl:$testServerPort',
               '$kGetUserDetailsEndpoint/$tUserID',
             ),
-            headers: {
+            header: {
               'Authorization': 'Bearer $tUserToken',
             },
           ),
@@ -103,9 +104,9 @@ void main() {
       'should throw [ServerException] when the status code is not 200 or 201',
       () async {
         when(
-          () => mockClient.get(
+          () => mockClient.getRequest(
             any(),
-            headers: any(named: 'headers'),
+            header: any(named: 'header'),
           ),
         ).thenAnswer(
           (_) async => http.Response(
@@ -127,12 +128,12 @@ void main() {
         );
 
         verify(
-          () => mockClient.get(
+          () => mockClient.getRequest(
             Uri.https(
               '$baseUrl:$testServerPort',
               '$kGetUserDetailsEndpoint/$tUserID',
             ),
-            headers: {
+            header: {
               'Authorization': 'Bearer $tUserToken',
             },
           ),
@@ -148,9 +149,9 @@ void main() {
       'should complete successfully when the status code is 200 or 201',
       () async {
         when(
-          () => mockClient.post(
+          () => mockClient.postRequest(
             any(),
-            headers: any(named: 'headers'),
+            header: any(named: 'header'),
             body: any(named: 'body'),
           ),
         ).thenAnswer(
@@ -170,12 +171,12 @@ void main() {
         );
 
         verify(
-          () => mockClient.post(
+          () => mockClient.postRequest(
             Uri.https(
               '$baseUrl:$testServerPort',
               '$kUpdateUserDetailsEndpont/$tUserID',
             ),
-            headers: {
+            header: {
               'Authorization': 'Bearer $tUserToken',
             },
             body: {
@@ -192,9 +193,9 @@ void main() {
       'should throw [ServerException] when the status code is not 200 or 201',
       () async {
         when(
-          () => mockClient.post(
+          () => mockClient.postRequest(
             any(),
-            headers: any(named: 'headers'),
+            header: any(named: 'header'),
             body: any(named: 'body'),
           ),
         ).thenAnswer(
@@ -218,12 +219,12 @@ void main() {
         );
 
         verify(
-          () => mockClient.post(
+          () => mockClient.postRequest(
             Uri.https(
               '$baseUrl:$testServerPort',
               '$kUpdateUserDetailsEndpont/$tUserID',
             ),
-            headers: {
+            header: {
               'Authorization': 'Bearer $tUserToken',
             },
             body: {

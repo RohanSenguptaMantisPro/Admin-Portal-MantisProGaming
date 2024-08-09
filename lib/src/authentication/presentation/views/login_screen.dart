@@ -10,15 +10,12 @@ import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_notification.da
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/bloc/authentication_bloc.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/authentication/presentation/widgets/center_text_box.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/search/presentation/views/user_search_screen.dart';
-
 import 'package:flutter/foundation.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import 'package:google_sign_in_web/web_only.dart' as web;
 
 class LoginScreen extends StatefulWidget {
@@ -103,13 +100,10 @@ class _LoginScreenState extends State<LoginScreen> {
           showErrorNotification(context, 'Auto login failed, please login');
         } //
         else if (state is AuthError) {
-          debugPrint('----- listener state : $state');
-          debugPrint('----- Something went wrong : ${state.message}');
-
           showErrorNotification(
-              context,
-              'Something Went Wrong!! Please try again '
-              'later!');
+            context,
+            state.message,
+          );
         } //on button click userToken received and saved.
         else if (state is CreatedUser && state.userToken.isNotEmpty) {
           // now to send this for isAdmin I am using the userToken again,
@@ -117,6 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // and set in that file with a setter.
           // here if logged in initialise the setter with the received userToken
           // to access elsewhere too.
+          debugPrint('-------RECEIVED USER TOKEN: ${state.userToken}');
           context.read<UserTokenProvider>().initUser(state.userToken);
 
           context.read<AuthBloc>().add(
@@ -124,10 +119,10 @@ class _LoginScreenState extends State<LoginScreen> {
               );
         } // check admin or not.
         else if (state is AdminCheckStatus && state.isAdmin == true) {
-          final userToken = context.read<UserTokenProvider>().userToken;
+          final userToken = context.read<UserTokenProvider>().userToken ?? '';
 
           context.read<AuthBloc>().add(
-                CacheUserTokenEvent(userToken!),
+                CacheUserTokenEvent(userToken),
               );
         } else if (state is AdminCheckStatus && state.isAdmin == false) {
           showErrorNotification(context, 'You do not have Admin Permission');
@@ -135,32 +130,31 @@ class _LoginScreenState extends State<LoginScreen> {
         else if (state is CachedUserToken) {
           // fetch admin profile data bloc event add here. and then setter to
           // store user data.
-          final userToken = context.read<UserTokenProvider>().userToken;
+          final userToken = context.read<UserTokenProvider>().userToken ?? '';
 
           // debugPrint('-------Done.');
           // call fetchUserData.
           context.read<AuthBloc>().add(
                 FetchAdminDataEvent(
-                  userToken: userToken!,
+                  userToken: userToken,
                 ),
               );
         } else if (state is FetchAdminDataError) {
-          showErrorNotification(context, 'Unable to access Admin Data');
-          // Navigator.of(context)
-          //     .pushReplacementNamed(Dashboard.routeName, arguments: 0);
+          showErrorNotification(
+            context,
+            'Unable to access Admin Data \n\n Error Details : ${state.message}',
+          );
+
           context.go(UserSearchScreen.routeName);
         } else if (state is FetchedAdminData) {
           context.read<AdminUserData>().initUser(state.adminDetails);
-          // Navigator.of(context)
-          //     .pushReplacementNamed(Dashboard.routeName, arguments: 0);
+
           context.go(UserSearchScreen.routeName);
         }
       },
 
       //
       builder: (context, state) {
-        // don't show login page if checking user token status.
-        debugPrint('---- new state : $state');
         return Scaffold(
           backgroundColor: Colours.backgroundColourLightDark,
           // login check, fetchAdminData all the time load the screen.

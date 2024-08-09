@@ -44,7 +44,8 @@ class PushNotificationBloc
     );
 
     result.fold(
-      (failure) => emit(PushNotificationError(errorMessage: failure.message)),
+      (failure) =>
+          emit(PushNotificationError(errorMessage: failure.errorMessage)),
       (_) => emit(
         const UploadedNotificationImage(),
       ),
@@ -65,7 +66,8 @@ class PushNotificationBloc
     );
 
     result.fold(
-      (failure) => emit(PushNotificationError(errorMessage: failure.message)),
+      (failure) =>
+          emit(PushNotificationError(errorMessage: failure.errorMessage)),
       (serverImage) => emit(
         DownloadedNotificationImage(serverImage: serverImage),
       ),
@@ -88,7 +90,9 @@ class PushNotificationBloc
     );
 
     result.fold(
-      (failure) => emit(PushNotificationError(errorMessage: failure.message)),
+      (failure) => emit(
+        PushNotificationError(errorMessage: failure.errorMessage),
+      ),
       (notificationResponse) => emit(
         NotificationResponseState(notificationResponse: notificationResponse),
       ),

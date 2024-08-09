@@ -85,7 +85,10 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (buildContext, state) {
         if (state is AuthError) {
-          showErrorNotification(context, 'Could not log you out!');
+          showErrorNotification(
+            context,
+            'Could not log you out! \n\n Error Details : ${state.message}',
+          );
         } else if (state is LoggedOut) {
           debugPrint('----State in [AdminProfileScreen]: $state');
           // delete any saved search parameters.

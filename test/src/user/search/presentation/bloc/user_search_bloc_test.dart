@@ -107,7 +107,7 @@ void main() {
       ),
       expect: () => [
         const UserSearchLoading(),
-        UserSearchError(message: tUserDataFetchFailure.message),
+        UserSearchError(message: tUserDataFetchFailure.errorMessage),
       ],
       verify: (_) {
         verify(

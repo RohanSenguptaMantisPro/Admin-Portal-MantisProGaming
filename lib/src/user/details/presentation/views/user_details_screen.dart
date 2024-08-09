@@ -8,7 +8,6 @@ import 'package:admin_portal_mantis_pro_gaming/core/extensions/context_extension
 import 'package:admin_portal_mantis_pro_gaming/core/res/colours.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/res/media_res.dart';
 import 'package:admin_portal_mantis_pro_gaming/core/utils/custom_notification.dart';
-import 'package:admin_portal_mantis_pro_gaming/core/utils/rebuild_check.dart';
 import 'package:admin_portal_mantis_pro_gaming/src/user/details/presentation/bloc/user_details_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -146,10 +145,15 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<UserDetailsBloc, UserDetailsState>(
       listener: (context, state) {
-        if (state is GetUserDetailsError || state is UpdateUserDetailsError) {
+        if (state is GetUserDetailsError) {
           showErrorNotification(
             context,
-            'Sorry! Something went wrong!',
+            'Could not fetch user details! \n\n Error Details: ${state.message}',
+          );
+        } else if (state is UpdateUserDetailsError) {
+          showErrorNotification(
+            context,
+            'Could not Update user details! \n\n Error Details: ${state.message}',
           );
         } else if (state is GotUserDetails) {
           debugPrint('------------- UserDetails :${state.userDetails}\n');

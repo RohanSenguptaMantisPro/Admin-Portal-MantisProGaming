@@ -8,16 +8,8 @@ abstract class GameSearchEvent with GameSearchEventMappable {
 @MappableClass()
 class SearchGamesEvent extends GameSearchEvent with SearchGamesEventMappable {
   SearchGamesEvent({
-    required this.userToken,
-    required this.pageNumber,
-    required this.limit,
-    required this.field,
-    required this.query,
+    required this.searchGamesParams,
   });
 
-  final String userToken;
-  final String pageNumber;
-  final String limit;
-  final String field;
-  final String query;
+  final SearchGamesParams searchGamesParams;
 }

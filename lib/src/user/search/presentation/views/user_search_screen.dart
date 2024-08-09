@@ -123,15 +123,13 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
 
     return BlocConsumer<UserSearchBloc, UserSearchState>(
       listener: (context, state) {
-        debugPrint('-------UserSearchScreen Current State : $state');
-
         if (state is UserSearchError) {
           debugPrint('----- listener state : $state');
           debugPrint('----- Something went wrong : ${state.message}');
 
-          showSuccessNotification(
+          showErrorNotification(
             context,
-            state.message,
+            'Could not fetch users! \n\n Error Details : ${state.message}',
           );
         } else if (state is FetchedUserData) {
           debugPrint('--------UserSearch Screen :state is fetchedUserData');
